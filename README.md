@@ -1,4 +1,4 @@
-# BlazotBrowserInteractLabeler
+# BlazorBrowserInteractLabeler
 
 An image markup utility. Made based on [cvat](https://github.com/opencv/cvat). One of the differences is that BrowserInteractLabeler works locally.
 
