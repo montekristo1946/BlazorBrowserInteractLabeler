@@ -1,0 +1,18 @@
+@inherits DrawingPanelModel
+
+
+<div class="row  bg-light p-0 m-0"  style="" >
+    <div class="col-md-leftPanel  border-end p-1  " style="" >
+        @ToolsPanelTemplate
+    </div>
+    <div class="col-md-imagePanel p-1" style=""  
+         @onmousewheel="HandleMouseWheel"
+         @onmousemove="HandlerOnmousemove">
+        @ImagesPamelTemplate
+    </div>
+
+    <div class="col-md-rightPanel  border-start p-0" style="">
+        @TabBoxPanelTemplate
+    </div>
+
+</div>

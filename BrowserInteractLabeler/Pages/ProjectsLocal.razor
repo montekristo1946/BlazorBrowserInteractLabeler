@@ -1,0 +1,20 @@
+@page "/projectslocal"
+@using BrowserInteractLabeler.Component.ProjectsBox
+@inherits ProjectModel
+
+
+
+<div class="row bg-light" style="">
+
+    <SqlSelectorPanel  
+        HeightPanel="@_projectsLocalHandler.GetHeightSqlSelectorPanel"
+        SqlDbNames="@_projectsLocalHandler.GetAllSqlDataBase()"
+        ChoseActiveDataBaseAsync="_projectsLocalHandler.HandlerChoseActiveDataBaseAsync"
+        ChoseExportDataBaseAsync="_projectsLocalHandler.HandlerChoseExportDataBaseAsync"
+        CurrentSqlDbNames="@_projectsLocalHandler.CurrentSqlDbName"
+        IsShowSpinnerLpadDB="_projectsLocalHandler.LoadingDB">
+            
+        </SqlSelectorPanel>
+        
+ 
+</div>

@@ -1,0 +1,95 @@
+@using BrowserInteractLabeler.Common.DTO
+@using System.Diagnostics
+@inherits LabelsPanelModel
+
+
+
+<div class="row no-select">
+    <div class="col-12">
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="object-tab" data-bs-toggle="tab" data-bs-target="#object-tab-panel"
+                        type="button" role="tab" aria-controls="object-tab-panel" aria-selected="true">
+                    Object
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="labels-tab" data-bs-toggle="tab" data-bs-target="#labels-tab-pane" type="button"
+                        role="tab" aria-controls="labels-tab-pane" aria-selected="false">
+                    Labels
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="tab-content m-0" id="myTabContent">
+    <div class="tab-pane fade show active " id="object-tab-panel" role="tabpanel" aria-labelledby="object-tab"tabindex="0">
+        <div class="list-group overflow-auto " style="display: flex;  height: @HeightMainWin; ">
+            @{
+                foreach (var annotation in AnnotationsOnPanel)
+                {
+                    var id = $"annot_{annotation.Id}";
+                    var colorPallet = ColorAll.FirstOrDefault(p => p.IdLabel == annotation.LabelId)?.Color ?? "#ffffff";
+                    
+                    var name = LabelAll.FirstOrDefault(p => p.Id == annotation.LabelId)?.NameLabel ?? "---------------";
+                    var colorButton = "#49505c00";
+                    if (annotation.State != StateAnnot.Finalized)
+                        colorButton = "#d8d8d8b2";
+                    
+                    <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"
+                            id="@id"
+                            style=" text-align: start; margin: 2px; border-radius: 5px; border-color: #49505c; background: @colorButton; "
+                            @onclick="@(() => ButtonClickObjectAsync(annotation.Id))">
+                        <div class=" row p-0 ">
+                            <div class="col-2 ">
+                                @annotation.Id
+                            </div>
+                            <div class="col-7  " style="overflow: hidden; ">
+                                @name
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="col-1" style="background: @colorPallet; border-radius:  15%;"></div>
+                        </div>
+                    </button>
+                   
+                }
+                
+            }
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade " id="labels-tab-pane" role="tabpanel" aria-labelledby="labels-tab" tabindex="0">
+        <div class="list-group overflow-auto " style="display: flex;  height: @HeightMainWin; ">
+
+            @{
+                foreach (var label in LabelAll)
+                {
+                    var id = $"label_{label.Id}";
+                    var colorModel = ColorAll.FirstOrDefault(p => p.IdLabel == label.Id);
+                    var alpha = "ff"; //ff*0.3=76
+                    var color = colorModel?.Color + alpha;
+                    var textKey = $"[{colorModel?.KeyOnBoard}]";
+
+                    var name = label.NameLabel;
+                    <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"
+                            id="@id"
+                            style=" text-align: start; margin: 2px;border-radius: 5px; border-color: #49505c;"
+                            @onclick="@(() => ButtonClickLabelAsync(label.Id))">
+
+                        <div class=" row ps-1 pe-1 " style="">
+
+                            <div class="col-1" style="background: @color; border-radius:  15%;"></div>
+                            <div class="col-8" style="overflow: hidden;">
+                                @name
+                            </div>
+                            <div class="col-2" style="overflow: hidden;">@textKey</div>
+                        </div>
+                    </button>
+                }
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler", "BrowserInteractLabeler\BrowserInteractLabeler.csproj", "{9AF652FF-BAC4-44CD-9418-875B7B2BE010}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Common", "BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj", "{E8B0B5BD-D45F-49D9-896B-66584F335BE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Repository", "BrowserInteractLabeler.Repository\BrowserInteractLabeler.Repository.csproj", "{0328687B-8AD8-4F6B-868A-9339300B1558}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.DataLoader", "BrowserInteractLabeler.DataLoader\BrowserInteractLabeler.DataLoader.csproj", "{8536046F-9429-4860-9FD4-ACA350CAE427}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Repository.IntegrationTest", "BrowserInteractLabeler.Repository.IntegrationTest\BrowserInteractLabeler.Repository.IntegrationTest.csproj", "{EAEE1409-09C8-49D8-8C77-BAEC409D611D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AF652FF-BAC4-44CD-9418-875B7B2BE010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF652FF-BAC4-44CD-9418-875B7B2BE010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF652FF-BAC4-44CD-9418-875B7B2BE010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF652FF-BAC4-44CD-9418-875B7B2BE010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8B0B5BD-D45F-49D9-896B-66584F335BE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8B0B5BD-D45F-49D9-896B-66584F335BE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8B0B5BD-D45F-49D9-896B-66584F335BE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8B0B5BD-D45F-49D9-896B-66584F335BE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0328687B-8AD8-4F6B-868A-9339300B1558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0328687B-8AD8-4F6B-868A-9339300B1558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0328687B-8AD8-4F6B-868A-9339300B1558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0328687B-8AD8-4F6B-868A-9339300B1558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8536046F-9429-4860-9FD4-ACA350CAE427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8536046F-9429-4860-9FD4-ACA350CAE427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8536046F-9429-4860-9FD4-ACA350CAE427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8536046F-9429-4860-9FD4-ACA350CAE427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,51 @@
+@inherits SwipePanelModel
+
+<div class="row" id="swipe-panel">
+    <div class="col-1"></div>
+    <div class="col-4 color-text-main" style=" font-size: 20px;">
+        <div class="row p-1" style="">
+            <div class="col-4">
+                @StatePrecess
+            </div>
+            <div class="col-4">
+                @TypeLabel
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2 p-0 m-0" style="">
+                <svg width="30" height="30" viewBox="0 0 30 30">
+                    <rect x="0" y="0" width="30" height="30" style="fill: @Color; stroke-width:1;"  rx="5"/>
+                </svg>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-2" style="">
+        <button type="button" class="btn  bottom-shadow " data-mdb-toggle="tooltip" @onclick="ButtonGoBackClick"
+                data-mdb-placement="right" title="Go back [D]">
+            <span role="img" class="anticon ">
+                <img src="icons/004_go_back.svg" width="30" height="30"/>
+            </span>
+        </button>
+    </div>
+
+
+    <div class="col-2" style="">
+
+        <button type="button" class="btn   bottom-shadow  " data-mdb-toggle="tooltip" @onclick="ButtonGoNextClick"
+                data-mdb-placement="right" title="Go next [F]">
+            <span role="img" class="anticon ">
+                <img src="icons/005_go_next.svg" width="30" height="30"/>
+            </span>
+        </button>
+    </div>
+    <div class=" col-2" style="padding: 6px 0px 0px; ">
+        <div class="input-group ">
+            <input type="text" class="form-control color-text-main" data-mdb-toggle="tooltip" data-mdb-placement="right"
+                   title="index img" placeholder="" aria-describedby="button-addon1"
+                   style="padding: 0px 4px 1px;"
+                   @onkeydown="@ButtonEnter" @bind="@IdActiveIdImages" @oninput="@EventOninput">
+        </div>
+    </div>
+    <div class="col-1"></div>
+
+</div>

@@ -1,0 +1,87 @@
+@page "/marker"
+@using BrowserInteractLabeler.Common
+@inherits MarkerModel
+
+
+<div @onkeydown="HandleKeyDown" tabindex="0" class=""  id="@IdImagesPamel">
+    <div class="row border-bottom bg-light p-1" >
+        <NavigationPanel>
+            <SavePanelTemplate>
+                <SavePanel
+                    ButtonSaveClick="() => _navigationHandler.SaveAnnotation()"
+                    ButtonUndoClick="() => _navigationHandler.UndoClick()"
+                    ButtonRedoClick="() => _navigationHandler.RedoClick()">
+                </SavePanel>
+            </SavePanelTemplate>
+            <SwipePanelTemplate>
+                <SwipePanel
+                    ButtonGoNextClick="() => _keyMapHandler.HandleKeyDownAsync(_commandGoNext)"
+                    ButtonGoBackClick="() => _keyMapHandler.HandleKeyDownAsync(_commandGoBack)"
+                    Color="@_cacheModel.ActiveIdLabelColor"
+                    TypeLabel="@_cacheModel.ActiveTypeLabel"
+                    StatePrecess="@_cacheModel.StatePrecess"
+                    IdActiveIdImages="@_cacheModel.CurrentIdImg.ToString()"
+                    ButtonEnterIdActiveIdImages="_navigationHandler.ButtonEnterIdActiveIdImagesAsync">
+                </SwipePanel>
+
+            </SwipePanelTemplate>
+            <ProgressPanelTemplate>
+                <ProgressPanel
+                    NameFileEdit="@_cacheModel.NameImages"
+                    CurrentProgress="@_cacheModel.CurrentProgress">
+
+                </ProgressPanel>
+            </ProgressPanelTemplate>
+        </NavigationPanel>
+    </div>
+
+    <div class="row m-0" id="drawing_main_panel">
+        <DrawingPanel
+            CancelFocusRootPanel="_navigationHandler.CancelFocusRootPanelAsync"
+            SetMainFocusRootPanel="_navigationHandler.SetMainFocusRootPanel"
+            HandleMouseWheel="@_keyMapHandler.HandleWheelDrawingPanelMouseEventAsync"
+            HandlerOnmousemove="@_keyMapHandler.HandlerDrawingPanelOnmousemoveAsync">
+            <ToolsPanelTemplate>
+                <ToolsPanel
+                    ButtonDefaultMoveClick="() => _navigationHandler.ButtonDefaultPositionImg()"
+                    ButtonOnRectangleClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Box)"
+                    ButtonOnPolygonClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Polygon)"
+                    ButtonOnPolyLineClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine)"
+                    ButtonOnPointsClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Point)">
+
+                </ToolsPanel>
+            </ToolsPanelTemplate>
+            <ImagesPamelTemplate>
+                <ImagesPanel
+                    ImagesBase64="@_cacheModel.ImagesBase64"
+                    CssScale="@_cacheModel.CssScale"
+                    WidthImg="@_cacheModel.WidthImg"
+                    HeightImg="@_cacheModel.HeightImg"
+                    WidthMainWin="@_cacheModel.WidthMainWin"
+                    HeightMainWin="@_cacheModel.HeightMainWin"
+                    HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
+                    HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmousedownAsync"
+                    HandlerOnmousemove="@_keyMapHandler.HandlerImagesPanelOnmouseupAsync">
+
+                    <SvgPanelTemplate>
+                        <SvgPanel 
+                            SvgToDraw="@_cacheModel.SvgModelString">
+                        </SvgPanel>
+                    </SvgPanelTemplate>
+
+                </ImagesPanel>
+            </ImagesPamelTemplate>
+            <TabBoxPanelTemplate>
+                <TabBoxPanel
+                    HeightMainWin="@_cacheModel.HeightMainWin"
+                    AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel"
+                    LabelAll="@_cacheModel.LabelAll"
+                    ColorAll="@_cacheModel.ColorAll"
+                    ChoseActiveAnnotationIdAsync="@_navigationHandler.SetActiveIdAnnotation"
+                    ChoseActiveLabelIdAsync="@_navigationHandler.HandlerSetLabelIdAsync">
+                </TabBoxPanel>
+            </TabBoxPanelTemplate>
+        </DrawingPanel>
+    </div>
+
+</div>

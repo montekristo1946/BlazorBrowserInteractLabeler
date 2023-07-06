@@ -1,0 +1,25 @@
+@inherits ProgressPanelModel
+
+<div class="row">
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25"
+                 aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar" style="width: @CurrentProgress%">@CurrentProgress%</div>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-10 image-name-details p-0 color-text-main" >
+            <div>
+                @NameFileEdit
+            </div>
+
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+@inherits TabSettingsPanelModel
+
+<div class="row m-0">
+    <div class="col-12 ms-1 me-1 pt-1 ">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="color-tab" data-bs-toggle="tab" data-bs-target="#color-tab-pane"
+                        type="button" role="tab" aria-controls="color-tab-pane" aria-selected="true">
+                    Color Label
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="root_settings-tab" data-bs-toggle="tab" data-bs-target="#root_settings-tab-pane" type="button"
+                        role="tab" aria-controls="root_settings-tab-pane" aria-selected="false">
+                    Root Settings
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="tab-content overflow-auto" id="myTabContent" style="height: @HeightPanel;  width: 100%; ">
+
+    <div class="tab-pane fade show active " id="color-tab-pane" role="tabpanel" aria-labelledby="color-tab" tabindex="0">
+        <div class="ps-1 pe-1 " style="overflow: hidden;">
+            @ColorMapPanelTemplate
+        </div>
+    </div>
+
+    <div class="tab-pane fade " id="root_settings-tab-pane" role="tabpanel" aria-labelledby="root_settings-tab" tabindex="0">
+        <div class="ps-2 pe-2" style="overflow: hidden;">
+            @RootSettingTemplate
+        </div>
+
+    </div>
+
+</div>

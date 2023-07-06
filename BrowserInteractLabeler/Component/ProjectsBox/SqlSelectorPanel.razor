@@ -1,0 +1,72 @@
+@inherits SqlSelectorPanelModel
+
+
+<div class="row">
+
+    <div class="list-group overflow-auto " style="display: flex;  height: @HeightPanel; ">
+
+        <div class="row text-center mt-4 color-text-main" style="">
+            <p>List local Tasks</p>
+        </div>
+
+        @{
+            foreach (var complexName in GetSqlOnlyName())
+            {
+                var isActivePanel = CheckActivePanel(complexName.name);
+                var colorButton = isActivePanel ? "#d8d8d8b2" : "#ffffff";
+                var textToActive = isActivePanel ? "In work" : "";
+                var visibilitySpinner = isActivePanel && IsShowSpinnerLpadDB ? "visible" : "hidden";
+                // var visibilitySpinner = "visible";
+                <div class="row m-0 my-2">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <div class="row  rounded-top-circle bottom-shadow m-0 color-text-main"
+                             style=" height: 100%; border:1px solid ; border-radius: 5px; border-color: #49505c; background: @colorButton; overflow: hidden;">
+
+                            <div class="col-1 my-2 text-center">
+                                <img src="icons/011_database.svg" width="35" height="35"/>
+                            </div>
+
+                            <div class="col-6 my-3 " style="overflow: hidden;">
+                                <div class="row">
+                                    <div class="col-1 text-center">@complexName.index</div>
+                                    <div class="col-11 text-start">@complexName.name</div>
+                                </div>
+                            </div>
+
+                            <div class="col-1 my-3 text-center">
+                                @textToActive
+                            </div>
+                            <div class="col-1  my-1">
+                                <div class="spinner-4 "style="visibility: @visibilitySpinner; height: 40px;"></div>
+                            </div>
+
+
+                            <div class="col-3 m-0 ">
+                                <div class="row my-2">
+                                    <div class="col-6  " style="">
+                                        <button type="button" class="btn btn-outline-primary" @onclick="@(() => ButtonClickLoadTaskAsync(complexName.name))">
+                                            Load task
+                                        </button>
+                                    </div>
+                                    <div class="col-6 " style="">
+                                        <button type="button" class="btn btn-outline-success" @onclick="@(() => ButtonClickSaveTaskAsync(complexName.name))">
+                                            Export task
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @* <div class="col-1"></div> *@
+                        </div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            }
+
+        }
+
+
+    </div>
+</div>

@@ -1,0 +1,21 @@
+@inherits ImagesPanelModel
+
+
+
+<div class="p-0 m-0 bg-light no-select" style="width:@WidthMainWin; height: @HeightMainWin; overflow: hidden" id="drawing_panel_background">
+    <div style="width:@WidthImg; height: @HeightImg;
+        @CssScale;
+        transition: all 0.100s;
+        transition-timing-function: linear;
+        background-repeat: no-repeat;
+        background-size: contain;
+        transform-origin: center;
+        background-position: center ;
+        background-image: @ImagesBase64;"  
+         @onclick="HandleMouse"  
+         @onmousedown="HandlerOnmousedown"
+         @onmousemove="HandlerOnmousemove">
+
+        @SvgPanelTemplate
+    </div>
+</div>

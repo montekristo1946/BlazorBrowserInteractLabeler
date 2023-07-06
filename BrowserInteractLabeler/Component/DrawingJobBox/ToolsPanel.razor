@@ -1,0 +1,58 @@
+@inherits ToolsPanelModel
+
+
+<div class="col-12 border-bottom  pb-2 pt-2">
+    <div class="row text-center p-1 ">
+        <button type="button" class="btn btn-lg rounded-top-circle bottom-shadow" data-mdb-toggle="tooltip"
+                data-mdb-placement="right" title="Default move [Ctrl (left)]" @onclick="ButtonDefaultMoveClick">
+            <span role="img" class="anticon  position-relative ">
+                <img src="icons/010_moveDefault.svg" width="25" height="25"/>
+            </span>
+        </button>
+    </div>
+</div>
+
+<div class="col-12 border-bottom  pb-2 pt-2">
+    <div class="row text-center p-1 ">
+        <button type="button" class="btn btn-lg rounded-top-circle bottom-shadow" data-mdb-toggle="tooltip"
+                data-mdb-placement="right" title="Rectangle" @onclick="ButtonOnRectangleClick">
+            <span role="img" class="anticon  position-relative ">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-4 bg-primary badge-font-size">
+                    Q
+                </span>
+                <img src="icons/006_rectangle.svg" width="25" height="25"/>
+            </span>
+        </button>
+    </div>
+
+    <div class="row text-center p-1  ">
+        <button type="button" class="btn btn-lg rounded-top-circle bottom-shadow" data-mdb-toggle="tooltip"
+                data-mdb-placement="right" title="Polygon" @onclick="ButtonOnPolygonClick">
+            <span role="img" class="anticon position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-4 bg-primary  badge-font-size">W</span>
+                <img src="icons/007_polygon.svg" width="25" height="25"/>
+            </span>
+        </button>
+    </div>
+
+    <div class="row text-center p-1 ">
+        <button type="button" class="btn btn-lg rounded-top-circle bottom-shadow" data-mdb-toggle="tooltip"
+                data-mdb-placement="right" title="PolyLine" @onclick="ButtonOnPolyLineClick" >
+            <span role="img" class="anticon position-relative">
+                <img src="icons/008_poly_line.svg" width="25" height="25"/>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-4 bg-primary  badge-font-size">A</span>
+            </span>
+        </button>
+    </div>
+
+    <div class="row text-center p-1">
+        <button type="button" class="btn btn-lg rounded-top-circle bottom-shadow" data-mdb-toggle="tooltip"
+                data-mdb-placement="right" title="Polnts" @onclick="ButtonOnPointsClick">
+            <span role="img" class="anticon position-relative">
+                <img src="icons/009_points.svg" width="25" height="25"/>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-4 bg-primary  badge-font-size">S</span>
+            </span>
+        </button>
+    </div>
+
+</div>

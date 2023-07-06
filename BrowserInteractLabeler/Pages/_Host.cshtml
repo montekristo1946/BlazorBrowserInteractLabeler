@@ -1,0 +1,29 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@namespace BrowserInteractLabeler.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="~/"/>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.css"/>
+    <link rel="stylesheet" href="css/main.css">
+
+    <title>Interact Laber 0.2</title>
+    <link rel="icon" type="image/x-icon" href="/icons/icon_tile_3.ico">
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered"/>
+</head>
+<body>
+<component type="typeof(App)" render-mode="ServerPrerendered"/>
+
+
+<script type="text/javascript" src="css/bootstrap/bootstrap.js"></script>
+<script src="_framework/blazor.server.js"></script>
+<script src="scripts/jsinterop.js"></script>
+
+
+</body>
+</html>
