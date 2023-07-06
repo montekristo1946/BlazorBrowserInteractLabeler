@@ -53,6 +53,11 @@ public class CreateImageDataset : IHostedService
     private async Task LoadDataset(string pathTask)
     {
         var directories = Directory.GetDirectories(pathTask);
+        if (!directories.Any())
+        {
+            _logger.Error("[LoadDataset] fail GetDirectories");
+            return;
+        }
         foreach (var taskFolder in directories)
         {
             _logger.Debug("[LoadDataset] Load Folder:{ImageName}", taskFolder);

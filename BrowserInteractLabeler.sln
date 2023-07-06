@@ -10,6 +10,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Repository.IntegrationTest", "BrowserInteractLabeler.Repository.IntegrationTest\BrowserInteractLabeler.Repository.IntegrationTest.csproj", "{EAEE1409-09C8-49D8-8C77-BAEC409D611D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{76A47213-6737-4078-9472-9C91AB2678A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImagesToDataset", "ImagesToDataset", "{BC8CAC6F-9061-4E49-8472-6AF4B9312160}"
+	ProjectSection(SolutionItems) = preProject
+		Example\ImagesToDataset\000000019318.jpg = Example\ImagesToDataset\000000019318.jpg
+		Example\ImagesToDataset\000000024769.jpg = Example\ImagesToDataset\000000024769.jpg
+		Example\ImagesToDataset\000000027805.jpg = Example\ImagesToDataset\000000027805.jpg
+		Example\ImagesToDataset\000000032667.jpg = Example\ImagesToDataset\000000032667.jpg
+		Example\ImagesToDataset\000000036448.jpg = Example\ImagesToDataset\000000036448.jpg
+		Example\ImagesToDataset\000000038389.jpg = Example\ImagesToDataset\000000038389.jpg
+		Example\ImagesToDataset\000000038548.jpg = Example\ImagesToDataset\000000038548.jpg
+		Example\ImagesToDataset\000000057480.jpg = Example\ImagesToDataset\000000057480.jpg
+		Example\ImagesToDataset\annot.json = Example\ImagesToDataset\annot.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +51,8 @@ Global
 		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAEE1409-09C8-49D8-8C77-BAEC409D611D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BC8CAC6F-9061-4E49-8472-6AF4B9312160} = {76A47213-6737-4078-9472-9C91AB2678A6}
 	EndGlobalSection
 EndGlobal

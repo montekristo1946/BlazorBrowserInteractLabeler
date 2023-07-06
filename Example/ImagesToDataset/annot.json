@@ -1,0 +1,21 @@
+{
+    "Labels": [
+        {
+            "NameLabel": "1_People"
+        },
+        {
+            
+            "NameLabel": "2_Dog"
+        },
+        
+        {
+            "NameLabel": "3_Cat"
+        },
+        {
+          
+            "NameLabel": "4_Car"
+        }
+    ],
+    "Images": [],
+    "Annotations": []
+}

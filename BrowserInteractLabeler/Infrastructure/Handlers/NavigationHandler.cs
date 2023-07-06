@@ -45,7 +45,7 @@ public class NavigationHandler
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _markupHandler = markupHandler ?? throw new ArgumentNullException(nameof(markupHandler));
 
-        cacheModel.Images = new ImageFrame() { Images = File.ReadAllBytes("Resource/error_1.png"), Id = -1 };
+        cacheModel.Images = new ImageFrame() { Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Resource/error_1.png")), Id = -1 };
 
         cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
         cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
