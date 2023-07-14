@@ -16,7 +16,7 @@ public class SvgConstructor
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
     }
 
-    public async Task<string> CreateSVG(Annotation[] annotations)
+    public string CreateSVG(Annotation[] annotations)
     {
         if (annotations?.Any() == false)
             return string.Empty;
@@ -35,16 +35,16 @@ public class SvgConstructor
                 case TypeLabel.None:
                     break;
                 case TypeLabel.Box:
-                    svg += await CreateSVGBox(annotation, activeAnnot);
+                    svg += CreateSVGBox(annotation, activeAnnot);
                     break;
                 case TypeLabel.Polygon:
-                    svg += await CreateSVGPolygon(annotation, activeAnnot, false);
+                    svg +=  CreateSVGPolygon(annotation, activeAnnot, false);
                     break;
                 case TypeLabel.PolyLine:
-                    svg += await CreateSVGPolygon(annotation, activeAnnot, true);
+                    svg +=  CreateSVGPolygon(annotation, activeAnnot, true);
                     break;
                 case TypeLabel.Point:
-                    svg += await CreateSVGPoint(annotation, activeAnnot);
+                    svg +=  CreateSVGPoint(annotation, activeAnnot);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -55,10 +55,10 @@ public class SvgConstructor
         return svg;
     }
 
-    private async Task<string> CreateSVGPoint(Annotation annotation, bool activeAnnot)
+    private string CreateSVGPoint(Annotation annotation, bool activeAnnot)
     {
         var retPolygon = new List<string>();
-        var colorModel = await _serviceConfigs.GetColor(annotation.LabelId);
+        var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
         var radius = 2;
         var strokeWidth = 2;
@@ -73,11 +73,11 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private async Task<string> CreateSVGPolygon(Annotation annotation, bool activeAnnot, bool polyLineType)
+    private string CreateSVGPolygon(Annotation annotation, bool activeAnnot, bool polyLineType)
     {
         const int minDrawPoints = 2;
         var retPolygon = new List<string>();
-        var colorModel = await _serviceConfigs.GetColor(annotation.LabelId);
+        var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
         var radius = 2;
         var strokeWidth = 2;
@@ -129,7 +129,7 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private async Task<string> CreateSVGBox(Annotation annotation, bool activeAnnot)
+    private string CreateSVGBox(Annotation annotation, bool activeAnnot)
     {
         var strokeWidth = 2;
         var typeLine = CrateDottedLine(activeAnnot);
@@ -139,7 +139,7 @@ public class SvgConstructor
 
         var retBoxs = new List<string>();
 
-        var colorModel = await _serviceConfigs.GetColor(annotation.LabelId);
+        var colorModel =  _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
         if (activeAnnot)
         {

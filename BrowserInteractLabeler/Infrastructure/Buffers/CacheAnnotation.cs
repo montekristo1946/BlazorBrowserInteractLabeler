@@ -38,12 +38,12 @@ public class CacheAnnotation
     }
 
 
-    public async Task<Annotation[]> GetAllAnnotations(int imagesId)
+    public  Annotation[] GetAllAnnotations(int imagesId)
     {
         return _annotations.Where(p=>p.ImageFrameId==imagesId).ToArray();
     }
 
-    public async Task SaveAnnotationsOnSql(int imagesId)
+    public async Task SaveAnnotationsOnSqlAsync(int imagesId)
     {
         var removeAnnot =  await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         await _repository.DeleteAnnotationsAsync(removeAnnot);
@@ -55,7 +55,7 @@ public class CacheAnnotation
         await _repository.SaveAnnotationsAsync(_annotations.ToArray());
     }
 
-    public async Task RemoveLastAnnotation(int imagesId)
+    public void RemoveLastAnnotation(int imagesId)
     {
         var last = _annotations.LastOrDefault(p => p.ImageFrameId==imagesId);
         if (last is null)
@@ -65,7 +65,7 @@ public class CacheAnnotation
 
     }
 
-    public async Task RestoreLastAnnotation(int imagesId)
+    public void RestoreLastAnnotation(int imagesId)
     {
         if(_lastAnnotation.Id<0 || _lastAnnotation.ImageFrameId !=imagesId )
             return;
@@ -74,7 +74,7 @@ public class CacheAnnotation
         _lastAnnotation = new Annotation();
     }
 
-    public async Task LoadAnnotationsSlowStorage(int imagesId)
+    public async Task LoadAnnotationsSlowStorageAsync(int imagesId)
     {
         var allAnnot =  await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations =allAnnot.ToList();
@@ -83,7 +83,7 @@ public class CacheAnnotation
  
     }
 
-    public async Task DeleteAnnotation()
+    public void DeleteAnnotation()
     {
         var last = _annotations.LastOrDefault(p => p.State!=StateAnnot.Finalized);
         if (last is null)
@@ -129,7 +129,7 @@ public class CacheAnnotation
 
     }
 
-    public async Task<bool> SetActiveAnnot(int idAnnot)
+    public bool SetActiveAnnot(int idAnnot)
     {
         var current = _annotations.LastOrDefault(p => p.Id==idAnnot);
      
@@ -147,7 +147,7 @@ public class CacheAnnotation
         return false;
     }
 
-    public async Task SetActiveIdLabel(int id)
+    public void SetActiveIdLabel(int id)
     {
         var current = _annotations.LastOrDefault(p => p.State!=StateAnnot.Finalized);
         if (current is not null)

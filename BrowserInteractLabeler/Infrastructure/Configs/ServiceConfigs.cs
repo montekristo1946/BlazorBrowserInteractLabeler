@@ -299,7 +299,7 @@ public class ServiceConfigs
         };
     }
 
-    public async Task<ColorModel> GetColor(int annotationLabelId)
+    public ColorModel GetColor(int annotationLabelId)
     {
         var ret = Colors.FirstOrDefault(p => p.IdLabel == annotationLabelId);
         if (ret is null)

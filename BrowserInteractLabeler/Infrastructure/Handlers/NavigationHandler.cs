@@ -54,7 +54,7 @@ public class NavigationHandler
         cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
         cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
         _cacheModel.CurrentIdImg = 1;
-        UpdateSvg().Wait();
+        UpdateSvg();
     }
 
 
@@ -63,8 +63,8 @@ public class NavigationHandler
         _cacheModel.CurrentIdImg = 1;
         _cacheModel.CurrentProgress = 0;
         await CreateStartImagesState(_cacheModel.CurrentIdImg);
-        await _cacheAnnotation.LoadAnnotationsSlowStorage(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel = await _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
+        _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
@@ -84,10 +84,10 @@ public class NavigationHandler
 
 
         _cacheModel.ScaleCurrent = _defaultScale;
-        await _cacheAnnotation.LoadAnnotationsSlowStorage(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel = await _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
+        _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         _cacheModel.NameImages = imageFrame.NameImages;
-        await UpdateSvg();
+         UpdateSvg();
     }
 
     private async Task HandlerClickNextAsync(int index)
@@ -136,27 +136,27 @@ public class NavigationHandler
     }
 
 
-    public async Task UpdateSvg()
+    private protected void UpdateSvg()
     {
-        _cacheModel.AnnotationsOnPanel = await _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
-        _cacheModel.SvgModelString = await _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel);
+        _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        _cacheModel.SvgModelString = _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel);
     }
 
     public async Task SaveAnnotation()
     {
-        await _cacheAnnotation.SaveAnnotationsOnSql(_cacheModel.CurrentIdImg);
+        await _cacheAnnotation.SaveAnnotationsOnSqlAsync(_cacheModel.CurrentIdImg);
     }
 
     public async Task UndoClick()
     {
-        await _cacheAnnotation.RemoveLastAnnotation(_cacheModel.CurrentIdImg);
-        await UpdateSvg();
+         _cacheAnnotation.RemoveLastAnnotation(_cacheModel.CurrentIdImg);
+         UpdateSvg();
     }
 
     public async Task RedoClick()
     {
-        await _cacheAnnotation.RestoreLastAnnotation(_cacheModel.CurrentIdImg);
-        await UpdateSvg();
+         _cacheAnnotation.RestoreLastAnnotation(_cacheModel.CurrentIdImg);
+         UpdateSvg();
     }
 
     /// <summary>
@@ -165,19 +165,19 @@ public class NavigationHandler
     /// <param name="id"></param>
     public async Task SetActiveIdAnnotation(int id)
     {
-        var res = await _cacheAnnotation.SetActiveAnnot(id);
+        var res =  _cacheAnnotation.SetActiveAnnot(id);
         if (!res)
             return;
 
         _cacheModel.StatePrecess = "Edit";
-        await UpdateSvg();
+         UpdateSvg();
     }
 
 
     public async Task DeleteAnnotation()
     {
-        await _cacheAnnotation.DeleteAnnotation();
-        await UpdateSvg();
+         _cacheAnnotation.DeleteAnnotation();
+         UpdateSvg();
         SetMainFocusRootPanel = true;
     }
 
@@ -196,7 +196,7 @@ public class NavigationHandler
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.result ? "Create" : "";
 
-        await UpdateSvg();
+         UpdateSvg();
     }
 
     /// <summary>
@@ -212,17 +212,17 @@ public class NavigationHandler
         _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg);
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.result ? "Create" : "";
-        await UpdateSvg();
+         UpdateSvg();
     }
 
     public async Task HandlerSetLabelIdAsync(int id)
     {
         _markupHandler.ActiveIdLabel = id;
-        await _cacheAnnotation.SetActiveIdLabel(id);
+         _cacheAnnotation.SetActiveIdLabel(id);
         var color = _helper.CreateColorTextToPanel(id, _cacheModel.ColorAll);
         _cacheModel.ActiveIdLabelColor = color;
 
-        await UpdateSvg();
+         UpdateSvg();
     }
 
 
@@ -272,7 +272,7 @@ public class NavigationHandler
         if (res is false)
             return;
         await _cacheAnnotation.UpdateAnnotation(annotation);
-        await UpdateSvg();
+         UpdateSvg();
     }
 
     public async Task HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
@@ -302,7 +302,7 @@ public class NavigationHandler
             return;
 
         await _cacheAnnotation.UpdateAnnotation(resHandlerOnmouseuplAsync.annot);
-        await UpdateSvg();
+         UpdateSvg();
     }
 
     public async Task ButtonEnterIdActiveIdImagesAsync(string indexImgString)
