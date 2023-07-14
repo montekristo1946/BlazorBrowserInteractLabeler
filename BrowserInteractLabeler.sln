@@ -14,13 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{76A4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImagesToDataset", "ImagesToDataset", "{BC8CAC6F-9061-4E49-8472-6AF4B9312160}"
 	ProjectSection(SolutionItems) = preProject
-		Example\ImagesToDataset\000000019318.jpg = Example\ImagesToDataset\000000019318.jpg
-		Example\ImagesToDataset\000000024769.jpg = Example\ImagesToDataset\000000024769.jpg
-		Example\ImagesToDataset\000000027805.jpg = Example\ImagesToDataset\000000027805.jpg
 		Example\ImagesToDataset\000000032667.jpg = Example\ImagesToDataset\000000032667.jpg
 		Example\ImagesToDataset\000000036448.jpg = Example\ImagesToDataset\000000036448.jpg
 		Example\ImagesToDataset\000000038389.jpg = Example\ImagesToDataset\000000038389.jpg
-		Example\ImagesToDataset\000000038548.jpg = Example\ImagesToDataset\000000038548.jpg
 		Example\ImagesToDataset\000000057480.jpg = Example\ImagesToDataset\000000057480.jpg
 		Example\ImagesToDataset\annot.json = Example\ImagesToDataset\annot.json
 	EndProjectSection

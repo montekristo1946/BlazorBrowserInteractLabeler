@@ -1,4 +1,3 @@
-using AutoFixture;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using Microsoft.EntityFrameworkCore;

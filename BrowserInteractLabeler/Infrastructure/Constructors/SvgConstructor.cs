@@ -18,11 +18,16 @@ public class SvgConstructor
 
     public async Task<string> CreateSVG(Annotation[] annotations)
     {
+        if(annotations?.Any() == false)
+            return string.Empty;
+        
         var svg = string.Empty;
- 
         
         foreach (var annotation in annotations)
         {
+            if(annotation.Points?.Any() == false)
+                continue;
+            
             var activeAnnot = annotation.State != StateAnnot.Finalized; 
 
             switch (annotation.LabelPattern)
@@ -84,8 +89,11 @@ public class SvgConstructor
         var srcPoints = annotation.Points;
 
         
-        var anchorPoints = CreateAnchorPoints(srcPoints, radius, color, strokeWidth);
-        retPolygon.AddRange(anchorPoints);
+        if (activeAnnot)
+        {
+            var anchorPoints = CreateAnchorPoints(annotation.Points, radius, color, strokeWidth);
+            retPolygon.AddRange(anchorPoints);
+        }
         
         if(srcPoints.Count<minDrawPoints)
             return String.Join(" ", retPolygon);
@@ -134,9 +142,12 @@ public class SvgConstructor
         var radius = 2;
         var colorModel = await _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
-        var anchorPoints = CreateAnchorPoints(annotation.Points, radius, color, strokeWidth);
-        retBoxs.AddRange(anchorPoints);
-        
+        if (activeAnnot)
+        {
+            var anchorPoints = CreateAnchorPoints(annotation.Points, radius, color, strokeWidth);
+            retBoxs.AddRange(anchorPoints);
+        }
+
         if (annotation.Points.Count == 1)
         {
             const int lenghtLine = 1;//100% width/height img
@@ -182,8 +193,8 @@ public class SvgConstructor
             retBoxs.Add(line3);
             var line4 = CreateLine(x4, y4, x1, y1, color, strokeWidth,typeLine);
             retBoxs.Add(line4);
-            var line5 = CreateLine(x1, y1, x3, y3,color, strokeWidth*0.5f,typeLine);
-            retBoxs.Add(line5);
+            // var line5 = CreateLine(x1, y1, x3, y3,color, strokeWidth*0.5f,typeLine);
+            // retBoxs.Add(line5);
         }
 
         return String.Join(" ", retBoxs);
