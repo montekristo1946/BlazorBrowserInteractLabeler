@@ -27,9 +27,9 @@ public class MoveImagesHandler
         const int minMovePx = 10;
         if (timeClick - _timeFirstPoint < _minTimeMove)
             return (false, new SizeF());
-
-        if (mouseEventArgs.Buttons != 1 || mouseEventArgs.ShiftKey == false)
-            return (false, new SizeF());
+        //
+        // if (mouseEventArgs.Buttons != 1 || mouseEventArgs.ShiftKey == false)
+        //     return (false, new SizeF());
 
         var retMove = new SizeF()
         {

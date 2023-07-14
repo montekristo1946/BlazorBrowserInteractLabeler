@@ -26,7 +26,7 @@ public class SwipePanelModel:ComponentBase
     
     internal async Task EventOninput(ChangeEventArgs arg)
     {
-        _logger.Debug("[EventOninput]{@Value}",arg.Value);
+        // _logger.Debug("[EventOninput]{@Value}",arg.Value);
         IdActiveIdImages = (string)arg.Value;
     }
     
@@ -34,7 +34,7 @@ public class SwipePanelModel:ComponentBase
     {
         if (arg.Key == "Enter")
         {
-            _logger.Debug("[ButtonEnter] {@Value}",IdActiveIdImages);
+            // _logger.Debug("[ButtonEnter] {@Value}",IdActiveIdImages);
             await ButtonEnterIdActiveIdImages.InvokeAsync(IdActiveIdImages);
         }
     }

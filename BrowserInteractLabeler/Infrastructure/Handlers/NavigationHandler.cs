@@ -45,7 +45,11 @@ public class NavigationHandler
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _markupHandler = markupHandler ?? throw new ArgumentNullException(nameof(markupHandler));
 
-        cacheModel.Images = new ImageFrame() { Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Resource/error_1.png")), Id = -1 };
+        cacheModel.Images = new ImageFrame()
+        {
+            Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/error_1.png")),
+            Id = -1
+        };
 
         cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
         cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
@@ -65,20 +69,20 @@ public class NavigationHandler
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
     }
-    
+
 
     private async Task CreateStartImagesState(int indexImg)
     {
         var imageFrame = await _repository.GetImagesByIndexAsync(indexImg);
-        if(!imageFrame.Images.Any())
+        if (!imageFrame.Images.Any())
             return;
-            
+
         _cacheModel.Images = imageFrame;
         _cacheModel.SizeDrawImage = _helper.CalculationOptimalSize(imageFrame.SizeImage, _cacheModel.ImageWindowsSize);
         _cacheModel.OffsetDrawImage =
             _helper.CalculationDefaultOffsetImg(_cacheModel.SizeDrawImage, _cacheModel.ImageWindowsSize);
-        
-        
+
+
         _cacheModel.ScaleCurrent = _defaultScale;
         await _cacheAnnotation.LoadAnnotationsSlowStorage(_cacheModel.CurrentIdImg);
         _cacheModel.AnnotationsOnPanel = await _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
@@ -90,32 +94,31 @@ public class NavigationHandler
     {
         var allIndex = await _repository.GetAllIndexImagesAsync();
 
-        if (index > allIndex.Length || index<1 )
+        if (index > allIndex.Length || index < 1)
         {
             _logger.Debug("[NavigationHandler:HandlerClickNextAsync] the list is over");
-            return ;
+            return;
         }
+
         await SetActiveIdAnnotation(-1);
         await SaveAnnotation();
         _cacheModel.CurrentIdImg = index;
-       
-        _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index,allIndex.Length );
+
+        _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
         await CreateStartImagesState(index);
         _cacheModel.StatePrecess = "";
-       
     }
+
     public async Task ButtonGoNextClick()
     {
         var currentId = _cacheModel.CurrentIdImg + 1;
-       await HandlerClickNextAsync(currentId);
-
+        await HandlerClickNextAsync(currentId);
     }
 
     public async Task ButtonGoBackClick()
     {
         var currentId = _cacheModel.CurrentIdImg - 1;
         await HandlerClickNextAsync(currentId);
-        
     }
 
 
@@ -185,7 +188,7 @@ public class NavigationHandler
     }
 
     /// <summary>
-    ///     keyBoard [N]
+    ///     keyBoard [E]
     /// </summary>
     public async Task EventEditAnnot()
     {
@@ -289,16 +292,12 @@ public class NavigationHandler
 
     public async Task ButtonEnterIdActiveIdImagesAsync(string indexImgString)
     {
-        _logger.Debug($"[ButtonEnterIdActiveIdImagesAsync] {indexImgString}");
+        // _logger.Debug($"[ButtonEnterIdActiveIdImagesAsync] {indexImgString}");
         var resultTryParse = Int32.TryParse(indexImgString, out var indexImg);
-        if(!resultTryParse)
+        if (!resultTryParse)
             return;
-      
+
         await HandlerClickNextAsync(indexImg);
-        
-
-
-        
     }
 
     public Task CancelFocusRootPanelAsync()

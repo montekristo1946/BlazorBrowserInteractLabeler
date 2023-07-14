@@ -14,7 +14,7 @@ public class KeyMapHandler
     private readonly ServiceConfigs _serviceConfigs;
     private readonly ILogger _logger = Log.ForContext<NavigationHandler>();
 
-    public KeyMapHandler(NavigationHandler navigationHandler,ServiceConfigs serviceConfigs)
+    public KeyMapHandler(NavigationHandler navigationHandler, ServiceConfigs serviceConfigs)
     {
         _navigationHandler = navigationHandler ?? throw new ArgumentNullException(nameof(navigationHandler));
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
@@ -27,21 +27,20 @@ public class KeyMapHandler
 
         var keyStrLow = arg.Key.ToLower();
 
-        await BasicFunctions(keyStrLow);
-        await MarkupFunctions(keyStrLow,_serviceConfigs.Colors);
- 
+        await BasicFunctions(keyStrLow, arg.Code);
+        await MarkupFunctions(keyStrLow, _serviceConfigs.Colors);
     }
 
     private async Task MarkupFunctions(string keyStrLow, ColorModel[] serviceConfigsColors)
     {
         var findKey = serviceConfigsColors.FirstOrDefault(p => p.KeyOnBoard == keyStrLow);
-        if(findKey is null)
+        if (findKey is null)
             return;
-    
+
         await _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
     }
 
-    private async Task BasicFunctions(string keyStrLow)
+    private async Task BasicFunctions(string keyStrLow, string codeKey)
     {
         switch (keyStrLow)
         {
@@ -63,7 +62,7 @@ public class KeyMapHandler
                 await _navigationHandler.DeleteAnnotation();
                 break;
             }
-            case "n":
+            case "e":
             {
                 await _navigationHandler.EventEditAnnot();
                 break;
@@ -88,12 +87,12 @@ public class KeyMapHandler
                 await _navigationHandler.EnableTypeLabel(TypeLabel.Point);
                 break;
             }
-            case "control":
+            case " ": //Sapase
             {
-                await _navigationHandler.ButtonDefaultPositionImg();
+                if (codeKey == "Space")
+                    await _navigationHandler.ButtonDefaultPositionImg();
                 break;
             }
-               
         }
     }
 
@@ -104,8 +103,11 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandleImagePanelMouseAsync(MouseEventArgs arg)
     {
-        if (arg.ShiftKey is false)
+        if (arg.AltKey is false)
+        {
+            // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}",arg);
             await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
+        }
     }
 
     /// <summary>
@@ -114,11 +116,27 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandlerImagesPanelOnmousedownAsync(MouseEventArgs arg)
     {
-        if (arg.ShiftKey)
+        if (arg.AltKey)
+        {
             await _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
-                DateTime.Now); //кооректируе точку отчета при перемещении изображения
+                DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+            return;
+        }
 
-        await _navigationHandler.HandlerSelectPointAsync(arg, DateTime.Now);
+        await _navigationHandler.HandlerSelectPointAsync(arg, DateTime.Now);  //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+    }
+
+    /// <summary>
+    ///     Общая панель для отрисовки перемещение мыши
+    /// </summary>
+    /// <param name="arg"></param>
+    public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
+    {
+        const long buttons = 1;
+        if (arg is { AltKey: true, Buttons: buttons })
+        {
+            await _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg, DateTime.Now);
+        }
     }
 
     /// <summary>
@@ -127,20 +145,11 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
     {
-        if (args.Buttons == 1)
+        const long buttons = 1;
+        if (args is { AltKey: false, Buttons: buttons })
             await _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
     }
 
-
-    /// <summary>
-    ///     Общая панель для отрисовки перемещение мыши
-    /// </summary>
-    /// <param name="arg"></param>
-    public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
-    {
-        if (arg.ShiftKey)
-            await _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg, DateTime.Now);
-    }
 
     /// <summary>
     ///     Общая панель для отрисовки , колесо мыши
