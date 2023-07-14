@@ -71,7 +71,7 @@
                     var colorModel = ColorAll.FirstOrDefault(p => p.IdLabel == label.Id);
                     var alpha = "ff"; //ff*0.3=76
                     var color = colorModel?.Color + alpha;
-                    var textKey = $"[{colorModel?.KeyOnBoard}]";
+                    var textKey = $"[{colorModel?.KeyOnBoardName}]";
 
                     var name = label.NameLabel;
                     <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"

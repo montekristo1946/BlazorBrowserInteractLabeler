@@ -20,8 +20,8 @@ public class MarkerModel : ComponentBase
     [Inject] internal IJSRuntime _JSRuntime { get; set; }
     
     internal readonly string IdImagesPamel  = "marker_panel";
-    internal readonly KeyboardEventArgs _commandGoNext = new() { Key = "f" };
-    internal readonly KeyboardEventArgs _commandGoBack = new() { Key = "d" };
+    internal readonly KeyboardEventArgs _commandGoNext = new() { Key = "f",Code = "KeyF"};
+    internal readonly KeyboardEventArgs _commandGoBack = new() { Key = "d",Code = "KeyD" };
     
     
     internal async Task HandleKeyDown(KeyboardEventArgs arg)

@@ -13,6 +13,7 @@ public class KeyMapHandler
 
     private readonly ServiceConfigs _serviceConfigs;
     private readonly ILogger _logger = Log.ForContext<NavigationHandler>();
+    private Dictionary<string, string> mLookup;
 
     public KeyMapHandler(NavigationHandler navigationHandler, ServiceConfigs serviceConfigs)
     {
@@ -23,74 +24,73 @@ public class KeyMapHandler
 
     public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
     {
-        // _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
+        _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
 
         var keyStrLow = arg.Key.ToLower();
 
-        await BasicFunctions(keyStrLow, arg.Code);
-        await MarkupFunctions(keyStrLow, _serviceConfigs.Colors);
+        await BasicFunctions(arg.Code);
+        await MarkupFunctions(arg.Code, _serviceConfigs.Colors);
     }
 
-    private async Task MarkupFunctions(string keyStrLow, ColorModel[] serviceConfigsColors)
+    private async Task MarkupFunctions(string codeKey, ColorModel[] serviceConfigsColors)
     {
-        var findKey = serviceConfigsColors.FirstOrDefault(p => p.KeyOnBoard == keyStrLow);
+        var findKey = serviceConfigsColors.FirstOrDefault(p => p.KeyCode == codeKey);
         if (findKey is null)
             return;
 
         await _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
     }
 
-    private async Task BasicFunctions(string keyStrLow, string codeKey)
+    private async Task BasicFunctions(string codeKey)
     {
-        switch (keyStrLow)
+        switch (codeKey)
         {
-            case "d":
-            case "arrowleft":
+            case "KeyD":
+            case "ArrowLeft":
             {
                 await _navigationHandler.ButtonGoBackClick();
                 break;
             }
-            case "f":
-            case "arrowright":
+            case "KeyF":
+            case "ArrowRight":
             {
                 await _navigationHandler.ButtonGoNextClick();
                 break;
             }
-            case "delete":
-            case "x":
+            case "Delete":
+            case "KeyX":
             {
                 await _navigationHandler.DeleteAnnotation();
                 break;
             }
-            case "e":
+            case "KeyE":
             {
                 await _navigationHandler.EventEditAnnot();
                 break;
             }
-            case "q":
+            case "KeyQ":
             {
                 await _navigationHandler.EnableTypeLabel(TypeLabel.Box);
                 break;
             }
-            case "w":
+            case "KeyW":
             {
                 await _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
                 break;
             }
-            case "a":
+            case "KeyA":
             {
                 await _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
                 break;
             }
-            case "s":
+            case "KeyS":
             {
                 await _navigationHandler.EnableTypeLabel(TypeLabel.Point);
                 break;
             }
-            case " ": //Sapase
+            case "Space": //Sapase
             {
-                if (codeKey == "Space")
-                    await _navigationHandler.ButtonDefaultPositionImg();
+                await _navigationHandler.ButtonDefaultPositionImg();
                 break;
             }
         }
@@ -123,7 +123,8 @@ public class KeyMapHandler
             return;
         }
 
-        await _navigationHandler.HandlerSelectPointAsync(arg, DateTime.Now);  //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+        await _navigationHandler.HandlerSelectPointAsync(arg,
+            DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
     }
 
     /// <summary>
