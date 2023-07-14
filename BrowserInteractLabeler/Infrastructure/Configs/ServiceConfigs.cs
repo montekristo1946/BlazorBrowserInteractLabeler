@@ -75,7 +75,7 @@ public class ServiceConfigs
                 Color = "#AA47BC",
                 IdLabel = 2,
                 KeyOnBoardName = "2",
-                KeyCode = "Digit1"
+                KeyCode = "Digit2"
             },
             new ColorModel()
             {
