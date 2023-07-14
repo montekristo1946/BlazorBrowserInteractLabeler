@@ -149,6 +149,10 @@ public class KeyMapHandler
         const long buttons = 1;
         if (args is { AltKey: false, Buttons: buttons })
             await _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
+        
+        
+        // _logger.Debug("[HandleWheelDrawingPanelMouseEventAsync]  {@WheelEventArgs}", args);
+
     }
 
 
