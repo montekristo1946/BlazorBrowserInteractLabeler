@@ -26,7 +26,7 @@ public class KeyMapHandler
     {
         // _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
 
-        var keyStrLow = arg.Key.ToLower();
+        // var keyStrLow = arg.Key.ToLower();
 
         await BasicFunctions(arg.Code);
         await MarkupFunctions(arg.Code, _serviceConfigs.Colors);
