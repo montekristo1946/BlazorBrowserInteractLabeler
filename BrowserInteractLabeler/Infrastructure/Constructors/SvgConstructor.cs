@@ -84,7 +84,7 @@ public class SvgConstructor
         var typeLine = CrateDottedLine(activeAnnot);
 
         if (activeAnnot)
-            strokeWidth = 3;
+            strokeWidth = 2;
 
         var srcPoints = annotation.Points;
 
@@ -133,16 +133,17 @@ public class SvgConstructor
     {
         var strokeWidth = 2;
         var typeLine = CrateDottedLine(activeAnnot);
+        
         if (activeAnnot)
-            strokeWidth = 3;
+            strokeWidth = 2;
 
         var retBoxs = new List<string>();
 
-        var radius = 2;
         var colorModel = await _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
         if (activeAnnot)
         {
+            var radius = 2;
             var anchorPoints = CreateAnchorPoints(annotation.Points, radius, color, strokeWidth);
             retBoxs.AddRange(anchorPoints);
         }

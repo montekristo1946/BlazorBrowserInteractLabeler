@@ -92,15 +92,8 @@ public class CacheAnnotation
         _annotations.Remove(_lastAnnotation);
     }
 
-    public async Task EventEditAnnot(int imagesId)
+    private void CreateNewAnnot(int imagesId)
     {
-        var last = _annotations.LastOrDefault(p => p.State!=StateAnnot.Finalized);
-        if (last is not null)
-        {
-            last.State = StateAnnot.Finalized;
-            return;
-        }
-
         _lastIdDb += 1;
         var annot =new Annotation()
         {
@@ -111,6 +104,29 @@ public class CacheAnnotation
             LabelId = -1
         };
         _annotations.Add(annot);
+    }
+    
+    public  void EventEditAnnotForceCreateNew(int imagesId)
+    {
+        foreach (var annotation in _annotations)
+        {
+            annotation.State =StateAnnot.Finalized;
+        }
+        
+        CreateNewAnnot(imagesId);
+
+    }
+    public  void EventEditAnnot(int imagesId)
+    {
+        var last = _annotations.LastOrDefault(p => p.State!=StateAnnot.Finalized);
+        if (last is not null)
+        {
+            last.State = StateAnnot.Finalized;
+            return;
+        }
+
+        CreateNewAnnot(imagesId);
+
     }
 
     public async Task<bool> SetActiveAnnot(int idAnnot)

@@ -192,18 +192,27 @@ public class NavigationHandler
     /// </summary>
     public async Task EventEditAnnot()
     {
-        await _cacheAnnotation.EventEditAnnot(_cacheModel.CurrentIdImg);
+        _cacheAnnotation.EventEditAnnot(_cacheModel.CurrentIdImg);
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.result ? "Create" : "";
 
         await UpdateSvg();
     }
 
+    /// <summary>
+    ///     key q,w,a,s
+    /// </summary>
+    /// <param name="typeLabel"></param>
     public async Task EnableTypeLabel(TypeLabel typeLabel)
     {
         _markupHandler.ActiveTypeLabel = typeLabel;
         var textToPanel = await _helper.CreateTypeTextToPanel(typeLabel);
         _cacheModel.ActiveTypeLabel = textToPanel;
+        
+        _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg);
+        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        _cacheModel.StatePrecess = resultGetEditAnnotation.result ? "Create" : "";
+        await UpdateSvg();
     }
 
     public async Task HandlerSetLabelIdAsync(int id)
@@ -245,6 +254,12 @@ public class NavigationHandler
             _cacheModel.OffsetDrawImage = _helper.CorrectOffset(moveDist.moveDist, _cacheModel.OffsetDrawImage);
     }
 
+    
+    /// <summary>
+    ///     Точки разметки
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="now"></param>
     public async Task HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
         var sizeImg = await GetSizeDrawImage();
