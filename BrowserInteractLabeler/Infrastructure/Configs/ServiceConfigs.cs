@@ -64,7 +64,7 @@ public class ServiceConfigs
         {
             new ColorModel()
             {
-                Color = "#F44236",
+                Color = "#2196F3",
                 IdLabel = 1,
                 KeyOnBoardName = "1",
                 KeyCode = "Digit1"
@@ -72,66 +72,66 @@ public class ServiceConfigs
             },
             new ColorModel()
             {
-                Color = "#AA47BC",
+                Color = "#8BC24A",
                 IdLabel = 2,
                 KeyOnBoardName = "2",
                 KeyCode = "Digit2"
             },
             new ColorModel()
             {
-                Color = "#2a1899",
+                Color = "#B61C1C",
                 IdLabel = 3,
                 KeyOnBoardName = "3",
                 KeyCode = "Digit3"
             },
             new ColorModel()
             {
-                Color = "#66BB6A",
+                Color = "#F9BBD0",
                 IdLabel = 4,
                 KeyOnBoardName = "4",
                 KeyCode = "Digit4"
             },
             new ColorModel()
             {
-                Color = "#FFEB3C",
+                Color = "#FF6F00",
                 IdLabel = 5,
                 KeyOnBoardName = "5",
                 KeyCode = "Digit5"
             },
             new ColorModel()
             {
-                Color = "#0288D1",
+                Color = "#FFEB3C",
                 IdLabel = 6,
                 KeyOnBoardName = "6",
                 KeyCode = "Digit6"
             },
             new ColorModel()
             {
-                Color = "#80CBC4",
+                Color = "#1C5E20",
                 IdLabel = 7,
                 KeyOnBoardName = "7",
                 KeyCode = "Digit7"
             },
             new ColorModel()
             {
-                Color = "#EC407A",
+                Color = "#6A1B9A",
                 IdLabel = 8,
-                KeyOnBoardName = "8",
-                KeyCode = "Digit8"
+                KeyOnBoardName = "t",
+                KeyCode = "KeyT"
             },
             new ColorModel()
             {
-                Color = "#FF9700",
+                Color = "#303E9F",
                 IdLabel = 9,
-                KeyOnBoardName = "9",
-                KeyCode = "Digit9"
+                KeyOnBoardName = "y",
+                KeyCode = "KeyY"
             },
             new ColorModel()
             {
-                Color = "#D4E056",
+                Color = "#EC407A",
                 IdLabel = 10,
-                KeyOnBoardName = "h",
-                KeyCode = "KeyH"
+                KeyOnBoardName = "u",
+                KeyCode = "KeyU"
             },
             new ColorModel()
             {
