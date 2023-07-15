@@ -77,7 +77,7 @@ public class Helper
 
         return new PointF() { Y = offsetY, X = offsetX };
     }
-    
+
     internal (float scale, PointF offset) CalculationScale(WheelEventArgs args,
         float? scaleInput,
         SizeF? sizeDrawImage,
@@ -115,7 +115,7 @@ public class Helper
         var positionY = offsetDrawImage.Y / (1 / scaleInput);
         var offY = positionY * (1 / scale);
         offsetY = (float)offY;
-        
+
         var offset = new PointF() { X = offsetX, Y = offsetY };
 
         return ((float scale, PointF offset))(scale, offset);
@@ -180,7 +180,7 @@ public class Helper
     public int CalculationCurrentProgress(int cacheModelCurrentIdImg, int allIndexLength)
     {
         // allIndexLength -= 1;
-        
+
         if (allIndexLength <= 0)
             return 0;
         if (cacheModelCurrentIdImg == allIndexLength)
@@ -188,4 +188,6 @@ public class Helper
         var ret = (float)cacheModelCurrentIdImg / (float)allIndexLength * 100F;
         return (int)ret;
     }
+
+    
 }

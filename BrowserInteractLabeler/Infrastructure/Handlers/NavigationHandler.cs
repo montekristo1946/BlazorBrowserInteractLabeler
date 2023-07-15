@@ -269,8 +269,10 @@ public class NavigationHandler
 
         var (res, annotation) =
             await _markupHandler.HandleMouseClickAsync(mouseEventArgs, sizeImg, resultGetEditAnnotation.annot);
+        
         if (res is false)
             return;
+        
         await _cacheAnnotation.UpdateAnnotation(annotation);
          UpdateSvg();
     }

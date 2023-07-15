@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrowserInteractLabeler.Repository.IntegrationTest;
 
-public class SqlRepositoryIntegrationTest 
+public class SqlRepositoryIntegrationTest
 {
     private readonly IRepository _operativeFramesStorage;
     private Fixture _fixture = new();
@@ -14,17 +14,22 @@ public class SqlRepositoryIntegrationTest
     public SqlRepositoryIntegrationTest(string pathDb)
     {
         _operativeFramesStorage = new SqlRepository();
-        _operativeFramesStorage.LoadDatabaseAsync(pathDb);
+        _operativeFramesStorage.LoadDatabaseAsync(pathDb).Wait();
+    }
+
+    public SqlRepositoryIntegrationTest()
+    {
     }
 
     public void Dispose()
     {
         _operativeFramesStorage.Dispose();
     }
+
     public void InsertImageFramesTest()
     {
         var arrFrames = new List<ImageFrame>();
-        
+
         for (int i = 0; i < 250; i++)
         {
             var sizeImage = _fixture.Build<SizeF>().With(p => p.Id, 0)
@@ -36,33 +41,32 @@ public class SqlRepositoryIntegrationTest
                 .Create();
             arrFrames.Add(frame);
         }
-  
-       
-        var res =  _operativeFramesStorage.InsertImageFrames(arrFrames.ToArray()).Result;
+
+
+        var res = _operativeFramesStorage.InsertImageFrames(arrFrames.ToArray()).Result;
         if (!res)
             throw new Exception("Fail InsertImageFrames");
     }
-    
+
     public void InsertLabelsTest()
     {
         var frame = _fixture.Build<Label>()
             .With(p => p.Id, 0)
             .CreateMany(100).ToArray();
-        
-        var res =  _operativeFramesStorage.InsertLabels(frame).Result;
+
+        var res = _operativeFramesStorage.InsertLabels(frame).Result;
         if (!res)
             throw new Exception("Fail InsertLabels");
     }
-    
-    public void SaveAnnotationsAsyncTest()
+
+    public void SaveAnnotationsAsyncTest(int countAnnot = 5, int countImg = 250)
     {
-     
-         var rnd = new Random();
+        var rnd = new Random();
         var arrAnnotations = new List<Annotation>();
-        for (int i = 1; i < 250; i++)
+        for (int i = 1; i < countImg; i++)
         {
             ImageFrame images = null;
-            for (int j = 0; j < 20; j++)
+            for (int j = 0; j < countAnnot; j++)
             {
                 var points = _fixture.Build<PointF>()
                     .With(p => p.Id, 0)
@@ -71,14 +75,15 @@ public class SqlRepositoryIntegrationTest
                     .CreateMany(50).ToList();
                 var annotation = _fixture.Build<Annotation>()
                     .With(p => p.Id, 0)
-                    .With(p=>p.LabelId, rnd.Next(1, 100))
+                    .With(p => p.LabelId, rnd.Next(1, 100))
                     .With(p => p.ImageFrameId, i)
-                    .With(p=>p.Points,points)
-                    .With(p=>p.Images,images)
+                    .With(p => p.Points, points)
+                    .With(p => p.Images, images)
                     .Create();
                 arrAnnotations.Add(annotation);
             }
         }
+
         var res = _operativeFramesStorage.SaveAnnotationsAsync(arrAnnotations.ToArray()).Result;
         if (!res)
             throw new Exception("Fail SaveAnnotationsAsyncTest");
@@ -103,7 +108,7 @@ public class SqlRepositoryIntegrationTest
             throw new Exception("Fail GetAnnotationsFromImgIdAsync");
 
         var res = _operativeFramesStorage.DeleteAnnotationsAsync(arrAnnot).Result;
-        
+
         if (!res)
             throw new Exception("Fail DeleteAnnotationsAsync");
     }
@@ -111,16 +116,16 @@ public class SqlRepositoryIntegrationTest
     public void GetAllIMagesIndexAsyncTest()
     {
         var res = _operativeFramesStorage.GetAllIndexImagesAsync().Result;
-        
+
         if (!res.Any())
             throw new Exception("Fail GetAllIMagesIndexAsync");
     }
-    
+
     public void GetImagesByIndexAsyncTest()
     {
         var imgId = 100;
         var res = _operativeFramesStorage.GetImagesByIndexAsync(imgId).Result;
-        
+
         if (!res.Images.Any())
             throw new Exception("Fail GetImagesByIndexAsync");
     }
@@ -128,7 +133,7 @@ public class SqlRepositoryIntegrationTest
     public void GetAllLabelsAsyncTest()
     {
         var res = _operativeFramesStorage.GetAllLabelsAsync().Result;
-        
+
         if (!res.Any())
             throw new Exception("Fail GetAllLabelsAsyncTest");
     }
@@ -138,8 +143,8 @@ public class SqlRepositoryIntegrationTest
     {
         var res = _operativeFramesStorage.GetLastIndexAnnotation().Result;
 
-        var lastId = 4980;
-        if (res!=lastId)
+        var lastId = 1245;
+        if (res != lastId)
             throw new Exception("Fail GetLastIndexAnnotation");
     }
 
@@ -159,9 +164,31 @@ public class SqlRepositoryIntegrationTest
             },
             State = StateAnnot.Active
         };
-        
-        var res = _operativeFramesStorage.SaveAnnotationsAsync(new []{annot}).Result;
+
+        var res = _operativeFramesStorage.SaveAnnotationsAsync(new[] { annot }).Result;
         if (!res)
             throw new Exception("Fail SaveAnnotationsAsyncTest");
+    }
+
+    public void TestFailInitSql(string fullPathDb)
+    {
+        using IRepository operativeFramesStorage = new SqlRepository();
+        var resInit = operativeFramesStorage.LoadDatabaseAsync(fullPathDb).Result;
+        if (!resInit)
+            throw new Exception("Fail TestInitSql");
+    }
+
+    
+    public void TestInheritanceOfData()
+    {
+        var imgId = 1;
+        var arrAnnotSrc = _operativeFramesStorage.GetAnnotationsFromImgIdAsync(imgId).Result;
+        var arrClone = arrAnnotSrc.CloneDeep();
+        
+        arrClone[0].Points[0] = new PointF() { X = 1, Y = 2 };
+        
+        if(arrAnnotSrc[0].Points[0].X == arrClone[0].Points[0].X)
+            throw new Exception("Fail CloneDeep");
+        
     }
 }

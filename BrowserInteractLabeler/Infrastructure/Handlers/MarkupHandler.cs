@@ -217,7 +217,8 @@ public class MarkupHandler
 
         // _logger.Debug($"[test] {currentX} {currentY}");
         var currentIndex = annot.Points.IndexOf(removePoints);
-        var newPoints = new PointF() { X = currentX, Y = currentY };
+        var oldPoints = annot.Points[currentIndex];
+        var newPoints = new PointF() { X = currentX, Y = currentY, AnnotationId = oldPoints.AnnotationId, Id = 0};
         annot.Points[currentIndex] = newPoints;
 
 
