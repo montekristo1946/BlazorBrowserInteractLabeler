@@ -136,10 +136,11 @@ public class NavigationHandler
     }
 
 
-    private protected void UpdateSvg()
+    private void UpdateSvg()
     {
         _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
-        _cacheModel.SvgModelString = _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel);
+        var thicknessLine = 1 / _cacheModel.ScaleCurrent;
+        _cacheModel.SvgModelString = _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel,thicknessLine);
     }
 
     public async Task SaveAnnotation()
@@ -244,6 +245,7 @@ public class NavigationHandler
             _cacheModel.ImageWindowsSize);
         _cacheModel.OffsetDrawImage = offset;
         _cacheModel.ScaleCurrent = scale;
+        UpdateSvg();
     }
 
     public async Task HandlerImagesPanelOnmousedownAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)

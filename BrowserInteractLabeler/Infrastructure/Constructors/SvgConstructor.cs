@@ -16,11 +16,12 @@ public class SvgConstructor
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
     }
 
-    public string CreateSVG(Annotation[] annotations)
+    public string CreateSVG(Annotation[] annotations, double thicknessLine)
     {
         if (annotations?.Any() == false)
             return string.Empty;
 
+        _logger.Debug($"CreateSVG {thicknessLine}");
         var svg = string.Empty;
 
         foreach (var annotation in annotations)
@@ -35,16 +36,16 @@ public class SvgConstructor
                 case TypeLabel.None:
                     break;
                 case TypeLabel.Box:
-                    svg += CreateSVGBox(annotation, activeAnnot);
+                    svg += CreateSVGBox(annotation, activeAnnot, thicknessLine);
                     break;
                 case TypeLabel.Polygon:
-                    svg +=  CreateSVGPolygon(annotation, activeAnnot, false);
+                    svg += CreateSVGPolygon(annotation, activeAnnot, false, thicknessLine);
                     break;
                 case TypeLabel.PolyLine:
-                    svg +=  CreateSVGPolygon(annotation, activeAnnot, true);
+                    svg += CreateSVGPolygon(annotation, activeAnnot, true,thicknessLine);
                     break;
                 case TypeLabel.Point:
-                    svg +=  CreateSVGPoint(annotation, activeAnnot);
+                    svg += CreateSVGPoint(annotation, activeAnnot,thicknessLine);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -55,17 +56,19 @@ public class SvgConstructor
         return svg;
     }
 
-    private string CreateSVGPoint(Annotation annotation, bool activeAnnot)
+    private string CreateSVGPoint(Annotation annotation, bool activeAnnot, double thicknessLine)
     {
         var retPolygon = new List<string>();
         var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
-        var radius = 2;
-        var strokeWidth = 2;
+        var strokeWidth = 2d;
 
         if (activeAnnot)
-            strokeWidth *= 2;
+            strokeWidth += 1;
 
+        strokeWidth *= thicknessLine;
+        var radius = strokeWidth;
+        
         var srcPoints = annotation.Points;
         var anchorPoints = CreateAnchorPoints(srcPoints, radius, color, strokeWidth);
         retPolygon.AddRange(anchorPoints);
@@ -73,19 +76,18 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private string CreateSVGPolygon(Annotation annotation, bool activeAnnot, bool polyLineType)
+    private string CreateSVGPolygon(Annotation annotation, bool activeAnnot, bool polyLineType, double thicknessLine)
     {
         const int minDrawPoints = 2;
         var retPolygon = new List<string>();
         var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
-        var radius = 2;
-        var strokeWidth = 2;
+       
+        var strokeWidth = 2D;
         var typeLine = CrateDottedLine(activeAnnot);
-
-        if (activeAnnot)
-            strokeWidth = 2;
-
+        
+        strokeWidth *= thicknessLine;
+        var radius =strokeWidth;
         var srcPoints = annotation.Points;
 
 
@@ -129,21 +131,23 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private string CreateSVGBox(Annotation annotation, bool activeAnnot)
+    private string CreateSVGBox(Annotation annotation, bool activeAnnot, double thicknessLine)
     {
-        var strokeWidth = 2;
+        var strokeWidth = 2D;
         var typeLine = CrateDottedLine(activeAnnot);
-        
-        if (activeAnnot)
-            strokeWidth = 2;
+
+        // if (activeAnnot)
+        //     strokeWidth =2D;
+
+        strokeWidth *= thicknessLine;
 
         var retBoxs = new List<string>();
 
-        var colorModel =  _serviceConfigs.GetColor(annotation.LabelId);
+        var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
         if (activeAnnot)
         {
-            var radius = 2;
+            var radius = strokeWidth;
             var anchorPoints = CreateAnchorPoints(annotation.Points, radius, color, strokeWidth);
             retBoxs.AddRange(anchorPoints);
         }
@@ -211,7 +215,7 @@ public class SvgConstructor
         return typeLine;
     }
 
-    private string[] CreateAnchorPoints(List<PointF> points, int radius, string color, int strokeWidth)
+    private string[] CreateAnchorPoints(List<PointF> points, double radius, string color, double strokeWidth)
     {
         var retPoints = new List<string>();
         foreach (var annotationPoint in points)
@@ -226,13 +230,13 @@ public class SvgConstructor
         return retPoints.ToArray();
     }
 
-    private string CreateCircle(float cx, float cy, int r, string color, int strokeWidth)
+    private string CreateCircle(double cx, double cy, double r, string color, double strokeWidth)
     {
         return
             $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"{color}\" fill-opacity=\"1\"></circle>";
     }
 
-    private string CreateLine(float x1, float y1, float x2, float y2, string colorModelColor, float strokeWidth,
+    private string CreateLine(double x1, double y1, double x2, double y2, string colorModelColor, double strokeWidth,
         string typeLine)
     {
         return
