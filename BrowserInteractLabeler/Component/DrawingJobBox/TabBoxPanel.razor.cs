@@ -1,3 +1,4 @@
+using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -13,17 +14,35 @@ public class LabelsPanelModel : ComponentBase
     [Parameter] public ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
     [Parameter] public EventCallback<int> ChoseActiveAnnotationIdAsync { get; set; }
     [Parameter] public EventCallback<int> ChoseActiveLabelIdAsync { get; set; }
-    
+
     internal async Task ButtonClickObjectAsync(int nameIdAnnot)
     {
-            await ChoseActiveAnnotationIdAsync.InvokeAsync(nameIdAnnot);
+        await ChoseActiveAnnotationIdAsync.InvokeAsync(nameIdAnnot);
     }
-    
+
     internal async Task ButtonClickLabelAsync(int nameIdAnnot)
     {
         await ChoseActiveLabelIdAsync.InvokeAsync(nameIdAnnot);
     }
-    
 
- 
+    internal string GetSvgPath(TypeLabel labelPattern)
+    {
+        switch (labelPattern)
+        {
+            case TypeLabel.None:
+                return "icons/014_fail_icon.svg";
+            case TypeLabel.Box:
+                return "icons/006_rectangle.svg";
+            case TypeLabel.Polygon:
+                return "icons/007_polygon.svg";
+            case TypeLabel.PolyLine:
+                return "icons/008_poly_line.svg";
+            case TypeLabel.Point:
+                return "icons/009_points.svg";
+            default:
+                throw new ArgumentOutOfRangeException(nameof(labelPattern), labelPattern, null);
+        }
+        
+        
+    }
 }

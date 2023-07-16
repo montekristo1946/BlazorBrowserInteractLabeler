@@ -33,7 +33,7 @@
                     var id = $"annot_{annotation.Id}";
                     var colorPallet = ColorAll.FirstOrDefault(p => p.IdLabel == annotation.LabelId)?.Color ?? "#ffffff";
                     
-                    var name = LabelAll.FirstOrDefault(p => p.Id == annotation.LabelId)?.NameLabel ?? "---------------";
+                    var name = LabelAll.FirstOrDefault(p => p.Id == annotation.LabelId)?.NameLabel ?? " ... ";
                     var colorButton = "#49505c00";
                     if (annotation.State != StateAnnot.Finalized)
                         colorButton = "#d8d8d8b2";
@@ -44,7 +44,8 @@
                             @onclick="@(() => ButtonClickObjectAsync(annotation.Id))">
                         <div class=" row p-0 ">
                             <div class="col-2 ">
-                                @annotation.Id
+                                <img src="@GetSvgPath(annotation.LabelPattern)" width="25" height="25"/>
+                                
                             </div>
                             <div class="col-7  " style="overflow: hidden; ">
                                 @name
