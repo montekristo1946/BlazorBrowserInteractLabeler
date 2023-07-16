@@ -146,6 +146,7 @@ public class KeyMapHandler
         {
             await _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg, DateTime.Now);
         }
+        
     }
 
     /// <summary>
@@ -160,6 +161,8 @@ public class KeyMapHandler
 
 
         // _logger.Debug("[HandleWheelDrawingPanelMouseEventAsync]  {@WheelEventArgs}", args);
+        //
+        // await _navigationHandler.HandlerDrawCrosshairAsync(args,DateTime.Now);
     }
 
 

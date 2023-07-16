@@ -23,6 +23,8 @@ public class NavigationHandler
     private readonly ServiceConfigs _serviceConfigs;
     private readonly MoveImagesHandler _moveImagesHandler;
     private readonly MarkupHandler _markupHandler;
+    private readonly CursorHandler _cursorHandler;
+    private const  string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
 
     public bool SetMainFocusRootPanel { get; set; } = false;
 
@@ -34,7 +36,8 @@ public class NavigationHandler
         SvgConstructor svgConstructor,
         ServiceConfigs serviceConfigs,
         MoveImagesHandler moveImagesHandler,
-        MarkupHandler markupHandler)
+        MarkupHandler markupHandler,
+        CursorHandler cursorHandler)
     {
         _cacheModel = cacheModel ?? throw new ArgumentNullException(nameof(cacheModel));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -44,6 +47,7 @@ public class NavigationHandler
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _markupHandler = markupHandler ?? throw new ArgumentNullException(nameof(markupHandler));
+        _cursorHandler = cursorHandler ?? throw new ArgumentNullException(nameof(cursorHandler));
 
         cacheModel.Images = new ImageFrame()
         {
@@ -64,7 +68,7 @@ public class NavigationHandler
         _cacheModel.CurrentProgress = 0;
         await CreateStartImagesState(_cacheModel.CurrentIdImg);
         await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
@@ -85,9 +89,9 @@ public class NavigationHandler
 
         _cacheModel.ScaleCurrent = _defaultScale;
         await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         _cacheModel.NameImages = imageFrame.NameImages;
-         UpdateSvg();
+        UpdateSvg();
     }
 
     private async Task HandlerClickNextAsync(int index)
@@ -138,9 +142,9 @@ public class NavigationHandler
 
     private void UpdateSvg()
     {
-        _cacheModel.AnnotationsOnPanel =  _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         var thicknessLine = 1 / _cacheModel.ScaleCurrent;
-        _cacheModel.SvgModelString = _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel,thicknessLine);
+        _cacheModel.SvgModelString = _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel, thicknessLine);
     }
 
     public async Task SaveAnnotation()
@@ -150,14 +154,14 @@ public class NavigationHandler
 
     public async Task UndoClick()
     {
-         _cacheAnnotation.RemoveLastAnnotation(_cacheModel.CurrentIdImg);
-         UpdateSvg();
+        _cacheAnnotation.RemoveLastAnnotation(_cacheModel.CurrentIdImg);
+        UpdateSvg();
     }
 
     public async Task RedoClick()
     {
-         _cacheAnnotation.RestoreLastAnnotation(_cacheModel.CurrentIdImg);
-         UpdateSvg();
+        _cacheAnnotation.RestoreLastAnnotation(_cacheModel.CurrentIdImg);
+        UpdateSvg();
     }
 
     /// <summary>
@@ -166,31 +170,30 @@ public class NavigationHandler
     /// <param name="id"></param>
     public async Task SetActiveIdAnnotation(int id)
     {
-        var resSetActiveAnnot =  _cacheAnnotation.SetActiveAnnot(id);
+        var resSetActiveAnnot = _cacheAnnotation.SetActiveAnnot(id);
         if (!resSetActiveAnnot.checkRes)
             return;
 
         _cacheModel.StatePrecess = "Edit";
-        _markupHandler.ActiveTypeLabel = resSetActiveAnnot.annotation.LabelPattern;
-
+        var activeLabelPattern = resSetActiveAnnot.annotation.LabelPattern;
+        _markupHandler.ActiveTypeLabel = activeLabelPattern;
+        _cacheModel.CursorStringStyle = activeLabelPattern == TypeLabel.Box ? _cursorEnable : "";
         await HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
-        // UpdateSvg();
-        // sdfsdf
     }
 
 
     public async Task DeleteAnnotation()
     {
-         _cacheAnnotation.DeleteAnnotation();
-         UpdateSvg();
+        _cacheAnnotation.DeleteAnnotation();
+        UpdateSvg();
         SetMainFocusRootPanel = true;
     }
 
 
-    public async Task<SizeF> GetSizeDrawImage()
-    {
-        return _cacheModel.SizeDrawImage;
-    }
+    // public async Task<SizeF> GetSizeDrawImage()
+    // {
+    //     return _cacheModel.SizeDrawImage;
+    // }
 
     /// <summary>
     ///     keyBoard [E]
@@ -201,7 +204,7 @@ public class NavigationHandler
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
 
-         UpdateSvg();
+        UpdateSvg();
     }
 
     /// <summary>
@@ -213,21 +216,26 @@ public class NavigationHandler
         _markupHandler.ActiveTypeLabel = typeLabel;
         var textToPanel = await _helper.CreateTypeTextToPanel(typeLabel);
         _cacheModel.ActiveTypeLabel = textToPanel;
-        
-        _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg,typeLabel);
+
+        _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg, typeLabel);
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
-         UpdateSvg();
+
+        _cacheModel.CursorStringStyle = typeLabel == TypeLabel.Box ? _cursorEnable : "";
+                
+        // _cacheModel.DrawCrosshair = typeLabel == TypeLabel.Box;
+
+        UpdateSvg();
     }
 
     public async Task HandlerSetLabelIdAsync(int activeIdLabel)
     {
         _markupHandler.ActiveIdLabel = activeIdLabel;
-         _cacheAnnotation.SetActiveIdLabel(activeIdLabel);
+        _cacheAnnotation.SetActiveIdLabel(activeIdLabel);
         var color = _helper.CreateColorTextToPanel(activeIdLabel, _cacheModel.ColorAll);
         _cacheModel.ActiveIdLabelColor = color;
 
-         UpdateSvg();
+        UpdateSvg();
     }
 
 
@@ -260,7 +268,7 @@ public class NavigationHandler
             _cacheModel.OffsetDrawImage = _helper.CorrectOffset(moveDist.moveDist, _cacheModel.OffsetDrawImage);
     }
 
-    
+
     /// <summary>
     ///     Точки разметки
     /// </summary>
@@ -268,40 +276,38 @@ public class NavigationHandler
     /// <param name="now"></param>
     public async Task HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
-        
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
-        
-        var sizeImg = await GetSizeDrawImage();
-        
+
+        var sizeImg = _cacheModel.SizeDrawImage;
+
         var (checkResult, annotation) =
             await _markupHandler.HandleMouseClickAsync(mouseEventArgs, sizeImg, resultGetEditAnnotation.annot);
-        
+
         if (checkResult is false)
             return;
-        
-        await _cacheAnnotation.UpdateAnnotation(annotation);
-         UpdateSvg();
-    }
-    
-    public async Task HandleImagePanelMouseRightButtonAsync(MouseEventArgs mouseEventArgs, DateTime now)
-    {
-      
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
-        if (!resultGetEditAnnotation.checkResult)
-            return;
-        
-        var (checkResult, annotation) =
-            await _markupHandler.HandleMouseClickUndoPointAsync(mouseEventArgs, resultGetEditAnnotation.annot);
-        
-        if (checkResult is false)
-            return;
-        
+
         await _cacheAnnotation.UpdateAnnotation(annotation);
         UpdateSvg();
     }
-    
+
+    public async Task HandleImagePanelMouseRightButtonAsync(MouseEventArgs mouseEventArgs, DateTime now)
+    {
+        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        if (!resultGetEditAnnotation.checkResult)
+            return;
+
+        var (checkResult, annotation) =
+            await _markupHandler.HandleMouseClickUndoPointAsync(mouseEventArgs, resultGetEditAnnotation.annot);
+
+        if (checkResult is false)
+            return;
+
+        await _cacheAnnotation.UpdateAnnotation(annotation);
+        UpdateSvg();
+    }
+
 
     public async Task HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
@@ -330,7 +336,7 @@ public class NavigationHandler
             return;
 
         await _cacheAnnotation.UpdateAnnotation(resHandlerOnmouseuplAsync.annot);
-         UpdateSvg();
+        UpdateSvg();
     }
 
     public async Task ButtonEnterIdActiveIdImagesAsync(string indexImgString)
@@ -348,4 +354,25 @@ public class NavigationHandler
         SetMainFocusRootPanel = false;
         return Task.CompletedTask;
     }
+
+    // public async Task HandlerDrawCrosshairAsync(MouseEventArgs args, DateTime dateTime)
+    // {
+    //
+    //     // if (!_cacheModel.DrawCrosshair)
+    //     //     return;
+    //     //
+    //     // var sizeImg = _cacheModel.SizeDrawImage;
+    //     //
+    //     // var resCursorHandler = _cursorHandler.GetPointDraw(args, dateTime, sizeImg);
+    //     //
+    //     // if (!resCursorHandler.checkres)
+    //     //     return;
+    //     //
+    //     // var resCreateSvgCursor = _svgConstructor.CreateSvgCursor(resCursorHandler.drawPoint);
+    //     //
+    //     // if (resCreateSvgCursor.checkCreateSvgCursor)
+    //     //     _cacheModel.SvgModelCursorString = resCreateSvgCursor.svgSting;
+    //     
+    //     // cursor: url('icons/015_crosshaiir.svg') 64 64, default;
+    // }
 }

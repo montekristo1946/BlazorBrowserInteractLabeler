@@ -24,6 +24,7 @@ public class SvgConstructor
         _logger.Debug($"CreateSVG {thicknessLine}");
         var svg = string.Empty;
 
+      
         foreach (var annotation in annotations)
         {
             if (annotation.Points?.Any() == false)
@@ -42,10 +43,10 @@ public class SvgConstructor
                     svg += CreateSVGPolygon(annotation, activeAnnot, false, thicknessLine);
                     break;
                 case TypeLabel.PolyLine:
-                    svg += CreateSVGPolygon(annotation, activeAnnot, true,thicknessLine);
+                    svg += CreateSVGPolygon(annotation, activeAnnot, true, thicknessLine);
                     break;
                 case TypeLabel.Point:
-                    svg += CreateSVGPoint(annotation, activeAnnot,thicknessLine);
+                    svg += CreateSVGPoint(annotation, activeAnnot, thicknessLine);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -54,6 +55,36 @@ public class SvgConstructor
 
 
         return svg;
+    }
+
+    public (bool checkCreateSvgCursor, string svgSting ) CreateSvgCursor(PointF point,  string color ="#ffffff")
+    {
+        if (point is null)
+            return (false, string.Empty);
+            
+        var retBoxs = new List<string>();
+        
+        var strokeWidth = 1D;
+       
+        var typeLine = "stroke-dasharray=\"4 2\"";
+
+        const int lenghtLine = 1; //100% width/height img
+
+        var xv1 = point.X;
+        var yv1 = point.Y - lenghtLine;
+        var xv2 = point.X;
+        var yv2 = point.Y + lenghtLine;
+        var xh1 = point.X - lenghtLine;
+        var yh1 = point.Y;
+        var xh2 = point.X + lenghtLine;
+        var yh2 = point.Y;
+
+        var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
+        retBoxs.Add(line1);
+        var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
+        retBoxs.Add(line2);
+
+        return (true, String.Join(" ", retBoxs));
     }
 
     private string CreateSVGPoint(Annotation annotation, bool activeAnnot, double thicknessLine)
@@ -68,7 +99,7 @@ public class SvgConstructor
 
         strokeWidth *= thicknessLine;
         var radius = strokeWidth;
-        
+
         var srcPoints = annotation.Points;
         var anchorPoints = CreateAnchorPoints(srcPoints, radius, color, strokeWidth);
         retPolygon.AddRange(anchorPoints);
@@ -82,12 +113,12 @@ public class SvgConstructor
         var retPolygon = new List<string>();
         var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
-       
+
         var strokeWidth = 2D;
         var typeLine = CrateDottedLine(activeAnnot);
-        
+
         strokeWidth *= thicknessLine;
-        var radius =strokeWidth;
+        var radius = strokeWidth;
         var srcPoints = annotation.Points;
 
 
@@ -164,7 +195,7 @@ public class SvgConstructor
             var yh1 = point.Y;
             var xh2 = point.X + lenghtLine;
             var yh2 = point.Y;
-
+        
             var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
             retBoxs.Add(line1);
             var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
