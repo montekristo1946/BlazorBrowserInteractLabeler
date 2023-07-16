@@ -2,7 +2,8 @@
 
 
 
-<div class="p-0 m-0 bg-light no-select" style="width:@WidthMainWin; height: @HeightMainWin; overflow: hidden" id="drawing_panel_background">
+<div class="p-0 m-0 bg-light no-select" 
+     style="width:@WidthMainWin; height: @HeightMainWin; overflow: hidden" id="drawing_panel_background">
     <div style="width:@WidthImg; height: @HeightImg;
         @CssScale;
         transition: all 0.100s;
@@ -12,7 +13,8 @@
         transform-origin: center;
         background-position: center ;
         background-image: @ImagesBase64;"  
-         @onclick="HandleMouse"  
+         @onclick="HandleMouse"
+          @oncontextmenu="HandleRightClick"
          @onmousedown="HandlerOnmousedown"
          @onmousemove="HandlerOnmousemove">
 

@@ -31,6 +31,9 @@ public class ImagesPanelModel : ComponentBase
     [Parameter] public string HeightMainWin { get; set; } = string.Empty;
   
     [Parameter] public EventCallback<MouseEventArgs> HandleMouse { get; set; }
+    
+    [Parameter] public EventCallback<MouseEventArgs> HandleRightClick { get; set; }
+    
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousedown { get; set; }
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }

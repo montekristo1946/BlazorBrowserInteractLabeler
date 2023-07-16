@@ -3,7 +3,9 @@
 @inherits MarkerModel
 
 
-<div @onkeydown="HandleKeyDown" tabindex="0" class=""  id="@IdImagesPamel">
+<div @onkeydown="HandleKeyDown" tabindex="0" class=""  
+     id="@IdImagesPamel" 
+     oncontextmenu = "return false;">
     <div class="row border-bottom bg-light p-1" >
         <NavigationPanel>
             <SavePanelTemplate>
@@ -60,6 +62,7 @@
                     WidthMainWin="@_cacheModel.WidthMainWin"
                     HeightMainWin="@_cacheModel.HeightMainWin"
                     HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
+                    HandleRightClick="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmousedownAsync"
                     HandlerOnmousemove="@_keyMapHandler.HandlerImagesPanelOnmouseupAsync">
 

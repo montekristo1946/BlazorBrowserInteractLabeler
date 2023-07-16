@@ -18,7 +18,7 @@ public class CacheAnnotation
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<(bool result, Annotation annot)> GetEditAnnotation()
+    public async Task<(bool checkResult, Annotation annot)> GetEditAnnotation()
     {
         var annot = _annotations.FirstOrDefault(p => p.State != StateAnnot.Finalized);
         if (annot is not null)
@@ -52,7 +52,7 @@ public class CacheAnnotation
         var equalAnnotation = removeAnnot.Equality(_annotations.ToArray());
         if (equalAnnotation)
             return;
-        
+
 
         _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
                       "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
@@ -72,7 +72,7 @@ public class CacheAnnotation
         _annotations = allAnnot.CloneDeep().ToList();
     }
 
- 
+
     public void RemoveLastAnnotation(int imagesId)
     {
         var last = _annotations.LastOrDefault(p => p.ImageFrameId == imagesId);
@@ -108,7 +108,7 @@ public class CacheAnnotation
         _annotations.Remove(_lastAnnotation);
     }
 
-    private void CreateNewAnnot(int imagesId)
+    private void CreateNewAnnot(int imagesId, TypeLabel typeLabel = TypeLabel.None)
     {
         _lastIdDb += 1;
         var annot = new Annotation()
@@ -117,7 +117,8 @@ public class CacheAnnotation
             Points = new List<PointF>(),
             ImageFrameId = imagesId,
             State = StateAnnot.Edit,
-            LabelId = -1
+            LabelId = -1,
+            LabelPattern = typeLabel
         };
         _annotations.Add(annot);
     }
@@ -126,14 +127,14 @@ public class CacheAnnotation
     ///     key q,w,a,s
     /// </summary>
     /// <param name="imagesId"></param>
-    public void EventEditAnnotForceCreateNew(int imagesId)
+    public void EventEditAnnotForceCreateNew(int imagesId, TypeLabel typeLabel = TypeLabel.None)
     {
         foreach (var annotation in _annotations)
         {
             annotation.State = StateAnnot.Finalized;
         }
 
-        CreateNewAnnot(imagesId);
+        CreateNewAnnot(imagesId,typeLabel);
     }
 
     /// <summary>
@@ -152,23 +153,25 @@ public class CacheAnnotation
         CreateNewAnnot(imagesId);
     }
 
-    public bool SetActiveAnnot(int idAnnot)
+    public (bool checkRes,Annotation annotation ) SetActiveAnnot(int idAnnot)
     {
         var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
 
+        if (current is null)
+            return (false, new Annotation());
 
-        if (current is not null)
+
+        foreach (var annotation in _annotations)
         {
-            foreach (var annotation in _annotations)
-            {
-                annotation.State = StateAnnot.Finalized;
-            }
-
-            current.State = StateAnnot.Active;
-            return true;
+            annotation.State = StateAnnot.Finalized;
         }
 
-        return false;
+        current.State = StateAnnot.Active;
+        
+        return (true, current);
+
+
+      
     }
 
     public void SetActiveIdLabel(int id)

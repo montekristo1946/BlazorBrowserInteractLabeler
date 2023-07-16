@@ -103,11 +103,19 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandleImagePanelMouseAsync(MouseEventArgs arg)
     {
-        if (arg.AltKey is false)
-        {
-            // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}",arg);
+        if (arg.AltKey)
+            return;
+
+        const int leftButton = 0;
+        const int rightButton = 2;
+        // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}", arg);
+        
+        if(arg.Buttons==leftButton)
             await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
-        }
+        
+        if(arg.Buttons==rightButton)
+            await _navigationHandler.HandleImagePanelMouseRightButtonAsync(arg, DateTime.Now);
+        
     }
 
     /// <summary>
@@ -149,10 +157,9 @@ public class KeyMapHandler
         const long buttons = 1;
         if (args is { AltKey: false, Buttons: buttons })
             await _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
-        
-        
-        // _logger.Debug("[HandleWheelDrawingPanelMouseEventAsync]  {@WheelEventArgs}", args);
 
+
+        // _logger.Debug("[HandleWheelDrawingPanelMouseEventAsync]  {@WheelEventArgs}", args);
     }
 
 

@@ -160,17 +160,21 @@ public class NavigationHandler
     }
 
     /// <summary>
-    ///     Изменения цвета аннотации
+    ///     Выбрали на редактирвоания аннотацию
     /// </summary>
     /// <param name="id"></param>
     public async Task SetActiveIdAnnotation(int id)
     {
-        var res =  _cacheAnnotation.SetActiveAnnot(id);
-        if (!res)
+        var resSetActiveAnnot =  _cacheAnnotation.SetActiveAnnot(id);
+        if (!resSetActiveAnnot.checkRes)
             return;
 
         _cacheModel.StatePrecess = "Edit";
-         UpdateSvg();
+        _markupHandler.ActiveTypeLabel = resSetActiveAnnot.annotation.LabelPattern;
+
+        await HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        // UpdateSvg();
+        // sdfsdf
     }
 
 
@@ -194,7 +198,7 @@ public class NavigationHandler
     {
         _cacheAnnotation.EventEditAnnot(_cacheModel.CurrentIdImg);
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
-        _cacheModel.StatePrecess = resultGetEditAnnotation.result ? "Create" : "";
+        _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
 
          UpdateSvg();
     }
@@ -209,17 +213,17 @@ public class NavigationHandler
         var textToPanel = await _helper.CreateTypeTextToPanel(typeLabel);
         _cacheModel.ActiveTypeLabel = textToPanel;
         
-        _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg);
+        _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg,typeLabel);
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
-        _cacheModel.StatePrecess = resultGetEditAnnotation.result ? "Create" : "";
+        _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
          UpdateSvg();
     }
 
-    public async Task HandlerSetLabelIdAsync(int id)
+    public async Task HandlerSetLabelIdAsync(int activeIdLabel)
     {
-        _markupHandler.ActiveIdLabel = id;
-         _cacheAnnotation.SetActiveIdLabel(id);
-        var color = _helper.CreateColorTextToPanel(id, _cacheModel.ColorAll);
+        _markupHandler.ActiveIdLabel = activeIdLabel;
+         _cacheAnnotation.SetActiveIdLabel(activeIdLabel);
+        var color = _helper.CreateColorTextToPanel(activeIdLabel, _cacheModel.ColorAll);
         _cacheModel.ActiveIdLabelColor = color;
 
          UpdateSvg();
@@ -262,25 +266,45 @@ public class NavigationHandler
     /// <param name="now"></param>
     public async Task HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
-        var sizeImg = await GetSizeDrawImage();
+        
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
-        if (!resultGetEditAnnotation.result)
+        if (!resultGetEditAnnotation.checkResult)
             return;
-
-        var (res, annotation) =
+        
+        var sizeImg = await GetSizeDrawImage();
+        
+        var (checkResult, annotation) =
             await _markupHandler.HandleMouseClickAsync(mouseEventArgs, sizeImg, resultGetEditAnnotation.annot);
         
-        if (res is false)
+        if (checkResult is false)
             return;
         
         await _cacheAnnotation.UpdateAnnotation(annotation);
          UpdateSvg();
     }
+    
+    public async Task HandleImagePanelMouseRightButtonAsync(MouseEventArgs mouseEventArgs, DateTime now)
+    {
+      
+        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        if (!resultGetEditAnnotation.checkResult)
+            return;
+        
+        var (checkResult, annotation) =
+            await _markupHandler.HandleMouseClickUndoPointAsync(mouseEventArgs, resultGetEditAnnotation.annot);
+        
+        if (checkResult is false)
+            return;
+        
+        await _cacheAnnotation.UpdateAnnotation(annotation);
+        UpdateSvg();
+    }
+    
 
     public async Task HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
-        if (!resultGetEditAnnotation.result)
+        if (!resultGetEditAnnotation.checkResult)
             return;
 
         await _markupHandler.HandlerOnmousedownAsync(mouseEventArgs,
@@ -292,7 +316,7 @@ public class NavigationHandler
     public async Task HandlerMovePointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
-        if (!resultGetEditAnnotation.result)
+        if (!resultGetEditAnnotation.checkResult)
             return;
 
         var resHandlerOnmouseuplAsync = await _markupHandler.HandlerOnmouseuplAsync(mouseEventArgs,
