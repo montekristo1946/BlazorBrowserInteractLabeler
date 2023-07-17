@@ -24,10 +24,12 @@ public class KeyMapHandler
 
     public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
     {
+        
         // _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
 
-        // var keyStrLow = arg.Key.ToLower();
-
+        if(arg.Repeat)
+            return;
+        
         await BasicFunctions(arg.Code);
         await MarkupFunctions(arg.Code, _serviceConfigs.Colors);
     }

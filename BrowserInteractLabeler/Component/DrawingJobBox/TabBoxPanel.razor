@@ -42,16 +42,17 @@
                             id="@id"
                             style=" text-align: start; margin: 2px; border-radius: 5px; border-color: #49505c; background: @colorButton; "
                             @onclick="@(() => ButtonClickObjectAsync(annotation.Id))">
-                        <div class=" row p-0 ">
-                            <div class="col-2 ">
-                                <img src="@GetSvgPath(annotation.LabelPattern)" width="25" height="25"/>
-                            </div>
-                            
-                            <div class="col-7  " style="overflow: hidden; ">
+                        <div class=" row px-1 ">
+                            <div class="col-1 " style="background: @colorPallet; border-radius:  15%;"></div>
+
+
+                            <div class="col-8  " style="overflow: hidden; ">
                                 @name
                             </div>
-                            <div class="col-1"></div>
-                            <div class="col-1" style="background: @colorPallet; border-radius:  15%;"></div>
+                            @* <div class="col-1"></div> *@
+                            <div class="col-2 " style="overflow: hidden; ">
+                                <img src="@GetSvgPath(annotation.LabelPattern)" width="25" height="25"/>
+                            </div>
                         </div>
                     </button>
                 }
