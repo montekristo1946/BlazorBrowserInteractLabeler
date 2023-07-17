@@ -60,16 +60,32 @@ public class CacheAnnotation
 
 
         await _repository.DeleteAnnotationsAsync(removeAnnot);
-        foreach (var annotation in _annotations)
-        {
-            annotation.State = StateAnnot.Finalized;
-            annotation.Id = 0;
-        }
-
+        _annotations = ClearFailAnnotation(_annotations);
         await _repository.SaveAnnotationsAsync(_annotations.ToArray());
 
         var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations = allAnnot.CloneDeep().ToList();
+    }
+
+    private List<Annotation> ClearFailAnnotation(IEnumerable<Annotation> annotations)
+    {
+        if (annotations?.Any() == null)
+            return new List<Annotation>();
+
+        var retAnnots = annotations.Where(annot => annot.Points?.Any() != null)
+            .Where(annot =>
+                (annot.LabelPattern == TypeLabel.Box && annot.Points.Count > 1)
+                || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count > 1)
+                || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count > 2)
+                || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count == 1)
+            ).Select(annot =>
+            {
+                annot.State = StateAnnot.Finalized;
+                annot.Id = 0;
+                return annot;
+            }).ToList();
+        
+        return retAnnots;
     }
 
 
@@ -134,7 +150,7 @@ public class CacheAnnotation
             annotation.State = StateAnnot.Finalized;
         }
 
-        CreateNewAnnot(imagesId,typeLabel);
+        CreateNewAnnot(imagesId, typeLabel);
     }
 
     /// <summary>
@@ -153,7 +169,7 @@ public class CacheAnnotation
         CreateNewAnnot(imagesId);
     }
 
-    public (bool checkRes,Annotation annotation ) SetActiveAnnot(int idAnnot)
+    public (bool checkRes, Annotation annotation ) SetActiveAnnot(int idAnnot)
     {
         var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
 
@@ -167,11 +183,8 @@ public class CacheAnnotation
         }
 
         current.State = StateAnnot.Active;
-        
+
         return (true, current);
-
-
-      
     }
 
     public void SetActiveIdLabel(int id)

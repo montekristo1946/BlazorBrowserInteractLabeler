@@ -108,7 +108,7 @@ public class KeyMapHandler
 
         const int leftButton = 0;
         const int rightButton = 2;
-        _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}", arg);
+        // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}", arg);
         
         if(arg.Button==leftButton)
             await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
