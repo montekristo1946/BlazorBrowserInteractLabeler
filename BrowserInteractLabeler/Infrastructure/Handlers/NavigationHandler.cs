@@ -23,7 +23,6 @@ public class NavigationHandler
     private readonly ServiceConfigs _serviceConfigs;
     private readonly MoveImagesHandler _moveImagesHandler;
     private readonly MarkupHandler _markupHandler;
-    private readonly CursorHandler _cursorHandler;
     private const  string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
 
     public bool SetMainFocusRootPanel { get; set; } = false;
@@ -36,8 +35,7 @@ public class NavigationHandler
         SvgConstructor svgConstructor,
         ServiceConfigs serviceConfigs,
         MoveImagesHandler moveImagesHandler,
-        MarkupHandler markupHandler,
-        CursorHandler cursorHandler)
+        MarkupHandler markupHandler)
     {
         _cacheModel = cacheModel ?? throw new ArgumentNullException(nameof(cacheModel));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -47,7 +45,6 @@ public class NavigationHandler
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _markupHandler = markupHandler ?? throw new ArgumentNullException(nameof(markupHandler));
-        _cursorHandler = cursorHandler ?? throw new ArgumentNullException(nameof(cursorHandler));
 
         cacheModel.Images = new ImageFrame()
         {
@@ -179,6 +176,8 @@ public class NavigationHandler
         _markupHandler.ActiveTypeLabel = activeLabelPattern;
         _cacheModel.CursorStringStyle = activeLabelPattern == TypeLabel.Box ? _cursorEnable : "";
         await HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        SetMainFocusRootPanel = true;
+        _cacheModel.ActiveTypeLabel =await _helper.CreateTypeTextToPanel(activeLabelPattern);
     }
 
 
@@ -190,10 +189,6 @@ public class NavigationHandler
     }
 
 
-    // public async Task<SizeF> GetSizeDrawImage()
-    // {
-    //     return _cacheModel.SizeDrawImage;
-    // }
 
     /// <summary>
     ///     keyBoard [E]
@@ -355,24 +350,5 @@ public class NavigationHandler
         return Task.CompletedTask;
     }
 
-    // public async Task HandlerDrawCrosshairAsync(MouseEventArgs args, DateTime dateTime)
-    // {
-    //
-    //     // if (!_cacheModel.DrawCrosshair)
-    //     //     return;
-    //     //
-    //     // var sizeImg = _cacheModel.SizeDrawImage;
-    //     //
-    //     // var resCursorHandler = _cursorHandler.GetPointDraw(args, dateTime, sizeImg);
-    //     //
-    //     // if (!resCursorHandler.checkres)
-    //     //     return;
-    //     //
-    //     // var resCreateSvgCursor = _svgConstructor.CreateSvgCursor(resCursorHandler.drawPoint);
-    //     //
-    //     // if (resCreateSvgCursor.checkCreateSvgCursor)
-    //     //     _cacheModel.SvgModelCursorString = resCreateSvgCursor.svgSting;
-    //     
-    //     // cursor: url('icons/015_crosshaiir.svg') 64 64, default;
-    // }
+
 }

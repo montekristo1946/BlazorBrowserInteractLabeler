@@ -249,8 +249,20 @@ html {
 /*--------------*/
 
 
-.newcursor {
+/*.newcursor {*/
 
 
-	cursor: url('icons/015_crosshaiir.svg') 100 100, default;
+/*	cursor: url('icons/015_crosshaiir.svg') 100 100, default;*/
+/*}*/
+
+.mycursor {
+	cursor: none;
+	width: 97px;
+	height: 137px;
+	background: url('icons/015_crosshaiir.svg') no-repeat left top;
+	/*position: absolute;*/
+	/*display: none;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*z-index: 10000;*/
 }

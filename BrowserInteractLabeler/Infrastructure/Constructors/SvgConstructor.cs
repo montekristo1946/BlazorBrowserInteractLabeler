@@ -21,7 +21,6 @@ public class SvgConstructor
         if (annotations?.Any() == false)
             return string.Empty;
 
-        _logger.Debug($"CreateSVG {thicknessLine}");
         var svg = string.Empty;
 
       

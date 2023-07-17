@@ -25,7 +25,7 @@ public class Startup
         services.AddSingleton<IRepository>(provider => new SqlRepository());
         services.AddSingleton<SettingsHandler>();
 
-        services.AddSingleton<CursorHandler>();
+
         services.AddSingleton<SvgConstructor>();
         services.AddSingleton<Helper>();
         services.AddSingleton<CacheModel>();

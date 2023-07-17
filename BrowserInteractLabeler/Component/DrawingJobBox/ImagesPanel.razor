@@ -5,8 +5,7 @@
 <div class="p-0 m-0 bg-light no-select " 
      style="width:@WidthMainWin; 
             height: @HeightMainWin; 
-            overflow: hidden;
-            cursor: @CursorStyle;"
+            overflow: hidden;"
      id="drawing_panel_background">
     <div style="width:@WidthImg; height: @HeightImg;
         @CssScale;
@@ -16,7 +15,8 @@
         background-size: contain;
         transform-origin: center;
         background-position: center ;
-        background-image: @ImagesBase64;"  
+        background-image: @ImagesBase64;
+        cursor: @CursorStyle;"  
          @onclick="HandleMouse"
          @oncontextmenu="HandleRightClick"
          @onmousedown="HandlerOnmousedown"
