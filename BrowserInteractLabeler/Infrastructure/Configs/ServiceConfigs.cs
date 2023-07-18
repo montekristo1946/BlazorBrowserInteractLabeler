@@ -64,247 +64,93 @@ public class ServiceConfigs
         {
             new ColorModel()
             {
-                Color = "#991897",
+                Color = "#2196F3",
                 IdLabel = 1,
-                KeyOnBoard = "r"
+                KeyOnBoardName = "1",
+                KeyCode = "Digit1"
+                
             },
             new ColorModel()
             {
-                Color = "#5b1899",
+                Color = "#8BC24A",
                 IdLabel = 2,
-                KeyOnBoard = "t"
+                KeyOnBoardName = "2",
+                KeyCode = "Digit2"
             },
             new ColorModel()
             {
-                Color = "#2a1899",
+                Color = "#B61C1C",
                 IdLabel = 3,
-                KeyOnBoard = "y"
+                KeyOnBoardName = "3",
+                KeyCode = "Digit3"
             },
             new ColorModel()
             {
-                Color = "#186199",
+                Color = "#F9BBD0",
                 IdLabel = 4,
-                KeyOnBoard = "u"
+                KeyOnBoardName = "4",
+                KeyCode = "Digit4"
             },
             new ColorModel()
             {
-                Color = "#188899",
+                Color = "#FF6F00",
                 IdLabel = 5,
-                KeyOnBoard = "i"
+                KeyOnBoardName = "5",
+                KeyCode = "Digit5"
             },
             new ColorModel()
             {
-                Color = "#189979",
+                Color = "#FFEB3C",
                 IdLabel = 6,
-                KeyOnBoard = "o"
+                KeyOnBoardName = "6",
+                KeyCode = "Digit6"
             },
             new ColorModel()
             {
-                Color = "#18992a",
+                Color = "#1C5E20",
                 IdLabel = 7,
-                KeyOnBoard = "p"
+                KeyOnBoardName = "7",
+                KeyCode = "Digit7"
             },
             new ColorModel()
             {
-                Color = "#6a9918",
+                Color = "#6A1B9A",
                 IdLabel = 8,
-                KeyOnBoard = "y"
+                KeyOnBoardName = "t",
+                KeyCode = "KeyT"
             },
             new ColorModel()
             {
-                Color = "#998418",
+                Color = "#303E9F",
                 IdLabel = 9,
-                KeyOnBoard = "g"
+                KeyOnBoardName = "y",
+                KeyCode = "KeyY"
             },
             new ColorModel()
             {
-                Color = "#994318",
+                Color = "#EC407A",
                 IdLabel = 10,
-                KeyOnBoard = "h"
+                KeyOnBoardName = "u",
+                KeyCode = "KeyU"
             },
             new ColorModel()
             {
-                Color = "#71731e",
+                Color = "#FFCC80",
                 IdLabel = 11,
-                KeyOnBoard = "j"
+                KeyOnBoardName = "j",
+                KeyCode = "KeyJ"
             },
-            new ColorModel()
-            {
-                Color = "#36298a",
-                IdLabel = 12,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#991f18",
-                IdLabel = 13,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#f5abe0",
-                IdLabel = 14,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#e0abf5",
-                IdLabel = 15,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#abb5f5",
-                IdLabel = 16,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#abf5f0",
-                IdLabel = 17,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#b3f5ab",
-                IdLabel = 18,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#f4f5ab",
-                IdLabel = 19,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#d42222",
-                IdLabel = 20,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#991897",
-                IdLabel = 21,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#5b1899",
-                IdLabel = 22,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#2a1899",
-                IdLabel = 23,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#186199",
-                IdLabel = 24,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#188899",
-                IdLabel = 25,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#189979",
-                IdLabel = 26,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#18992a",
-                IdLabel = 27,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#6a9918",
-                IdLabel = 28,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#998418",
-                IdLabel = 29,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#994318",
-                IdLabel = 30,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#71731e",
-                IdLabel = 31,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#36298a",
-                IdLabel = 32,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#991f18",
-                IdLabel = 33,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#f5abe0",
-                IdLabel = 34,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#e0abf5",
-                IdLabel = 35,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#abb5f5",
-                IdLabel = 36,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#abf5f0",
-                IdLabel = 37,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#b3f5ab",
-                IdLabel = 38,
-                KeyOnBoard = ""
-            },
-            new ColorModel()
-            {
-                Color = "#f4f5ab",
-                IdLabel = 39,
-                KeyOnBoard = ""
-            },
+            
+            
         };
     }
 
-    public async Task<ColorModel> GetColor(int annotationLabelId)
+    public ColorModel GetColor(int annotationLabelId)
     {
         var ret = Colors.FirstOrDefault(p => p.IdLabel == annotationLabelId);
         if (ret is null)
         {
-            _logger.Error("[GetColor] Fail Get color {IdLabel}; all Labels {@ColorModel}",annotationLabelId,Colors );
+            _logger.Debug("[GetColor] Fail Get color {IdLabel}; ",annotationLabelId );
             return new ColorModel();
         }
 

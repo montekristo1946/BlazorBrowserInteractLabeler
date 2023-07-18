@@ -1,5 +1,3 @@
-using System.Drawing;
-using System.Net.Mime;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using ImageMagick;

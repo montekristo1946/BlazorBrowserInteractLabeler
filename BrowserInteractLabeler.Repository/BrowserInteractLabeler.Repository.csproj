@@ -24,10 +24,6 @@
         <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.0" />
   
     </ItemGroup>
-    <ItemGroup>
-      <Reference Include="AutoFixture">
-        <HintPath>..\..\..\..\..\..\..\root\.nuget\packages\autofixture\4.18.0\lib\netstandard2.0\AutoFixture.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+
     
 </Project>

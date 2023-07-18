@@ -45,17 +45,18 @@ public class ColorLabelPanelModel : ComponentBase
     internal Task EventOnKeyDown(KeyboardEventArgs arg)
     {
         var keyStrLow = arg.Key.ToLower();
-        currentColorModel.KeyOnBoard = keyStrLow;
+        currentColorModel.KeyOnBoardName = keyStrLow;
+        currentColorModel.KeyCode = arg.Code;
         return Task.CompletedTask;
     }
 
 
     internal async Task ButtonClickSaveLabelInfoAsync(MouseEventArgs arg)
     {
-        if (currentColorModel.IdLabel < 0 || currentColorModel.KeyOnBoard == null)
+        if (currentColorModel.IdLabel < 0 || currentColorModel.KeyOnBoardName == null)
             return;
 
-        currentColorModel.KeyOnBoard = currentColorModel.KeyOnBoard.ToLower();
+        currentColorModel.KeyOnBoardName = currentColorModel.KeyOnBoardName.ToLower();
         await UpdateColorModel.InvokeAsync(currentColorModel);
     }
 

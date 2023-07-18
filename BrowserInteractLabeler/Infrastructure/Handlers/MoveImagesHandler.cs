@@ -23,13 +23,13 @@ public class MoveImagesHandler
     public async Task<(bool res, SizeF moveDist)> HandlerOnmouseupAsync(MouseEventArgs mouseEventArgs,
         DateTime timeClick)
     {
-        const int step = 50;
-        const int minMovePx = 10;
+        const int step = 15;
+        const int minMovePx = 4;
         if (timeClick - _timeFirstPoint < _minTimeMove)
             return (false, new SizeF());
-
-        if (mouseEventArgs.Buttons != 1 || mouseEventArgs.ShiftKey == false)
-            return (false, new SizeF());
+        //
+        // if (mouseEventArgs.Buttons != 1 || mouseEventArgs.ShiftKey == false)
+        //     return (false, new SizeF());
 
         var retMove = new SizeF()
         {

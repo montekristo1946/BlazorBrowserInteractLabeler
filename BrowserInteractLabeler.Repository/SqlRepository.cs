@@ -1,4 +1,3 @@
-using AutoFixture;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +21,13 @@ public class SqlRepository : IRepository
                     _db.Dispose();
                     _db = null;
                 }
-                
+                _logger.Debug("[LoadDatabaseAsync] Init  {PathDb}", pathDb);
                 var databaseConnectionString = $@"Data Source={pathDb};foreign keys=true;";
                 var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseSqlite(databaseConnectionString)
                     .Options;
                 _db = new ApplicationDbContext(contextOptions);
-                _logger.Debug("[LoadDatabaseAsync] Load {PathDb}", pathDb);
+                _logger.Debug("[LoadDatabaseAsync] Load ok {PathDb}", pathDb);
                 
                 return true;
             }

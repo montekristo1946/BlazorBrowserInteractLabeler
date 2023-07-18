@@ -12,6 +12,7 @@ html, body  {
 	max-width: 100%;
 	overflow-x: hidden;
 	overflow-y: hidden;
+
 	
 }
 div:focus {
@@ -243,4 +244,25 @@ html {
 		width: 320px;
 		height: 608px;
 	}
+}
+
+/*--------------*/
+
+
+/*.newcursor {*/
+
+
+/*	cursor: url('icons/015_crosshaiir.svg') 100 100, default;*/
+/*}*/
+
+.mycursor {
+	cursor: none;
+	width: 97px;
+	height: 137px;
+	background: url('icons/015_crosshaiir.svg') no-repeat left top;
+	/*position: absolute;*/
+	/*display: none;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*z-index: 10000;*/
 }

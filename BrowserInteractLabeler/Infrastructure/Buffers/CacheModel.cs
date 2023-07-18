@@ -13,6 +13,7 @@ public class CacheModel
     internal ImageFrame Images { get; set; } = new ImageFrame();
     
     internal string SvgModelString  { get; set; } = "";
+    public string CursorStringStyle { get; set; }= "";
     
     internal string CssScale =>
         $"transform: scale({ScaleCurrent}) translate({OffsetDrawImage.X}px, {OffsetDrawImage.Y}px)";
@@ -33,4 +34,7 @@ public class CacheModel
     public string StatePrecess { get; set; }= "";
     public string NameImages { get; set; }="";
     public int CurrentProgress { get; set; } = 0;
+
+    // public bool DrawCrosshair { get; set; } = false;
+   
 }

@@ -24,7 +24,7 @@ public class MarkupHandler
     public async Task<(bool checkRes, Annotation res)> HandleMouseClickAsync(MouseEventArgs mouseEventArgs,
         SizeF sizeImg, Annotation annotation)
     {
-        if (annotation.State != StateAnnot.Edit)
+        if (annotation.State == StateAnnot.Finalized )
             return (false, new Annotation());
 
         var pointClick = new PointF()
@@ -52,6 +52,17 @@ public class MarkupHandler
         }
 
         return (false, new Annotation());
+    }
+
+    public async Task<(bool res, Annotation annotation)> HandleMouseClickUndoPointAsync(MouseEventArgs mouseEventArgs,
+        Annotation annot)
+    {
+
+        if (annot.State == StateAnnot.Finalized || annot.Points?.Any() == false)
+            return (false, annot);
+
+        annot.Points?.RemoveAt( annot.Points.Count-1);
+        return (true, annot);
     }
 
 
@@ -89,49 +100,7 @@ public class MarkupHandler
         return annotation;
     }
 
-    /*   private async Task ProcessingPolygonAnnotation(PointF point, int labelId)
-      {
-          var annotation = await _navigationHandler.CreateNewAnnotation(_idAnnotation);
-          _idAnnotation = annotation.Id;
-          annotation.Points.Add(point);
-          annotation.LabelPattern = _currentTypeLabel;
-          annotation.LabelId = labelId;
-          
-          await _navigationHandler.UpdateAnnotation(annotation);
-          await _navigationHandler.SetActiveIdAnnotation(annotation.Id );
-      }
-  
-  
-      public async Task HandlerSetLabelIdAsync(int labelId)
-      {
-          _labelId = labelId;
-          var activeIdAnnotation = await _navigationHandler.GerActiveIdAnnotation();
-          var allAnnot = await _navigationHandler.GetAnnotationsOnPanel();
-          var annotation = allAnnot.FirstOrDefault(p => p.Id == activeIdAnnotation);
-          if (annotation is null)
-              return;
-  
-          annotation.LabelId = _labelId;
-          await _navigationHandler.UpdateAnnotation(annotation);
-          await _navigationHandler.UpdateSvg();
-      }*/
-
-    // public async Task StartMarkupAnnot()
-    // {
-    //     if (_currentTypeLabel == TypeLabel.None || _labelId < 0)
-    //     {
-    //         await _navigationHandler.SetActiveIdAnnotation(-1);
-    //         return;
-    //     }
-    //
-    //     _startMarkupAnnot = !_startMarkupAnnot;
-    //
-    //     if (_startMarkupAnnot is false)
-    //     {
-    //         await _navigationHandler.SetActiveIdAnnotation(-1);
-    //         await DefaultState();
-    //     }
-    // }
+    
 
 
     /// <summary>
@@ -217,9 +186,9 @@ public class MarkupHandler
 
         // _logger.Debug($"[test] {currentX} {currentY}");
         var currentIndex = annot.Points.IndexOf(removePoints);
-        var newPoints = new PointF() { X = currentX, Y = currentY };
+        var oldPoints = annot.Points[currentIndex];
+        var newPoints = new PointF() { X = currentX, Y = currentY, AnnotationId = oldPoints.AnnotationId, Id = 0};
         annot.Points[currentIndex] = newPoints;
-
 
         _movedData = (true, newPoints, annot);
 
@@ -228,9 +197,6 @@ public class MarkupHandler
         return (true, annot);
     }
 
-    // public async Task DefaultState()
-    // {
-    //     _idAnnotation = -1;
-    //     // _startMarkupAnnot = false;
-    // }
+
+
 }

@@ -3,7 +3,6 @@
 @inherits LabelsPanelModel
 
 
-
 <div class="row no-select">
     <div class="col-12">
 
@@ -32,30 +31,32 @@
                 {
                     var id = $"annot_{annotation.Id}";
                     var colorPallet = ColorAll.FirstOrDefault(p => p.IdLabel == annotation.LabelId)?.Color ?? "#ffffff";
-                    
-                    var name = LabelAll.FirstOrDefault(p => p.Id == annotation.LabelId)?.NameLabel ?? "---------------";
+
+                    var name = LabelAll.FirstOrDefault(p => p.Id == annotation.LabelId)?.NameLabel ?? " ... ";
                     var colorButton = "#49505c00";
                     if (annotation.State != StateAnnot.Finalized)
                         colorButton = "#d8d8d8b2";
-                    
+
                     <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"
+                            @key="annotation.Id"
                             id="@id"
                             style=" text-align: start; margin: 2px; border-radius: 5px; border-color: #49505c; background: @colorButton; "
                             @onclick="@(() => ButtonClickObjectAsync(annotation.Id))">
-                        <div class=" row p-0 ">
-                            <div class="col-2 ">
-                                @annotation.Id
-                            </div>
-                            <div class="col-7  " style="overflow: hidden; ">
+                        <div class=" row px-1 ">
+                            <div class="col-1 " style="background: @colorPallet; border-radius:  15%;"></div>
+
+
+                            <div class="col-8  " style="overflow: hidden; ">
                                 @name
                             </div>
-                            <div class="col-1"></div>
-                            <div class="col-1" style="background: @colorPallet; border-radius:  15%;"></div>
+                            @* <div class="col-1"></div> *@
+                            <div class="col-2 " style="overflow: hidden; ">
+                                <img src="@GetSvgPath(annotation.LabelPattern)" width="25" height="25"/>
+                            </div>
                         </div>
                     </button>
-                   
                 }
-                
+
             }
         </div>
     </div>
@@ -71,10 +72,11 @@
                     var colorModel = ColorAll.FirstOrDefault(p => p.IdLabel == label.Id);
                     var alpha = "ff"; //ff*0.3=76
                     var color = colorModel?.Color + alpha;
-                    var textKey = $"[{colorModel?.KeyOnBoard}]";
+                    var textKey = $"[{colorModel?.KeyOnBoardName}]";
 
                     var name = label.NameLabel;
                     <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"
+                            @key="label.Id"
                             id="@id"
                             style=" text-align: start; margin: 2px;border-radius: 5px; border-color: #49505c;"
                             @onclick="@(() => ButtonClickLabelAsync(label.Id))">
