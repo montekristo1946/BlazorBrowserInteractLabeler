@@ -10,7 +10,7 @@ public class CacheAnnotation
     private readonly IRepository _repository;
     private Annotation _lastAnnotation = new();
     private List<Annotation> _annotations = new();
-    private int _lastIdDb = -1;
+    // private int _lastIdDb = -1;
     private readonly ILogger _logger = Log.ForContext<CacheAnnotation>();
 
     public CacheAnnotation(IRepository repository)
@@ -77,7 +77,7 @@ public class CacheAnnotation
                 (annot.LabelPattern == TypeLabel.Box && annot.Points.Count > 1)
                 || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count > 1)
                 || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count > 2)
-                || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count == 1)
+                || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count > 0)
             ).Select(annot =>
             {
                 annot.State = StateAnnot.Finalized;
@@ -112,7 +112,7 @@ public class CacheAnnotation
         var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations = allAnnot.CloneDeep().ToList();
 
-        _lastIdDb = await _repository.GetLastIndexAnnotation();
+        // _lastIdDb = await _repository.GetLastIndexAnnotation();
     }
 
     public void DeleteAnnotation()
@@ -126,10 +126,16 @@ public class CacheAnnotation
 
     private void CreateNewAnnot(int imagesId, TypeLabel typeLabel = TypeLabel.None)
     {
-        _lastIdDb += 1;
+
+        var lastAnnot = _annotations.MaxBy(p => p.Id);
+        var currentDb = 1;
+        
+        if (lastAnnot is not null)
+            currentDb = lastAnnot.Id + 1;
+            
         var annot = new Annotation()
         {
-            Id = _lastIdDb,
+            Id = currentDb,
             Points = new List<PointF>(),
             ImageFrameId = imagesId,
             State = StateAnnot.Edit,

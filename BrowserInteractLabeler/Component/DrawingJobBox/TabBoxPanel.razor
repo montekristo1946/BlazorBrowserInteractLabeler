@@ -26,8 +26,9 @@
 <div class="tab-content m-0" id="myTabContent">
     <div class="tab-pane fade show active " id="object-tab-panel" role="tabpanel" aria-labelledby="object-tab"tabindex="0">
         <div class="list-group overflow-auto " style="display: flex;  height: @HeightMainWin; ">
+            
             @{
-                foreach (var annotation in AnnotationsOnPanel)
+               foreach (var annotation in AnnotationsOnPanel)
                 {
                     var id = $"annot_{annotation.Id}";
                     var colorPallet = ColorAll.FirstOrDefault(p => p.IdLabel == annotation.LabelId)?.Color ?? "#ffffff";
@@ -42,10 +43,9 @@
                             id="@id"
                             style=" text-align: start; margin: 2px; border-radius: 5px; border-color: #49505c; background: @colorButton; "
                             @onclick="@(() => ButtonClickObjectAsync(annotation.Id))">
+
                         <div class=" row px-1 ">
                             <div class="col-1 " style="background: @colorPallet; border-radius:  15%;"></div>
-
-
                             <div class="col-8  " style="overflow: hidden; ">
                                 @name
                             </div>

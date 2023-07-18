@@ -217,9 +217,7 @@ public class NavigationHandler
         _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
 
         _cacheModel.CursorStringStyle = typeLabel == TypeLabel.Box ? _cursorEnable : "";
-                
-        // _cacheModel.DrawCrosshair = typeLabel == TypeLabel.Box;
-
+        
         UpdateSvg();
     }
 

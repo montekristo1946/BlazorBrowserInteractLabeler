@@ -89,6 +89,9 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.Property<int>("AnnotationId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PositionInGroup")
+                        .HasColumnType("INTEGER");
+
                     b.Property<float>("X")
                         .HasColumnType("REAL");
 

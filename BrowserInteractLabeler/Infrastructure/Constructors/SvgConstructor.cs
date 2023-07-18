@@ -28,7 +28,7 @@ public class SvgConstructor
         {
             if (annotation.Points?.Any() == false)
                 continue;
-
+            
             var activeAnnot = annotation.State != StateAnnot.Finalized;
 
             switch (annotation.LabelPattern)
