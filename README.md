@@ -24,6 +24,6 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
    ![plot](./Example/Info/start_page.jpg)
 
 ## Hotkeys <br>
-1. Zoom in/out image shift + mouse wheel
-2. Return to original position ctrl
-3. Object markup start and end [n] key
+1. Zoom in/out image alt + mouse wheel
+2. Return to original position spase key
+3. Object markup start and end [e] key
