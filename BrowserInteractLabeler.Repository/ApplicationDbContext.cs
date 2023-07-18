@@ -38,4 +38,6 @@ public  class ApplicationDbContext:DbContext
     public DbSet<SizeF> Sizes { get; set; }
     public DbSet<Label> Labels { get; set; }
     
+    public DbSet<InformationDto> InformationState { get; set; }
+
 }

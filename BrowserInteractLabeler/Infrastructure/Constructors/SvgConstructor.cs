@@ -28,6 +28,8 @@ public class SvgConstructor
         {
             if (annotation.Points?.Any() == false)
                 continue;
+
+            annotation.Points = annotation.Points.OrderBy(p => p.PositionInGroup).ToList();
             
             var activeAnnot = annotation.State != StateAnnot.Finalized;
 

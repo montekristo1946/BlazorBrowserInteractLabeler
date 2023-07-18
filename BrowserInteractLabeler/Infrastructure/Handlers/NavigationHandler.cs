@@ -285,6 +285,12 @@ public class NavigationHandler
         UpdateSvg();
     }
 
+    
+    /// <summary>
+    ///     Right button mouse
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="now"></param>
     public async Task HandleImagePanelMouseRightButtonAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();

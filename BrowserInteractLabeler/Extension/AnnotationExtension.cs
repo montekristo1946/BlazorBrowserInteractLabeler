@@ -16,7 +16,8 @@ public static class AnnotationExtension
                 {
                     X = pointSrc.X,
                     Y = pointSrc.Y,
-                    Id = pointSrc.Id
+                    Id = pointSrc.Id,
+                    PositionInGroup = pointSrc.PositionInGroup
                 }).ToList();
 
             return new Annotation()

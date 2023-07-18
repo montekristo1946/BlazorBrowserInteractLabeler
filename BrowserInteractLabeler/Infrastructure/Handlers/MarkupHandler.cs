@@ -27,11 +27,15 @@ public class MarkupHandler
         if (annotation.State == StateAnnot.Finalized )
             return (false, new Annotation());
 
+        var lastPoint = annotation.Points?.MaxBy(p => p.PositionInGroup);
+        var lastIPosition = lastPoint == null ? 0 : lastPoint.PositionInGroup + 1;
+        
         var pointClick = new PointF()
         {
             X = (float)mouseEventArgs.OffsetX / sizeImg.Width,
             Y = (float)mouseEventArgs.OffsetY / sizeImg.Height,
-            Annot = new Annotation()
+            Annot = new Annotation(),
+            PositionInGroup = lastIPosition
         };
 
         switch (ActiveTypeLabel)
@@ -54,6 +58,12 @@ public class MarkupHandler
         return (false, new Annotation());
     }
 
+    /// <summary>
+    ///     Удалить последнюю точку
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="annot"></param>
+    /// <returns></returns>
     public async Task<(bool res, Annotation annotation)> HandleMouseClickUndoPointAsync(MouseEventArgs mouseEventArgs,
         Annotation annot)
     {
@@ -61,7 +71,12 @@ public class MarkupHandler
         if (annot.State == StateAnnot.Finalized || annot.Points?.Any() == false)
             return (false, annot);
 
-        annot.Points?.RemoveAt( annot.Points.Count-1);
+        var lastPoint = annot.Points?.MaxBy(p => p.PositionInGroup);
+        if(lastPoint is null)
+            return (false, annot);
+
+        annot.Points.Remove(lastPoint);
+        
         return (true, annot);
     }
 

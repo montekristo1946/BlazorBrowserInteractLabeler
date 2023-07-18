@@ -61,13 +61,30 @@ public class CacheAnnotation
 
         await _repository.DeleteAnnotationsAsync(removeAnnot);
         _annotations = ClearFailAnnotation(_annotations);
+        _annotations = OrderPoints(_annotations);
         await _repository.SaveAnnotationsAsync(_annotations.ToArray());
 
         var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations = allAnnot.CloneDeep().ToList();
     }
 
-    private List<Annotation> ClearFailAnnotation(IEnumerable<Annotation> annotations)
+    private List<Annotation> OrderPoints( List<Annotation> annotations)
+    {
+        if (annotations?.Any() == null)
+            return new List<Annotation>();
+
+        var retArr = annotations.Select(annot =>
+        {
+            var newPoints = annot.Points
+                ?.Select((point, index) => point with { Id = 0, PositionInGroup = index })
+                .ToList();
+            return annot with { Points = newPoints };
+        }).ToList();
+
+        return retArr;
+    }
+
+    private List<Annotation> ClearFailAnnotation(List<Annotation>  annotations)
     {
         if (annotations?.Any() == null)
             return new List<Annotation>();
@@ -111,6 +128,7 @@ public class CacheAnnotation
     {
         var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations = allAnnot.CloneDeep().ToList();
+        _annotations = _annotations.OrderBy(p => p.LabelId).ToList();
 
         // _lastIdDb = await _repository.GetLastIndexAnnotation();
     }
