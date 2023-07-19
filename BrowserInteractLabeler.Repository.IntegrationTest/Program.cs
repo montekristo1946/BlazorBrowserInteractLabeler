@@ -30,6 +30,6 @@ new SqlRepositoryIntegrationTest(pathRepo).GetLastIndexAnnotationTest();
 new SqlRepositoryIntegrationTest(pathRepo).FailWriteSqlAnnotation();
 new SqlRepositoryIntegrationTest().TestFailInitSql(pathRepo);
 
-
+new SqlRepositoryIntegrationTest(pathRepo).TestWriteReadInformationState();
 
 _logger.Debug("End test");

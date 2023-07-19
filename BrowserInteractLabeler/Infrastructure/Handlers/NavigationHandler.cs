@@ -147,6 +147,7 @@ public class NavigationHandler
     public async Task SaveAnnotation()
     {
         await _cacheAnnotation.SaveAnnotationsOnSqlAsync(_cacheModel.CurrentIdImg);
+        UpdateSvg();
     }
 
     public async Task UndoClick()
@@ -263,7 +264,7 @@ public class NavigationHandler
 
 
     /// <summary>
-    ///     Точки разметки
+    ///     Left button Mouse, 
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="now"></param>
@@ -308,6 +309,11 @@ public class NavigationHandler
     }
 
 
+    /// <summary>
+    ///     Перемещение точки Выбор обекта
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
     public async Task HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
@@ -320,6 +326,11 @@ public class NavigationHandler
             _cacheModel.SizeDrawImage);
     }
 
+    /// <summary>
+    ///     Перемещение точки 
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
     public async Task HandlerMovePointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();

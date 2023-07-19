@@ -10,7 +10,6 @@ public class CacheAnnotation
     private readonly IRepository _repository;
     private Annotation _lastAnnotation = new();
     private List<Annotation> _annotations = new();
-    // private int _lastIdDb = -1;
     private readonly ILogger _logger = Log.ForContext<CacheAnnotation>();
 
     public CacheAnnotation(IRepository repository)
@@ -48,30 +47,30 @@ public class CacheAnnotation
     public async Task SaveAnnotationsOnSqlAsync(int imagesId)
     {
         var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-
-        var equalAnnotation = removeAnnot.Equality(_annotations.ToArray());
+        var annotations = _annotations.CloneDeep();
+        var equalAnnotation = removeAnnot.Equality(annotations);
         if (equalAnnotation)
             return;
 
 
         _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
                       "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
-            _annotations.Count);
+            annotations.Count());
 
 
         await _repository.DeleteAnnotationsAsync(removeAnnot);
-        _annotations = ClearFailAnnotation(_annotations);
-        _annotations = OrderPoints(_annotations);
-        await _repository.SaveAnnotationsAsync(_annotations.ToArray());
+        annotations = ClearFailAnnotation(annotations);
+        annotations = OrderPoints(annotations);
+        await _repository.SaveAnnotationsAsync(annotations);
 
         var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations = allAnnot.CloneDeep().ToList();
     }
 
-    private List<Annotation> OrderPoints( List<Annotation> annotations)
+    private Annotation []  OrderPoints( Annotation [] annotations)
     {
         if (annotations?.Any() == null)
-            return new List<Annotation>();
+            return Array.Empty<Annotation>();
 
         var retArr = annotations.Select(annot =>
         {
@@ -79,15 +78,15 @@ public class CacheAnnotation
                 ?.Select((point, index) => point with { Id = 0, PositionInGroup = index })
                 .ToList();
             return annot with { Points = newPoints };
-        }).ToList();
+        }).ToArray();
 
         return retArr;
     }
 
-    private List<Annotation> ClearFailAnnotation(List<Annotation>  annotations)
+    private Annotation [] ClearFailAnnotation(Annotation[] annotations)
     {
         if (annotations?.Any() == null)
-            return new List<Annotation>();
+            return Array.Empty<Annotation>();
 
         var retAnnots = annotations.Where(annot => annot.Points?.Any() != null)
             .Where(annot =>
@@ -100,7 +99,7 @@ public class CacheAnnotation
                 annot.State = StateAnnot.Finalized;
                 annot.Id = 0;
                 return annot;
-            }).ToList();
+            }).ToArray();
         
         return retAnnots;
     }
@@ -126,11 +125,21 @@ public class CacheAnnotation
 
     public async Task LoadAnnotationsSlowStorageAsync(int imagesId)
     {
-        var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-        _annotations = allAnnot.CloneDeep().ToList();
-        _annotations = _annotations.OrderBy(p => p.LabelId).ToList();
+        var allAnnots = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+        var cloneAnnots = allAnnots.CloneDeep().ToList();
+        var annotations = cloneAnnots.Select(annot =>
+        {
+            if (annot.Points?.Any() == false)
+                return annot;
 
-        // _lastIdDb = await _repository.GetLastIndexAnnotation();
+            var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
+            if (checkRestore == annot.Points.Count())//restoration position
+                annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
+            
+            return annot;
+        }).OrderBy(p => p.LabelId).ToList();
+
+        _annotations = annotations;
     }
 
     public void DeleteAnnotation()

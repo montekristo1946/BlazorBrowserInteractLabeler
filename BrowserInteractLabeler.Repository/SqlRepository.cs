@@ -160,4 +160,25 @@ public class SqlRepository : IRepository
 
         return true;
     }
+
+    public async Task<bool> SaveInformationDtoAsync(InformationDto frame)
+    {
+        if (frame is null || _db is null)
+            return false;
+
+        await _db.InformationState.AddAsync(frame);
+        await _db.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<InformationDto[]> GetInformationDtoAsync()
+    {
+        if (_db is null)
+            return Array.Empty<InformationDto>();
+
+        var annotations = await _db.InformationState.ToArrayAsync();
+
+        return annotations;
+    }
 }

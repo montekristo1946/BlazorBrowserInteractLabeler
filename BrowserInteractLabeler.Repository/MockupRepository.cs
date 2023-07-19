@@ -198,7 +198,16 @@ public class MockupRepository : IRepository
     {
         throw new NotImplementedException();
     }
-    
+
+    public Task<bool> SaveInformationDtoAsync(InformationDto frame)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<InformationDto[]> GetInformationDtoAsync()
+    {
+        throw new NotImplementedException();
+    }
 
 
     private (int width, int height, byte[] img) GetSizeImg(byte[] img)

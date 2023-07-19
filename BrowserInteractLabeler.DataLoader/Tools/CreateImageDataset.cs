@@ -117,9 +117,14 @@ public class CreateImageDataset : IHostedService
                 .SelectMany(p=>p.groupAnnot)
                 .Select(annot =>
                 {
-                    annot.Id = 0;
-                    annot.ImageFrameId = indexInBase;
-                    return annot;
+                    // annot.Id = 0;
+                    // annot.ImageFrameId = indexInBase;
+                    // annot.Points = annot.Points?.Select(p => p with { Id = 0 }).ToList();
+                    return annot with
+                    {
+                        Id = 0, ImageFrameId = indexInBase,
+                        Points = annot.Points?.Select(p => p with { Id = 0 }).ToList()
+                    };
                 })
                 .ToArray();
             if(!annotsImport.Any())

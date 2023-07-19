@@ -25,6 +25,8 @@ public interface IRepository: IDisposable
 
     public Task<bool> InsertLabels(Label?[]? frame);
     
-    
+    public Task<bool> SaveInformationDtoAsync(InformationDto frame);
+
+    public Task<InformationDto[]> GetInformationDtoAsync();
 }
 

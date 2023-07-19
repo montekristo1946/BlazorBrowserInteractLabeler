@@ -67,7 +67,7 @@ public class ProjectsLocalHandler
         LoadingDB = false;
     }
 
-    internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb) //TODO: еще не сделал
+    internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb) 
     {
         if(fullPathDb is null || !fullPathDb.Any())
             return;
@@ -90,6 +90,16 @@ public class ProjectsLocalHandler
             var json = JsonConvert.SerializeObject(saveJson,jsonSerializerSettings);
             var jsonPath = Path.Combine(_serviceConfigs.ExportCompletedTasks, $"{Path.GetFileName(fullPathDb)}.json");
             await File.WriteAllTextAsync(jsonPath, json);
+            
+            var newInformationDto = new InformationDto()
+            {
+                Information = "Completed",
+                CategoryInformation = 1,
+            };
+
+            var resSaveInformationDtoAsync = await _repository.SaveInformationDtoAsync(newInformationDto);
+            if(!resSaveInformationDtoAsync)
+                _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}", fullPathDb);
         }
         catch (Exception e)
         {
