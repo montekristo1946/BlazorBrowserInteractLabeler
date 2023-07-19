@@ -186,21 +186,21 @@ public class SvgConstructor
 
         if (annotation.Points.Count == 1)
         {
-            const int lenghtLine = 1; //100% width/height img
-            var point = annotation.Points.First();
-            var xv1 = point.X;
-            var yv1 = point.Y - lenghtLine;
-            var xv2 = point.X;
-            var yv2 = point.Y + lenghtLine;
-            var xh1 = point.X - lenghtLine;
-            var yh1 = point.Y;
-            var xh2 = point.X + lenghtLine;
-            var yh2 = point.Y;
-        
-            var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
-            retBoxs.Add(line1);
-            var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
-            retBoxs.Add(line2);
+            // const int lenghtLine = 1; //100% width/height img
+            // var point = annotation.Points.First();
+            // var xv1 = point.X;
+            // var yv1 = point.Y - lenghtLine;
+            // var xv2 = point.X;
+            // var yv2 = point.Y + lenghtLine;
+            // var xh1 = point.X - lenghtLine;
+            // var yh1 = point.Y;
+            // var xh2 = point.X + lenghtLine;
+            // var yh2 = point.Y;
+            //
+            // var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
+            // retBoxs.Add(line1);
+            // var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
+            // retBoxs.Add(line2);
         }
 
         if (annotation.Points.Count == 2)
