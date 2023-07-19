@@ -5,17 +5,14 @@ namespace BrowserInteractLabeler.Component.ProjectsBox;
 public class SqlSelectorPanelModel : ComponentBase
 {
     [Parameter] public string[] SqlDbNames { get; set; }
-    
     [Parameter] public string CurrentSqlDbNames { get; set; }
-    
+    [Parameter] public string CurrentInformationSqlDb { get; set; }
     [Parameter] public string HeightPanel { get; set; }
-    
     [Parameter] public bool IsShowSpinnerLpadDB { get; set; }
     [Parameter] public EventCallback<string> ChoseActiveDataBaseAsync { get; set; }
     [Parameter] public EventCallback<string> ChoseExportDataBaseAsync { get; set; }
-    
-    
-    
+
+
     internal (string index, string name)[] GetSqlOnlyName()
     {
         if (SqlDbNames is null || !SqlDbNames.Any())
@@ -38,27 +35,26 @@ public class SqlSelectorPanelModel : ComponentBase
         var retPath = SqlDbNames.FirstOrDefault(path => Path.GetFileName(path) == nameFile);
         return retPath ?? String.Empty;
     }
+
     internal async Task ButtonClickLoadTaskAsync(string nameFile)
     {
         var path = FindFullPath(nameFile);
         await ChoseActiveDataBaseAsync.InvokeAsync(path);
     }
-    
+
     internal async Task ButtonClickSaveTaskAsync(string nameFile)
     {
         var path = FindFullPath(nameFile);
         await ChoseExportDataBaseAsync.InvokeAsync(path);
     }
-    
+
     internal bool CheckActivePanel(string nameFile)
     {
         if (CurrentSqlDbNames is null || !CurrentSqlDbNames.Any() || nameFile is null || !nameFile.Any())
             return false;
 
         var name = Path.GetFileName(CurrentSqlDbNames);
-        
+
         return name == nameFile;
     }
-    
-
 }

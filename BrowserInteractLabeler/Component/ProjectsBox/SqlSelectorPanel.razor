@@ -14,7 +14,7 @@
             {
                 var isActivePanel = CheckActivePanel(complexName.name);
                 var colorButton = isActivePanel ? "#d8d8d8b2" : "#ffffff";
-                var textToActive = isActivePanel ? "In work" : "";
+                var textToActive = isActivePanel && CurrentInformationSqlDb.Any() ?  CurrentInformationSqlDb:"";
                 var visibilitySpinner = isActivePanel && IsShowSpinnerLpadDB ? "visible" : "hidden";
                 // var visibilitySpinner = "visible";
                 <div class="row m-0 my-2">

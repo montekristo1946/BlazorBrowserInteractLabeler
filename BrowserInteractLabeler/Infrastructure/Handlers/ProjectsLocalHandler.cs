@@ -20,7 +20,7 @@ public class ProjectsLocalHandler
     internal string GetHeightSqlSelectorPanel =>$"{(int)_imageWindowsSize.Height}px";
 
     internal string CurrentSqlDbName { get; set; } = String.Empty;
-    // internal string GetCurrentSqlDbNames() => _serviceConfigs.LastLoadDb;
+    internal string CurrentInformationSqlDb { get; set; } = String.Empty;
 
 
     public ProjectsLocalHandler(ServiceConfigs serviceConfigs,
@@ -63,8 +63,19 @@ public class ProjectsLocalHandler
             return;
         }
 
+        await LoadInformationOnStateDb();
+
         await _navigationHandler.LoadFirstImg();
         LoadingDB = false;
+    }
+
+    private async Task  LoadInformationOnStateDb()
+    {
+        var allInformation = await _repository.GetInformationDtoAsync();
+        var currentInfo = allInformation.Where(p => p.CategoryInformation == 1);
+        var lastInfo = currentInfo.MaxBy(p => p.Id);
+        CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "In work";
+
     }
 
     internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb) 
@@ -100,6 +111,8 @@ public class ProjectsLocalHandler
             var resSaveInformationDtoAsync = await _repository.SaveInformationDtoAsync(newInformationDto);
             if(!resSaveInformationDtoAsync)
                 _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}", fullPathDb);
+            
+            await LoadInformationOnStateDb();
         }
         catch (Exception e)
         {
