@@ -14,10 +14,16 @@ public class LabelsPanelModel : ComponentBase
     [Parameter] public ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
     [Parameter] public EventCallback<int> ChoseActiveAnnotationIdAsync { get; set; }
     [Parameter] public EventCallback<int> ChoseActiveLabelIdAsync { get; set; }
+    
+    [Parameter] public EventCallback<int> ChoseHiddenLabelIdAsync { get; set; }
 
     internal async Task ButtonClickObjectAsync(int nameIdAnnot)
     {
         await ChoseActiveAnnotationIdAsync.InvokeAsync(nameIdAnnot);
+    }
+    internal async Task ButtonClickObjectHiddenAsync(int nameIdAnnot)
+    {
+        await ChoseHiddenLabelIdAsync.InvokeAsync(nameIdAnnot);
     }
 
     internal async Task ButtonClickLabelAsync(int nameIdAnnot)

@@ -23,7 +23,7 @@ public class NavigationHandler
     private readonly ServiceConfigs _serviceConfigs;
     private readonly MoveImagesHandler _moveImagesHandler;
     private readonly MarkupHandler _markupHandler;
-    private const  string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
+    private const string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
 
     public bool SetMainFocusRootPanel { get; set; } = false;
 
@@ -178,7 +178,7 @@ public class NavigationHandler
         _cacheModel.CursorStringStyle = activeLabelPattern == TypeLabel.Box ? _cursorEnable : "";
         await HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
         SetMainFocusRootPanel = true;
-        _cacheModel.ActiveTypeLabel =await _helper.CreateTypeTextToPanel(activeLabelPattern);
+        _cacheModel.ActiveTypeLabel = await _helper.CreateTypeTextToPanel(activeLabelPattern);
     }
 
 
@@ -188,7 +188,6 @@ public class NavigationHandler
         UpdateSvg();
         SetMainFocusRootPanel = true;
     }
-
 
 
     /// <summary>
@@ -218,7 +217,7 @@ public class NavigationHandler
         _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
 
         _cacheModel.CursorStringStyle = typeLabel == TypeLabel.Box ? _cursorEnable : "";
-        
+
         UpdateSvg();
     }
 
@@ -286,7 +285,7 @@ public class NavigationHandler
         UpdateSvg();
     }
 
-    
+
     /// <summary>
     ///     Right button mouse
     /// </summary>
@@ -365,5 +364,27 @@ public class NavigationHandler
         return Task.CompletedTask;
     }
 
-
+    /// <summary>
+    ///     Скрывает аннотацию
+    /// </summary>
+    /// <param name="arg"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task SetHiddenIdAnnotation(int id)
+    {
+        var resSetActiveAnnot = _cacheAnnotation.SetHiddenAnnot(id);
+        if (!resSetActiveAnnot.checkRes)
+            return;
+        
+        _cacheModel.StatePrecess = "Edit";
+        var activeLabelPattern = resSetActiveAnnot.annotation.LabelPattern;
+        _markupHandler.ActiveTypeLabel = activeLabelPattern;
+        _cacheModel.CursorStringStyle = activeLabelPattern == TypeLabel.Box ? _cursorEnable : "";
+        await HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        SetMainFocusRootPanel = true;
+        _cacheModel.ActiveTypeLabel =await _helper.CreateTypeTextToPanel(activeLabelPattern);
+        
+      
+        // _logger.Debug("SetHiddenIdAnnotation");
+    }
 }

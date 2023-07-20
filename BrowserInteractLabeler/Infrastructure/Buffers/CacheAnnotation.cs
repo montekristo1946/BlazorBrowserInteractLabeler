@@ -228,4 +228,23 @@ public class CacheAnnotation
             current.LabelId = id;
         }
     }
+
+
+    public (bool checkRes, Annotation annotation ) SetHiddenAnnot(int idAnnot)
+    {
+        var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
+
+        if (current is null)
+            return (false, new Annotation());
+
+        var state = current.State != StateAnnot.Hidden ? StateAnnot.Hidden : StateAnnot.Edit;
+        foreach (var annotation in _annotations)
+        {
+            annotation.State = StateAnnot.Finalized;
+        }
+        
+        current.State = state;
+
+        return (true, current);
+    }
 }
