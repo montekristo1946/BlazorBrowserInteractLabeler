@@ -64,8 +64,6 @@ public class NavigationHandler
         _cacheModel.CurrentIdImg = 1;
         _cacheModel.CurrentProgress = 0;
         await CreateStartImagesState(_cacheModel.CurrentIdImg);
-        await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
