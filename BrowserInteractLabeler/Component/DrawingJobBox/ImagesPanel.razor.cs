@@ -40,6 +40,6 @@ public class ImagesPanelModel : ComponentBase
     
     [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
     
-    [Parameter] public string CursorStyle { get; set; } = string.Empty;
+    // [Parameter] public string CursorStyle { get; set; } = string.Empty;
     
 }

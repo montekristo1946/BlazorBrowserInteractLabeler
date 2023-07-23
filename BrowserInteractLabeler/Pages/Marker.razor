@@ -2,6 +2,10 @@
 @using BrowserInteractLabeler.Common
 @inherits MarkerModel
 
+@code {
+   
+}
+
 
 <div @onkeydown="HandleKeyDown" tabindex="0" class=""  
      id="@IdImagesPamel" 
@@ -19,8 +23,8 @@
                 <SwipePanel
                     ButtonGoNextClick="() => _keyMapHandler.HandleKeyDownAsync(_commandGoNext)"
                     ButtonGoBackClick="() => _keyMapHandler.HandleKeyDownAsync(_commandGoBack)"
-                    Color="@_cacheModel.ActiveIdLabelColor"
-                    TypeLabel="@_cacheModel.ActiveTypeLabel"
+                    Color="@_cacheModel.ActiveLabelColor"
+                    TypeLabel="@_cacheModel.ActiveTypeLabelText"
                     StatePrecess="@_cacheModel.StatePrecess"
                     IdActiveIdImages="@_cacheModel.CurrentIdImg.ToString()"
                     ButtonEnterIdActiveIdImages="_navigationHandler.ButtonEnterIdActiveIdImagesAsync">
@@ -64,12 +68,22 @@
                     HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandleRightClick="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmousedownAsync"
-                    HandlerOnmousemove="@_keyMapHandler.HandlerImagesPanelOnmouseupAsync"
-                    CursorStyle="@_cacheModel.CursorStringStyle">
+                    HandlerOnmousemove="@HandlerImagesPanelOnmouseupAsync">
 
                     <SvgPanelTemplate>
-                        <SvgPanel 
-                            SvgToDraw="@_cacheModel.SvgModelString">
+                        <SvgPanel
+                            
+                            AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel"
+                            ScaleImg="@_cacheModel.ScaleCurrent">
+                            <CrosshairsTemplate>
+                                <Crosshair
+                                    PointCursor="@_cacheModel.PointCursor"
+                                    ScaleCurrent="@_cacheModel.ScaleCurrent"
+                                    ActiveTypeLabel="@_cacheModel.ActiveTypeLabel"
+                                    ActiveLabelColor="@_cacheModel.ActiveLabelColor"
+                                    AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel">
+                                </Crosshair>
+                            </CrosshairsTemplate>
                         </SvgPanel>
                     </SvgPanelTemplate>
 

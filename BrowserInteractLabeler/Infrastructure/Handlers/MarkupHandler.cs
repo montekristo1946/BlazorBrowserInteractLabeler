@@ -157,7 +157,7 @@ public class MarkupHandler
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="timeClick"></param>
-    public async Task<(bool result, Annotation annot)> HandlerOnmouseuplAsync(MouseEventArgs mouseEventArgs,
+    public  (bool result, Annotation annot) HandlerOnmouseuplAsync(MouseEventArgs mouseEventArgs,
         Annotation annotation,
         DateTime timeClick,
         SizeF sizeImg)

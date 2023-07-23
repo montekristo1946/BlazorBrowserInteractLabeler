@@ -17,7 +17,7 @@ public class CacheAnnotation
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<(bool checkResult, Annotation annot)> GetEditAnnotation()
+    public  (bool checkResult, Annotation annot) GetEditAnnotation()
     {
         var annot = _annotations.FirstOrDefault(p => p.State != StateAnnot.Finalized);
         if (annot is not null)
@@ -26,7 +26,7 @@ public class CacheAnnotation
         return (false, new Annotation());
     }
 
-    public async Task UpdateAnnotation(Annotation annotation)
+    public void UpdateAnnotation(Annotation annotation)
     {
         var currentAnnot = _annotations.FirstOrDefault(p => p.Id == annotation.Id);
         if (currentAnnot is null)

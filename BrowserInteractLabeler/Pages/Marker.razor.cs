@@ -1,4 +1,5 @@
 using BrowserInteractLabeler.Common;
+using BrowserInteractLabeler.Component.DrawingJobBox;
 using BrowserInteractLabeler.Infrastructure;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -12,17 +13,16 @@ namespace BrowserInteractLabeler.Pages;
 public class MarkerModel : ComponentBase
 {
     [Inject] internal NavigationHandler _navigationHandler { get; set; }
-    
-    [Inject] internal KeyMapHandler _keyMapHandler{ get; set; }
-    
-    [Inject] internal CacheModel _cacheModel{ get; set; }
+
+    [Inject] internal KeyMapHandler _keyMapHandler { get; set; }
+
+    [Inject] internal CacheModel _cacheModel { get; set; }
 
     [Inject] internal IJSRuntime _JSRuntime { get; set; }
-    
-    internal readonly string IdImagesPamel  = "marker_panel";
-    internal readonly KeyboardEventArgs _commandGoNext = new() { Key = "f",Code = "KeyF"};
-    internal readonly KeyboardEventArgs _commandGoBack = new() { Key = "d",Code = "KeyD" };
-    
+
+    internal readonly string IdImagesPamel = "marker_panel";
+    internal readonly KeyboardEventArgs _commandGoNext = new() { Key = "f", Code = "KeyF" };
+    internal readonly KeyboardEventArgs _commandGoBack = new() { Key = "d", Code = "KeyD" };
     
     internal async Task HandleKeyDown(KeyboardEventArgs arg)
     {
@@ -38,4 +38,13 @@ public class MarkerModel : ComponentBase
         }
     }
 
+    internal Task HandlerImagesPanelOnmouseupAsync(MouseEventArgs arg)
+    {
+        return Task.Run(() =>
+        {
+            _keyMapHandler.HandlerImagesPanelOnmouseupAsync(arg);
+            _cacheModel.PointCursor = _navigationHandler.CalculateCursor(arg.OffsetX,arg.OffsetY);
+            
+        });
+    }
 }

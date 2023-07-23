@@ -1,5 +1,6 @@
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
+using BrowserInteractLabeler.Component.DrawingJobBox;
 using BrowserInteractLabeler.Infrastructure.Configs;
 using Microsoft.AspNetCore.Components.Web;
 using Serilog;
@@ -24,12 +25,11 @@ public class KeyMapHandler
 
     public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
     {
-        
         // _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
 
-        if(arg.Repeat)
+        if (arg.Repeat)
             return;
-        
+
         await BasicFunctions(arg.Code);
         await MarkupFunctions(arg.Code, _serviceConfigs.Colors);
     }
@@ -67,7 +67,7 @@ public class KeyMapHandler
             }
             case "KeyE":
             {
-                await _navigationHandler.EventEditAnnot();
+                 _navigationHandler.EventEditAnnot();
                 break;
             }
             case "KeyQ":
@@ -111,13 +111,15 @@ public class KeyMapHandler
         const int leftButton = 0;
         const int rightButton = 2;
         // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}", arg);
-        
-        if(arg.Button==leftButton)
+        _logger.Debug($"[HandleImagePanelMouseAsync] {arg.OffsetX}; {arg.OffsetY}");
+
+        if (arg.Button == leftButton)
             await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
-        
-        if(arg.Button==rightButton)
+
+        // await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
+
+        if (arg.Button == rightButton)
             await _navigationHandler.HandleImagePanelMouseRightButtonAsync(arg, DateTime.Now);
-        
     }
 
     /// <summary>
@@ -143,28 +145,24 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
     {
-        const long buttons = 1;
-        if (arg is { AltKey: true, Buttons: buttons })
+        const long button = 1;
+        if (arg is { AltKey: true, Buttons: button })
         {
             await _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg, DateTime.Now);
         }
-        
     }
 
     /// <summary>
     ///     Полотно с изображением
     /// </summary>
+    /// <param name="args"></param>
+    /// <param name="svgPanelRef"></param>
     /// <param name="arg"></param>
-    public async Task HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
+    public void HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
     {
         const long buttons = 1;
         if (args is { AltKey: false, Buttons: buttons })
-            await _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
-
-
-        // _logger.Debug("[HandleWheelDrawingPanelMouseEventAsync]  {@WheelEventArgs}", args);
-        //
-        // await _navigationHandler.HandlerDrawCrosshairAsync(args,DateTime.Now);
+            _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
     }
 
 
