@@ -19,11 +19,11 @@ public class NavigationHandler
     private readonly ILogger _logger = Log.ForContext<NavigationHandler>();
     private readonly Helper _helper;
     private readonly CacheAnnotation _cacheAnnotation;
-    private readonly SvgConstructor _svgConstructor;
+    // private readonly SvgConstructor _svgConstructor;
     private readonly ServiceConfigs _serviceConfigs;
     private readonly MoveImagesHandler _moveImagesHandler;
     private readonly MarkupHandler _markupHandler;
-    private const string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
+    // private const string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
 
     public bool SetMainFocusRootPanel { get; set; } = false;
 
@@ -32,7 +32,7 @@ public class NavigationHandler
         IRepository repository,
         Helper helper,
         CacheAnnotation cacheAnnotation,
-        SvgConstructor svgConstructor,
+        // SvgConstructor svgConstructor,
         ServiceConfigs serviceConfigs,
         MoveImagesHandler moveImagesHandler,
         MarkupHandler markupHandler)
@@ -41,7 +41,7 @@ public class NavigationHandler
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         _helper = helper ?? throw new ArgumentNullException(nameof(helper));
         _cacheAnnotation = cacheAnnotation ?? throw new ArgumentNullException(nameof(cacheAnnotation));
-        _svgConstructor = svgConstructor ?? throw new ArgumentNullException(nameof(svgConstructor));
+        // _svgConstructor = svgConstructor ?? throw new ArgumentNullException(nameof(svgConstructor));
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _markupHandler = markupHandler ?? throw new ArgumentNullException(nameof(markupHandler));
