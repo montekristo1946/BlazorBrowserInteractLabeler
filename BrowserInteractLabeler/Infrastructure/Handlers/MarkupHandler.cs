@@ -24,12 +24,13 @@ public class MarkupHandler
     public async Task<(bool checkRes, Annotation res)> HandleMouseClickAsync(MouseEventArgs mouseEventArgs,
         SizeF sizeImg, Annotation annotation)
     {
-        if (annotation.State == StateAnnot.Finalized )
+        if (annotation.State == StateAnnot.Finalized || _movedData.isMoved is true)
             return (false, new Annotation());
 
         var lastPoint = annotation.Points?.MaxBy(p => p.PositionInGroup);
         var lastIPosition = lastPoint == null ? 0 : lastPoint.PositionInGroup + 1;
         
+        _logger.Debug("HandleMouseClickAsync create new {@_movedData}",_movedData);
         var pointClick = new PointF()
         {
             X = (float)mouseEventArgs.OffsetX / sizeImg.Width,
@@ -144,6 +145,13 @@ public class MarkupHandler
 
         _timeFirstPoint = timeClick;
         _movedData = (isMoved: true, point: movePoint, annot: annotation);
+        _logger.Debug("Capture point");
+    }
+    
+    public void ResetSelectPoint()
+    {
+        _logger.Debug("ResetSelectPoint");
+        _movedData = (isMoved: false, point: new PointF(), annot: new Annotation());
     }
 
     private void ResetMovedCache()
@@ -153,7 +161,7 @@ public class MarkupHandler
     }
 
     /// <summary>
-    /// Реализация самого перемещения обьекта
+    ///     Реализация самого перемещения обьекта
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="timeClick"></param>
@@ -202,7 +210,7 @@ public class MarkupHandler
         // _logger.Debug($"[test] {currentX} {currentY}");
         var currentIndex = annot.Points.IndexOf(removePoints);
         var oldPoints = annot.Points[currentIndex];
-        var newPoints = oldPoints with { X = currentX, Y = currentY, Id = 0 };
+        var newPoints = oldPoints with { X = currentX, Y = currentY, Id = 0 , PositionInGroup = oldPoints.PositionInGroup};
         // var newPoints = new PointF() { X = currentX, Y = currentY, AnnotationId = oldPoints.AnnotationId, Id = 0};
         annot.Points[currentIndex] = newPoints;
 
@@ -214,5 +222,5 @@ public class MarkupHandler
     }
 
 
-
+  
 }

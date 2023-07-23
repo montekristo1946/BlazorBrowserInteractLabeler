@@ -251,11 +251,21 @@ public class NavigationHandler
         UpdateSvg();
     }
 
+    /// <summary>
+    ///     Перемешение изобаржения первое нажатие
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
     public async Task HandlerImagesPanelOnmousedownAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         await _moveImagesHandler.HandlerOnmousedownAsync(mouseEventArgs, timeClick);
     }
 
+    /// <summary>
+    ///     Перемешение изображения
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
     public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         var moveDist = await _moveImagesHandler.HandlerOnmouseupAsync(mouseEventArgs, timeClick);
@@ -305,13 +315,13 @@ public class NavigationHandler
         if (checkResult is false)
             return;
 
-         _cacheAnnotation.UpdateAnnotation(annotation);
+        _cacheAnnotation.UpdateAnnotation(annotation);
         UpdateSvg();
     }
 
 
     /// <summary>
-    ///     Перемещение точки Выбор обекта
+    ///     Перемещение точки Выбор обекта, нажали клавишу
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="timeClick"></param>
@@ -325,6 +335,17 @@ public class NavigationHandler
             resultGetEditAnnotation.annot,
             timeClick,
             _cacheModel.SizeDrawImage);
+    }
+    
+    /// <summary>
+    ///      Перемещение точки Выбор обекта, отпустили клавишу
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="now"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void ResetSelectPointAsync()
+    {
+         _markupHandler.ResetSelectPoint();
     }
 
     /// <summary>
@@ -407,4 +428,6 @@ public class NavigationHandler
         
         return new PointF() { X = (float)currentX, Y = (float)currentY };
     }
+
+   
 }

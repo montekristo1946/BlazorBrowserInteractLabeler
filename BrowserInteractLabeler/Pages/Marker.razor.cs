@@ -38,6 +38,11 @@ public class MarkerModel : ComponentBase
         }
     }
 
+    /// <summary>
+    ///     Движение мыши
+    /// </summary>
+    /// <param name="arg"></param>
+    /// <returns></returns>
     internal Task HandlerImagesPanelOnmouseupAsync(MouseEventArgs arg)
     {
         return Task.Run(() =>

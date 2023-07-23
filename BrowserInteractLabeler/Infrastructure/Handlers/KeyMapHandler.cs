@@ -23,6 +23,10 @@ public class KeyMapHandler
     }
 
 
+    /// <summary>
+    ///     ButtonGoNextClick on ButtonGoBackClick
+    /// </summary>
+    /// <param name="arg"></param>
     public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
     {
         // _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
@@ -110,23 +114,23 @@ public class KeyMapHandler
 
         const int leftButton = 0;
         const int rightButton = 2;
-        // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}", arg);
-        _logger.Debug($"[HandleImagePanelMouseAsync] {arg.OffsetX}; {arg.OffsetY}");
 
-        if (arg.Button == leftButton)
-            await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
-
-        // await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
-
-        if (arg.Button == rightButton)
-            await _navigationHandler.HandleImagePanelMouseRightButtonAsync(arg, DateTime.Now);
+        switch (arg.Button)
+        {
+            case leftButton:
+                await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
+                break;
+            case rightButton:
+                await _navigationHandler.HandleImagePanelMouseRightButtonAsync(arg, DateTime.Now);
+                break;
+        }
     }
 
     /// <summary>
-    ///     Полотно с изображением
+    ///     Левую клавишу мыши нажали
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandlerImagesPanelOnmousedownAsync(MouseEventArgs arg)
+    public async Task HandlerImagesPanelOnmouseDownAsync(MouseEventArgs arg)
     {
         if (arg.AltKey)
         {
@@ -134,10 +138,12 @@ public class KeyMapHandler
                 DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
             return;
         }
-
+        _navigationHandler.ResetSelectPointAsync();
         await _navigationHandler.HandlerSelectPointAsync(arg,
             DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
     }
+
+
 
     /// <summary>
     ///     Общая панель для отрисовки перемещение мыши
@@ -153,13 +159,14 @@ public class KeyMapHandler
     }
 
     /// <summary>
-    ///     Полотно с изображением
+    ///     Перемещение точки
     /// </summary>
     /// <param name="args"></param>
     /// <param name="svgPanelRef"></param>
     /// <param name="arg"></param>
     public void HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
     {
+        // _logger.Debug("[HandlerImagesPanelOnmouseupAsync] {@MouseEventArgs}",args);
         const long buttons = 1;
         if (args is { AltKey: false, Buttons: buttons })
             _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);

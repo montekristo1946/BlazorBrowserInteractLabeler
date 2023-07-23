@@ -35,6 +35,8 @@ public class ImagesPanelModel : ComponentBase
     [Parameter] public EventCallback<MouseEventArgs> HandleRightClick { get; set; }
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousedown { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseup { get; set; }
+    
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }
     
