@@ -74,7 +74,7 @@ public class ProjectsLocalHandler
         var allInformation = await _repository.GetInformationDtoAsync();
         var currentInfo = allInformation.Where(p => p.CategoryInformation == 1);
         var lastInfo = currentInfo.MaxBy(p => p.Id);
-        CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "In work";
+        CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "Being processed ...";
 
     }
 

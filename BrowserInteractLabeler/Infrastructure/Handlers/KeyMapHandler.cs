@@ -44,7 +44,7 @@ public class KeyMapHandler
         if (findKey is null)
             return;
 
-        await _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
+        _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
     }
 
     private async Task BasicFunctions(string codeKey)
@@ -66,32 +66,32 @@ public class KeyMapHandler
             case "Delete":
             case "KeyX":
             {
-                await _navigationHandler.DeleteAnnotation();
+                _navigationHandler.DeleteAnnotation();
                 break;
             }
             case "KeyE":
             {
-                 _navigationHandler.EventEditAnnot();
+                _navigationHandler.EventEditAnnot();
                 break;
             }
             case "KeyQ":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.Box);
+                _navigationHandler.EnableTypeLabel(TypeLabel.Box);
                 break;
             }
             case "KeyW":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
+                _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
                 break;
             }
             case "KeyA":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
+                _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
                 break;
             }
             case "KeyS":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.Point);
+                _navigationHandler.EnableTypeLabel(TypeLabel.Point);
                 break;
             }
             case "Space": //Sapase
@@ -118,10 +118,10 @@ public class KeyMapHandler
         switch (arg.Button)
         {
             case leftButton:
-                await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
+                _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
                 break;
             case rightButton:
-                await _navigationHandler.HandleImagePanelMouseRightButtonAsync(arg, DateTime.Now);
+                _navigationHandler.HandleImagePanelMouseRightButtonAsync();
                 break;
         }
     }
@@ -134,28 +134,29 @@ public class KeyMapHandler
     {
         if (arg.AltKey)
         {
-            await _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
+            _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
                 DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
             return;
         }
-        _navigationHandler.ResetSelectPointAsync();
-        await _navigationHandler.HandlerSelectPointAsync(arg,
-            DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
-    }
 
+        _navigationHandler.ResetSelectPointAsync();
+        _navigationHandler.HandlerSelectPointAsync(arg, DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+    }
 
 
     /// <summary>
     ///     Общая панель для отрисовки перемещение мыши
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
+    public Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
     {
         const long button = 1;
         if (arg is { AltKey: true, Buttons: button })
         {
-            await _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg, DateTime.Now);
+            return Task.Run(() => { _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg); });
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -166,7 +167,6 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public void HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
     {
-        // _logger.Debug("[HandlerImagesPanelOnmouseupAsync] {@MouseEventArgs}",args);
         const long buttons = 1;
         if (args is { AltKey: false, Buttons: buttons })
             _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
@@ -177,8 +177,11 @@ public class KeyMapHandler
     ///     Общая панель для отрисовки , колесо мыши
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
+    public  Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
     {
-        await _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now);
+        return Task.Run(() =>
+        {
+            _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now);
+        });
     }
 }

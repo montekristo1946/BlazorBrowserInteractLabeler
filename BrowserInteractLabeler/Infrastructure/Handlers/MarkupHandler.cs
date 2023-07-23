@@ -21,7 +21,7 @@ public class MarkupHandler
     private DateTime _timeFirstPoint = DateTime.MinValue;
 
 
-    public async Task<(bool checkRes, Annotation res)> HandleMouseClickAsync(MouseEventArgs mouseEventArgs,
+    public (bool checkRes, Annotation res) HandleMouseClickAsync(MouseEventArgs mouseEventArgs,
         SizeF sizeImg, Annotation annotation)
     {
         if (annotation.State == StateAnnot.Finalized || _movedData.isMoved is true)
@@ -30,7 +30,6 @@ public class MarkupHandler
         var lastPoint = annotation.Points?.MaxBy(p => p.PositionInGroup);
         var lastIPosition = lastPoint == null ? 0 : lastPoint.PositionInGroup + 1;
         
-        _logger.Debug("HandleMouseClickAsync create new {@_movedData}",_movedData);
         var pointClick = new PointF()
         {
             X = (float)mouseEventArgs.OffsetX / sizeImg.Width,
@@ -44,12 +43,12 @@ public class MarkupHandler
             case TypeLabel.None:
                 break;
             case TypeLabel.Box:
-                var resBox = await ProcessingBoxAnnotation(pointClick, ActiveIdLabel, annotation);
+                var resBox =  ProcessingBoxAnnotation(pointClick, ActiveIdLabel, annotation);
                 return (true, resBox);
             case TypeLabel.Polygon:
             case TypeLabel.PolyLine:
             case TypeLabel.Point:
-                var res = await ProcessingAddPointAnnotation(pointClick, ActiveIdLabel, annotation, ActiveTypeLabel);
+                var res =  ProcessingAddPointAnnotation(pointClick, ActiveIdLabel, annotation, ActiveTypeLabel);
                 return (true, res);
 
             default:
@@ -65,8 +64,7 @@ public class MarkupHandler
     /// <param name="mouseEventArgs"></param>
     /// <param name="annot"></param>
     /// <returns></returns>
-    public async Task<(bool res, Annotation annotation)> HandleMouseClickUndoPointAsync(MouseEventArgs mouseEventArgs,
-        Annotation annot)
+    public (bool res, Annotation annotation) HandleMouseClickUndoPointAsync(Annotation annot)
     {
 
         if (annot.State == StateAnnot.Finalized || annot.Points?.Any() == false)
@@ -82,7 +80,7 @@ public class MarkupHandler
     }
 
 
-    private async Task<Annotation> ProcessingAddPointAnnotation(PointF pointClick,
+    private Annotation ProcessingAddPointAnnotation(PointF pointClick,
         int activeIdLabel,
         Annotation annotation,
         TypeLabel labelPattern)
@@ -95,7 +93,7 @@ public class MarkupHandler
     }
 
 
-    private async Task<Annotation> ProcessingBoxAnnotation(PointF point, int activeIdLabel, Annotation annotation)
+    private Annotation ProcessingBoxAnnotation(PointF point, int activeIdLabel, Annotation annotation)
     {
         const int maxPoints = 2;
         if (annotation.Points.Count < maxPoints)
@@ -127,7 +125,7 @@ public class MarkupHandler
     /// <param name="timeClick"></param>
     /// <param name="cacheModelSizeDrawImage"></param>
     /// <param name="now"></param>
-    public async Task HandlerOnmousedownAsync(MouseEventArgs mouseEventArgs,
+    public void HandlerOnmousedownAsync(MouseEventArgs mouseEventArgs,
         Annotation annotation,
         DateTime timeClick,
         SizeF sizeDrawImage)
@@ -145,12 +143,10 @@ public class MarkupHandler
 
         _timeFirstPoint = timeClick;
         _movedData = (isMoved: true, point: movePoint, annot: annotation);
-        _logger.Debug("Capture point");
     }
     
     public void ResetSelectPoint()
     {
-        _logger.Debug("ResetSelectPoint");
         _movedData = (isMoved: false, point: new PointF(), annot: new Annotation());
     }
 

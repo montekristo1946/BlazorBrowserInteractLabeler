@@ -150,7 +150,7 @@ public class ServiceConfigs
         var ret = Colors.FirstOrDefault(p => p.IdLabel == annotationLabelId);
         if (ret is null)
         {
-            _logger.Debug("[GetColor] Fail Get color {IdLabel}; ",annotationLabelId );
+            // _logger.Debug("[GetColor] Fail Get color {IdLabel}; ",annotationLabelId );
             return new ColorModel();
         }
 

@@ -237,7 +237,7 @@ public class CacheAnnotation
         if (current is null)
             return (false, new Annotation());
 
-        var state = current.State != StateAnnot.Hidden ? StateAnnot.Hidden : StateAnnot.Edit;
+        var state = current.State != StateAnnot.Hidden ? StateAnnot.Hidden : StateAnnot.Active;
         foreach (var annotation in _annotations)
         {
             annotation.State = StateAnnot.Finalized;
