@@ -178,17 +178,36 @@ public class SqlRepositoryIntegrationTest
             throw new Exception("Fail TestInitSql");
     }
 
-    
+
     public void TestInheritanceOfData()
     {
         var imgId = 1;
         var arrAnnotSrc = _operativeFramesStorage.GetAnnotationsFromImgIdAsync(imgId).Result;
         var arrClone = arrAnnotSrc.CloneDeep();
-        
+
         arrClone[0].Points[0] = new PointF() { X = 1, Y = 2 };
-        
-        if(arrAnnotSrc[0].Points[0].X == arrClone[0].Points[0].X)
+
+        if (arrAnnotSrc[0].Points[0].X == arrClone[0].Points[0].X)
             throw new Exception("Fail CloneDeep");
-        
+    }
+
+    public void TestWriteReadInformationState()
+    {
+        var newInformationDto = new InformationDto()
+        {
+            Id = 0,
+            Information = "Completed",
+            CategoryInformation = 1,
+        };
+
+        var res = _operativeFramesStorage.SaveInformationDtoAsync(newInformationDto).Result;
+        if (!res)
+            throw new Exception("Fail TestWriteReadInformationState");
+
+
+        var arrInformationDto = _operativeFramesStorage.GetInformationDtoAsync().Result;
+        if (arrInformationDto.Any() is false)
+            throw new Exception("Fail GetInformationDtoAsync");
+
     }
 }

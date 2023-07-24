@@ -1,0 +1,13 @@
+@inherits CrosshairModel
+
+
+
+
+@* <circle cx="50%" cy="50%" r="1" stroke="#EE534F" stroke-width="1" fill="#EE534F" fill-opacity="1"></circle> *@
+@* <circle cx="@GetTopPoint().X%" cy="@GetTopPoint().Y%" r="4" stroke="green" stroke-width="4" fill="yellow" fill-opacity="1" /> *@
+
+
+<line x1="@GetVerticalPoints().p1.X%" y1="@GetVerticalPoints().p1.Y%" x2="@GetVerticalPoints().p2.X%" y2="@GetVerticalPoints().p2.Y%" stroke="@ActiveLabelColor" stroke-width="@GetThicknessLine()" stroke-dasharray="4 2"> </line>
+<line x1="@GetHorizontalPoint().p1.X%" y1="@GetHorizontalPoint().p1.Y%" x2="@GetHorizontalPoint().p2.X%" y2="@GetHorizontalPoint().p2.Y%" stroke="@ActiveLabelColor" stroke-width="@GetThicknessLine()" stroke-dasharray="4 2"> </line>
+
+<line x1="@GetLinePoint().p1.X%" y1="@GetLinePoint().p1.Y%" x2="@GetLinePoint().p2.X%" y2="@GetLinePoint().p2.Y%" stroke="@ActiveLabelColor" stroke-width="@GetThicknessLine()" stroke-dasharray="4 2"> </line>

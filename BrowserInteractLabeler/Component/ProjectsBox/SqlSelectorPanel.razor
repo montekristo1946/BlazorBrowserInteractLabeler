@@ -14,7 +14,7 @@
             {
                 var isActivePanel = CheckActivePanel(complexName.name);
                 var colorButton = isActivePanel ? "#d8d8d8b2" : "#ffffff";
-                var textToActive = isActivePanel ? "In work" : "";
+                var textToActive = isActivePanel && CurrentInformationSqlDb.Any() ?  CurrentInformationSqlDb:"";
                 var visibilitySpinner = isActivePanel && IsShowSpinnerLpadDB ? "visible" : "hidden";
                 // var visibilitySpinner = "visible";
                 <div class="row m-0 my-2">
@@ -27,14 +27,14 @@
                                 <img src="icons/011_database.svg" width="35" height="35"/>
                             </div>
 
-                            <div class="col-6 my-3 " style="overflow: hidden;">
+                            <div class="col-5 my-3 " style="overflow: hidden;">
                                 <div class="row">
                                     <div class="col-1 text-center">@complexName.index</div>
                                     <div class="col-11 text-start">@complexName.name</div>
                                 </div>
                             </div>
 
-                            <div class="col-1 my-3 text-center">
+                            <div class="col-2 my-3 text-center">
                                 @textToActive
                             </div>
                             <div class="col-1  my-1">

@@ -1,5 +1,6 @@
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
+using BrowserInteractLabeler.Component.DrawingJobBox;
 using BrowserInteractLabeler.Infrastructure.Configs;
 using Microsoft.AspNetCore.Components.Web;
 using Serilog;
@@ -22,14 +23,17 @@ public class KeyMapHandler
     }
 
 
+    /// <summary>
+    ///     ButtonGoNextClick on ButtonGoBackClick
+    /// </summary>
+    /// <param name="arg"></param>
     public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
     {
-        
         // _logger.Debug("[KeyMapHandler:HandleKeyDownAsync] key down {@KeyboardEventArgs}", arg);
 
-        if(arg.Repeat)
+        if (arg.Repeat)
             return;
-        
+
         await BasicFunctions(arg.Code);
         await MarkupFunctions(arg.Code, _serviceConfigs.Colors);
     }
@@ -40,7 +44,7 @@ public class KeyMapHandler
         if (findKey is null)
             return;
 
-        await _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
+        _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
     }
 
     private async Task BasicFunctions(string codeKey)
@@ -62,32 +66,32 @@ public class KeyMapHandler
             case "Delete":
             case "KeyX":
             {
-                await _navigationHandler.DeleteAnnotation();
+                _navigationHandler.DeleteAnnotation();
                 break;
             }
             case "KeyE":
             {
-                await _navigationHandler.EventEditAnnot();
+                _navigationHandler.EventEditAnnot();
                 break;
             }
             case "KeyQ":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.Box);
+                _navigationHandler.EnableTypeLabel(TypeLabel.Box);
                 break;
             }
             case "KeyW":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
+                _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
                 break;
             }
             case "KeyA":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
+                _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
                 break;
             }
             case "KeyS":
             {
-                await _navigationHandler.EnableTypeLabel(TypeLabel.Point);
+                _navigationHandler.EnableTypeLabel(TypeLabel.Point);
                 break;
             }
             case "Space": //Sapase
@@ -110,61 +114,62 @@ public class KeyMapHandler
 
         const int leftButton = 0;
         const int rightButton = 2;
-        // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}", arg);
-        
-        if(arg.Button==leftButton)
-            await _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
-        
-        if(arg.Button==rightButton)
-            await _navigationHandler.HandleImagePanelMouseRightButtonAsync(arg, DateTime.Now);
-        
+
+        switch (arg.Button)
+        {
+            case leftButton:
+                _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
+                break;
+            case rightButton:
+                _navigationHandler.HandleImagePanelMouseRightButtonAsync();
+                break;
+        }
     }
 
     /// <summary>
-    ///     Полотно с изображением
+    ///     Левую клавишу мыши нажали
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandlerImagesPanelOnmousedownAsync(MouseEventArgs arg)
+    public async Task HandlerImagesPanelOnmouseDownAsync(MouseEventArgs arg)
     {
         if (arg.AltKey)
         {
-            await _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
+            _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
                 DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
             return;
         }
 
-        await _navigationHandler.HandlerSelectPointAsync(arg,
-            DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+        _navigationHandler.ResetSelectPointAsync();
+        _navigationHandler.HandlerSelectPointAsync(arg, DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
     }
+
 
     /// <summary>
     ///     Общая панель для отрисовки перемещение мыши
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
+    public Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
     {
-        const long buttons = 1;
-        if (arg is { AltKey: true, Buttons: buttons })
+        const long button = 1;
+        if (arg is { AltKey: true, Buttons: button })
         {
-            await _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg, DateTime.Now);
+            return Task.Run(() => { _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg); });
         }
-        
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
-    ///     Полотно с изображением
+    ///     Перемещение точки
     /// </summary>
+    /// <param name="args"></param>
+    /// <param name="svgPanelRef"></param>
     /// <param name="arg"></param>
-    public async Task HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
+    public void HandlerImagesPanelOnmouseupAsync(MouseEventArgs args)
     {
         const long buttons = 1;
         if (args is { AltKey: false, Buttons: buttons })
-            await _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
-
-
-        // _logger.Debug("[HandleWheelDrawingPanelMouseEventAsync]  {@WheelEventArgs}", args);
-        //
-        // await _navigationHandler.HandlerDrawCrosshairAsync(args,DateTime.Now);
+            _navigationHandler.HandlerMovePointAsync(args, DateTime.Now);
     }
 
 
@@ -172,8 +177,11 @@ public class KeyMapHandler
     ///     Общая панель для отрисовки , колесо мыши
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
+    public  Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
     {
-        await _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now);
+        return Task.Run(() =>
+        {
+            _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now);
+        });
     }
 }

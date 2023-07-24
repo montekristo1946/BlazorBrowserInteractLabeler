@@ -35,11 +35,13 @@ public class ImagesPanelModel : ComponentBase
     [Parameter] public EventCallback<MouseEventArgs> HandleRightClick { get; set; }
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousedown { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseup { get; set; }
+    
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }
     
     [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
     
-    [Parameter] public string CursorStyle { get; set; } = string.Empty;
+    // [Parameter] public string CursorStyle { get; set; } = string.Empty;
     
 }

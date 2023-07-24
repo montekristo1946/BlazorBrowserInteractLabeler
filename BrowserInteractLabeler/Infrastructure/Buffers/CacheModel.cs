@@ -12,8 +12,8 @@ public class CacheModel
     internal string ImagesBase64 => $"data:image/jpg;base64," + Convert.ToBase64String(Images.Images);
     internal ImageFrame Images { get; set; } = new ImageFrame();
     
-    internal string SvgModelString  { get; set; } = "";
-    public string CursorStringStyle { get; set; }= "";
+    // internal string SvgModelString  { get; set; } = "";
+    // public string CursorStringStyle { get; set; }= "";
     
     internal string CssScale =>
         $"transform: scale({ScaleCurrent}) translate({OffsetDrawImage.X}px, {OffsetDrawImage.Y}px)";
@@ -29,12 +29,15 @@ public class CacheModel
     internal Annotation[] AnnotationsOnPanel { get; set; } = Array.Empty<Annotation>();
     internal Label[] LabelAll { get; set; } = Array.Empty<Label>();
     internal ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
-    public string ActiveTypeLabel { get; set; } = "";
-    public string ActiveIdLabelColor { get; set; } = "#f8f9fa";
+    public string ActiveTypeLabelText { get; set; } = "";
+    public TypeLabel ActiveTypeLabel { get; set; } = TypeLabel.None;
+    public string ActiveLabelColor { get; set; } = "#f8f9fa";
     public string StatePrecess { get; set; }= "";
     public string NameImages { get; set; }="";
     public int CurrentProgress { get; set; } = 0;
 
+    public PointF PointCursor { get; set; } = new PointF() { X = 0, Y = 0 };
+
     // public bool DrawCrosshair { get; set; } = false;
-   
+
 }

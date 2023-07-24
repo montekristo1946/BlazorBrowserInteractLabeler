@@ -15,11 +15,11 @@
         background-size: contain;
         transform-origin: center;
         background-position: center ;
-        background-image: @ImagesBase64;
-        cursor: @CursorStyle;"  
+        background-image: @ImagesBase64;"  
          @onclick="HandleMouse"
          @oncontextmenu="HandleRightClick"
          @onmousedown="HandlerOnmousedown"
+         @onmouseup="HandlerOnmouseup"
          @onmousemove="HandlerOnmousemove">
 
         @SvgPanelTemplate

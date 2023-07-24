@@ -18,9 +18,9 @@ public class NavMenuModel:ComponentBase
     {
 
         var sizeBrowse = await JSRuntime.InvokeAsync<SizeF>("GetBrowseSize");
-        await _navigationHandler.SetRootWindowsSize(sizeBrowse);
-        await _projectsLocalHandler.SetRootWindowsSize(sizeBrowse);
-        await _settingsHandler.SetRootWindowsSize(sizeBrowse);
+         _navigationHandler.SetRootWindowsSize(sizeBrowse);
+         _projectsLocalHandler.SetRootWindowsSize(sizeBrowse);
+         _settingsHandler.SetRootWindowsSize(sizeBrowse);
         
         
     }

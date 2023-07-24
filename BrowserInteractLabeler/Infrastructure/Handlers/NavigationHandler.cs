@@ -19,11 +19,9 @@ public class NavigationHandler
     private readonly ILogger _logger = Log.ForContext<NavigationHandler>();
     private readonly Helper _helper;
     private readonly CacheAnnotation _cacheAnnotation;
-    private readonly SvgConstructor _svgConstructor;
     private readonly ServiceConfigs _serviceConfigs;
     private readonly MoveImagesHandler _moveImagesHandler;
     private readonly MarkupHandler _markupHandler;
-    private const  string _cursorEnable = "url('icons/015_crosshaiir.svg') 64 64, default";
 
     public bool SetMainFocusRootPanel { get; set; } = false;
 
@@ -32,7 +30,6 @@ public class NavigationHandler
         IRepository repository,
         Helper helper,
         CacheAnnotation cacheAnnotation,
-        SvgConstructor svgConstructor,
         ServiceConfigs serviceConfigs,
         MoveImagesHandler moveImagesHandler,
         MarkupHandler markupHandler)
@@ -41,7 +38,6 @@ public class NavigationHandler
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         _helper = helper ?? throw new ArgumentNullException(nameof(helper));
         _cacheAnnotation = cacheAnnotation ?? throw new ArgumentNullException(nameof(cacheAnnotation));
-        _svgConstructor = svgConstructor ?? throw new ArgumentNullException(nameof(svgConstructor));
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _markupHandler = markupHandler ?? throw new ArgumentNullException(nameof(markupHandler));
@@ -64,8 +60,6 @@ public class NavigationHandler
         _cacheModel.CurrentIdImg = 1;
         _cacheModel.CurrentProgress = 0;
         await CreateStartImagesState(_cacheModel.CurrentIdImg);
-        await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
         _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
@@ -101,7 +95,7 @@ public class NavigationHandler
             return;
         }
 
-        await SetActiveIdAnnotation(-1);
+        SetActiveIdAnnotation(-1);
         await SaveAnnotation();
         _cacheModel.CurrentIdImg = index;
 
@@ -131,7 +125,7 @@ public class NavigationHandler
         _cacheModel.ScaleCurrent = _defaultScale;
     }
 
-    public async Task SetRootWindowsSize(SizeF sizeBrowse)
+    public void  SetRootWindowsSize(SizeF sizeBrowse)
     {
         _cacheModel.ImageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
     }
@@ -140,48 +134,76 @@ public class NavigationHandler
     private void UpdateSvg()
     {
         _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
-        var thicknessLine = 1 / _cacheModel.ScaleCurrent;
-        _cacheModel.SvgModelString = _svgConstructor.CreateSVG(_cacheModel.AnnotationsOnPanel, thicknessLine);
     }
 
-    public async Task SaveAnnotation()
+    public Task SaveAnnotation()
     {
-        await _cacheAnnotation.SaveAnnotationsOnSqlAsync(_cacheModel.CurrentIdImg);
+        return Task.Run(() =>
+        {
+            _cacheAnnotation.SaveAnnotationsOnSqlAsync(_cacheModel.CurrentIdImg).Wait();
+            UpdateSvg();
+        });
     }
 
-    public async Task UndoClick()
+    public Task UndoClick()
     {
-        _cacheAnnotation.RemoveLastAnnotation(_cacheModel.CurrentIdImg);
-        UpdateSvg();
+        return Task.Run(() =>
+        {
+            _cacheAnnotation.RemoveLastAnnotation(_cacheModel.CurrentIdImg);
+            UpdateSvg();
+        });
     }
 
-    public async Task RedoClick()
+    public  Task RedoClick()
     {
-        _cacheAnnotation.RestoreLastAnnotation(_cacheModel.CurrentIdImg);
-        UpdateSvg();
+        return Task.Run(() =>
+        {
+            _cacheAnnotation.RestoreLastAnnotation(_cacheModel.CurrentIdImg);
+            UpdateSvg();
+        });
     }
 
     /// <summary>
     ///     Выбрали на редактирвоания аннотацию
     /// </summary>
     /// <param name="id"></param>
-    public async Task SetActiveIdAnnotation(int id)
+    public void SetActiveIdAnnotation(int id)
     {
         var resSetActiveAnnot = _cacheAnnotation.SetActiveAnnot(id);
         if (!resSetActiveAnnot.checkRes)
             return;
 
-        _cacheModel.StatePrecess = "Edit";
+        _cacheModel.StatePrecess = "Active";
         var activeLabelPattern = resSetActiveAnnot.annotation.LabelPattern;
         _markupHandler.ActiveTypeLabel = activeLabelPattern;
-        _cacheModel.CursorStringStyle = activeLabelPattern == TypeLabel.Box ? _cursorEnable : "";
-        await HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
         SetMainFocusRootPanel = true;
-        _cacheModel.ActiveTypeLabel =await _helper.CreateTypeTextToPanel(activeLabelPattern);
+        _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
+        _cacheModel.ActiveTypeLabel = activeLabelPattern;
     }
 
+    /// <summary>
+    ///     Скрывает аннотацию
+    /// </summary>
+    /// <param name="arg"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task SetHiddenIdAnnotation(int id)
+    {
+        var resSetActiveAnnot = _cacheAnnotation.SetHiddenAnnot(id);
+        if (!resSetActiveAnnot.checkRes)
+            return;
 
-    public async Task DeleteAnnotation()
+        _cacheModel.StatePrecess = "Hidden";
+        var activeLabelPattern = resSetActiveAnnot.annotation.LabelPattern;
+        _markupHandler.ActiveTypeLabel = activeLabelPattern;
+        HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        SetMainFocusRootPanel = true;
+        _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
+        _cacheModel.ActiveTypeLabel = activeLabelPattern;
+    }
+
+    public void DeleteAnnotation()
     {
         _cacheAnnotation.DeleteAnnotation();
         UpdateSvg();
@@ -189,14 +211,13 @@ public class NavigationHandler
     }
 
 
-
     /// <summary>
     ///     keyBoard [E]
     /// </summary>
-    public async Task EventEditAnnot()
+    public void EventEditAnnot()
     {
         _cacheAnnotation.EventEditAnnot(_cacheModel.CurrentIdImg);
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
 
         UpdateSvg();
@@ -206,29 +227,26 @@ public class NavigationHandler
     ///     key q,w,a,s
     /// </summary>
     /// <param name="typeLabel"></param>
-    public async Task EnableTypeLabel(TypeLabel typeLabel)
+    public void EnableTypeLabel(TypeLabel typeLabel)
     {
         _markupHandler.ActiveTypeLabel = typeLabel;
-        var textToPanel = await _helper.CreateTypeTextToPanel(typeLabel);
-        _cacheModel.ActiveTypeLabel = textToPanel;
+        var textToPanel = _helper.CreateTypeTextToPanel(typeLabel);
+        _cacheModel.ActiveTypeLabelText = textToPanel;
+        _cacheModel.ActiveTypeLabel = typeLabel;
 
         _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg, typeLabel);
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         _cacheModel.StatePrecess = resultGetEditAnnotation.checkResult ? "Create" : "";
-
-        _cacheModel.CursorStringStyle = typeLabel == TypeLabel.Box ? _cursorEnable : "";
-                
-        // _cacheModel.DrawCrosshair = typeLabel == TypeLabel.Box;
 
         UpdateSvg();
     }
 
-    public async Task HandlerSetLabelIdAsync(int activeIdLabel)
+    public void HandlerSetLabelIdAsync(int activeIdLabel)
     {
         _markupHandler.ActiveIdLabel = activeIdLabel;
         _cacheAnnotation.SetActiveIdLabel(activeIdLabel);
         var color = _helper.CreateColorTextToPanel(activeIdLabel, _cacheModel.ColorAll);
-        _cacheModel.ActiveIdLabelColor = color;
+        _cacheModel.ActiveLabelColor = color;
 
         UpdateSvg();
     }
@@ -239,7 +257,7 @@ public class NavigationHandler
     /// </summary>
     /// <param name="args"></param>
     /// <param name="now"></param>
-    public async Task WheelDrawingPanelMouseEventAsync(WheelEventArgs args, DateTime now)
+    public void WheelDrawingPanelMouseEventAsync(WheelEventArgs args, DateTime now)
     {
         var (scale, offset) = _helper.CalculationScale(args,
             _cacheModel.ScaleCurrent,
@@ -251,78 +269,115 @@ public class NavigationHandler
         UpdateSvg();
     }
 
-    public async Task HandlerImagesPanelOnmousedownAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    /// <summary>
+    ///     Перемешение изобаржения первое нажатие
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
+    public void HandlerImagesPanelOnmousedownAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
-        await _moveImagesHandler.HandlerOnmousedownAsync(mouseEventArgs, timeClick);
+        _moveImagesHandler.HandlerOnmousedownAsync(mouseEventArgs, timeClick);
     }
 
-    public async Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    /// <summary>
+    ///     Перемешение изображения
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
+    public void HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs mouseEventArgs)
     {
-        var moveDist = await _moveImagesHandler.HandlerOnmouseupAsync(mouseEventArgs, timeClick);
+        var stepCoeff = 1 / _cacheModel.ScaleCurrent;
+        var moveDist = _moveImagesHandler.HandlerOnMouseMove(mouseEventArgs, stepCoeff);
         if (moveDist.res)
             _cacheModel.OffsetDrawImage = _helper.CorrectOffset(moveDist.moveDist, _cacheModel.OffsetDrawImage);
     }
-
-
+    
     /// <summary>
-    ///     Точки разметки
+    ///     Left button Mouse, 
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="now"></param>
-    public async Task HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
+    public void HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
 
         var sizeImg = _cacheModel.SizeDrawImage;
 
         var (checkResult, annotation) =
-            await _markupHandler.HandleMouseClickAsync(mouseEventArgs, sizeImg, resultGetEditAnnotation.annot);
+            _markupHandler.HandleMouseClickAsync(mouseEventArgs, sizeImg, resultGetEditAnnotation.annot);
 
         if (checkResult is false)
             return;
 
-        await _cacheAnnotation.UpdateAnnotation(annotation);
+        _cacheAnnotation.UpdateAnnotation(annotation);
         UpdateSvg();
     }
 
-    public async Task HandleImagePanelMouseRightButtonAsync(MouseEventArgs mouseEventArgs, DateTime now)
+
+    /// <summary>
+    ///     Right button mouse
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="now"></param>
+    public void HandleImagePanelMouseRightButtonAsync()
     {
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
 
         var (checkResult, annotation) =
-            await _markupHandler.HandleMouseClickUndoPointAsync(mouseEventArgs, resultGetEditAnnotation.annot);
+            _markupHandler.HandleMouseClickUndoPointAsync(resultGetEditAnnotation.annot);
 
         if (checkResult is false)
             return;
 
-        await _cacheAnnotation.UpdateAnnotation(annotation);
+        _cacheAnnotation.UpdateAnnotation(annotation);
         UpdateSvg();
     }
 
 
-    public async Task HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    /// <summary>
+    ///     Перемещение точки Выбор обекта, нажали клавишу
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
+    public void HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
 
-        await _markupHandler.HandlerOnmousedownAsync(mouseEventArgs,
+        _markupHandler.HandlerOnmousedownAsync(mouseEventArgs,
             resultGetEditAnnotation.annot,
             timeClick,
             _cacheModel.SizeDrawImage);
     }
 
-    public async Task HandlerMovePointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    /// <summary>
+    ///      Перемещение точки Выбор обекта, отпустили клавишу
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="now"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void ResetSelectPointAsync()
     {
-        var resultGetEditAnnotation = await _cacheAnnotation.GetEditAnnotation();
+        _markupHandler.ResetSelectPoint();
+    }
+
+    /// <summary>
+    ///     Перемещение точки 
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
+    public void HandlerMovePointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    {
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
 
-        var resHandlerOnmouseuplAsync = await _markupHandler.HandlerOnmouseuplAsync(mouseEventArgs,
+        var resHandlerOnmouseuplAsync = _markupHandler.HandlerOnmouseuplAsync(mouseEventArgs,
             resultGetEditAnnotation.annot,
             timeClick,
             _cacheModel.SizeDrawImage);
@@ -330,13 +385,12 @@ public class NavigationHandler
         if (!resHandlerOnmouseuplAsync.result)
             return;
 
-        await _cacheAnnotation.UpdateAnnotation(resHandlerOnmouseuplAsync.annot);
+        _cacheAnnotation.UpdateAnnotation(resHandlerOnmouseuplAsync.annot);
         UpdateSvg();
     }
 
     public async Task ButtonEnterIdActiveIdImagesAsync(string indexImgString)
     {
-        // _logger.Debug($"[ButtonEnterIdActiveIdImagesAsync] {indexImgString}");
         var resultTryParse = Int32.TryParse(indexImgString, out var indexImg);
         if (!resultTryParse)
             return;
@@ -351,4 +405,11 @@ public class NavigationHandler
     }
 
 
+    public PointF CalculateCursor(double argOffsetX, double argOffsetY)
+    {
+        var currentX = (argOffsetX / _cacheModel.SizeDrawImage.Width);
+        var currentY = (argOffsetY / _cacheModel.SizeDrawImage.Height);
+
+        return new PointF() { X = (float)currentX, Y = (float)currentY };
+    }
 }

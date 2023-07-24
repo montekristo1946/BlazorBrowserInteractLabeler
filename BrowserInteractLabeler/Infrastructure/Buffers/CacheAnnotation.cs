@@ -10,7 +10,6 @@ public class CacheAnnotation
     private readonly IRepository _repository;
     private Annotation _lastAnnotation = new();
     private List<Annotation> _annotations = new();
-    private int _lastIdDb = -1;
     private readonly ILogger _logger = Log.ForContext<CacheAnnotation>();
 
     public CacheAnnotation(IRepository repository)
@@ -18,7 +17,7 @@ public class CacheAnnotation
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<(bool checkResult, Annotation annot)> GetEditAnnotation()
+    public  (bool checkResult, Annotation annot) GetEditAnnotation()
     {
         var annot = _annotations.FirstOrDefault(p => p.State != StateAnnot.Finalized);
         if (annot is not null)
@@ -27,7 +26,7 @@ public class CacheAnnotation
         return (false, new Annotation());
     }
 
-    public async Task UpdateAnnotation(Annotation annotation)
+    public void UpdateAnnotation(Annotation annotation)
     {
         var currentAnnot = _annotations.FirstOrDefault(p => p.Id == annotation.Id);
         if (currentAnnot is null)
@@ -48,42 +47,59 @@ public class CacheAnnotation
     public async Task SaveAnnotationsOnSqlAsync(int imagesId)
     {
         var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-
-        var equalAnnotation = removeAnnot.Equality(_annotations.ToArray());
+        var annotations = _annotations.CloneDeep();
+        var equalAnnotation = removeAnnot.Equality(annotations);
         if (equalAnnotation)
             return;
 
 
         _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
                       "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
-            _annotations.Count);
+            annotations.Count());
 
 
         await _repository.DeleteAnnotationsAsync(removeAnnot);
-        _annotations = ClearFailAnnotation(_annotations);
-        await _repository.SaveAnnotationsAsync(_annotations.ToArray());
+        annotations = ClearFailAnnotation(annotations);
+        annotations = OrderPoints(annotations);
+        await _repository.SaveAnnotationsAsync(annotations);
 
         var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
         _annotations = allAnnot.CloneDeep().ToList();
     }
 
-    private List<Annotation> ClearFailAnnotation(IEnumerable<Annotation> annotations)
+    private Annotation []  OrderPoints( Annotation [] annotations)
     {
         if (annotations?.Any() == null)
-            return new List<Annotation>();
+            return Array.Empty<Annotation>();
+
+        var retArr = annotations.Select(annot =>
+        {
+            var newPoints = annot.Points
+                ?.Select((point, index) => point with { Id = 0, PositionInGroup = index })
+                .ToList();
+            return annot with { Points = newPoints };
+        }).ToArray();
+
+        return retArr;
+    }
+
+    private Annotation [] ClearFailAnnotation(Annotation[] annotations)
+    {
+        if (annotations?.Any() == null)
+            return Array.Empty<Annotation>();
 
         var retAnnots = annotations.Where(annot => annot.Points?.Any() != null)
             .Where(annot =>
                 (annot.LabelPattern == TypeLabel.Box && annot.Points.Count > 1)
                 || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count > 1)
                 || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count > 2)
-                || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count == 1)
+                || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count > 0)
             ).Select(annot =>
             {
                 annot.State = StateAnnot.Finalized;
                 annot.Id = 0;
                 return annot;
-            }).ToList();
+            }).ToArray();
         
         return retAnnots;
     }
@@ -109,10 +125,21 @@ public class CacheAnnotation
 
     public async Task LoadAnnotationsSlowStorageAsync(int imagesId)
     {
-        var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-        _annotations = allAnnot.CloneDeep().ToList();
+        var allAnnots = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+        var cloneAnnots = allAnnots.CloneDeep().ToList();
+        var annotations = cloneAnnots.Select(annot =>
+        {
+            if (annot.Points?.Any() == false)
+                return annot;
 
-        _lastIdDb = await _repository.GetLastIndexAnnotation();
+            var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
+            if (checkRestore == annot.Points.Count())//restoration position
+                annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
+            
+            return annot;
+        }).OrderBy(p => p.LabelId).ToList();
+
+        _annotations = annotations;
     }
 
     public void DeleteAnnotation()
@@ -126,10 +153,16 @@ public class CacheAnnotation
 
     private void CreateNewAnnot(int imagesId, TypeLabel typeLabel = TypeLabel.None)
     {
-        _lastIdDb += 1;
+
+        var lastAnnot = _annotations.MaxBy(p => p.Id);
+        var currentDb = 1;
+        
+        if (lastAnnot is not null)
+            currentDb = lastAnnot.Id + 1;
+            
         var annot = new Annotation()
         {
-            Id = _lastIdDb,
+            Id = currentDb,
             Points = new List<PointF>(),
             ImageFrameId = imagesId,
             State = StateAnnot.Edit,
@@ -194,5 +227,24 @@ public class CacheAnnotation
         {
             current.LabelId = id;
         }
+    }
+
+
+    public (bool checkRes, Annotation annotation ) SetHiddenAnnot(int idAnnot)
+    {
+        var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
+
+        if (current is null)
+            return (false, new Annotation());
+
+        var state = current.State != StateAnnot.Hidden ? StateAnnot.Hidden : StateAnnot.Active;
+        foreach (var annotation in _annotations)
+        {
+            annotation.State = StateAnnot.Finalized;
+        }
+        
+        current.State = state;
+
+        return (true, current);
     }
 }

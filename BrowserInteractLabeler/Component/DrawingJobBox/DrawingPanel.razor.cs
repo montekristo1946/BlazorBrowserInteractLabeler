@@ -13,7 +13,7 @@ public class DrawingPanelModel : ComponentBase,IAsyncDisposable
     [Parameter] public RenderFragment ImagesPamelTemplate { get; set; }
     [Parameter] public RenderFragment TabBoxPanelTemplate { get; set; }
     
-    [Parameter] public bool SetMainFocusRootPanel { get; set; }
+    // [Parameter] public bool SetMainFocusRootPanel { get; set; }
     
     [Parameter] public EventCallback CancelFocusRootPanel { get; set; }
     

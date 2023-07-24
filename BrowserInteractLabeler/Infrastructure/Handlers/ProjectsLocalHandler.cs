@@ -20,7 +20,7 @@ public class ProjectsLocalHandler
     internal string GetHeightSqlSelectorPanel =>$"{(int)_imageWindowsSize.Height}px";
 
     internal string CurrentSqlDbName { get; set; } = String.Empty;
-    // internal string GetCurrentSqlDbNames() => _serviceConfigs.LastLoadDb;
+    internal string CurrentInformationSqlDb { get; set; } = String.Empty;
 
 
     public ProjectsLocalHandler(ServiceConfigs serviceConfigs,
@@ -63,13 +63,24 @@ public class ProjectsLocalHandler
             return;
         }
 
+        await LoadInformationOnStateDb();
+
         await _navigationHandler.LoadFirstImg();
         LoadingDB = false;
     }
 
-    internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb) //TODO: еще не сделал
+    private async Task  LoadInformationOnStateDb()
     {
-        if(fullPathDb is null || !fullPathDb.Any())
+        var allInformation = await _repository.GetInformationDtoAsync();
+        var currentInfo = allInformation.Where(p => p.CategoryInformation == 1);
+        var lastInfo = currentInfo.MaxBy(p => p.Id);
+        CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "Being processed ...";
+
+    }
+
+    internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb) 
+    {
+        if(string.IsNullOrEmpty(fullPathDb))
             return;
 
         try
@@ -90,6 +101,18 @@ public class ProjectsLocalHandler
             var json = JsonConvert.SerializeObject(saveJson,jsonSerializerSettings);
             var jsonPath = Path.Combine(_serviceConfigs.ExportCompletedTasks, $"{Path.GetFileName(fullPathDb)}.json");
             await File.WriteAllTextAsync(jsonPath, json);
+            
+            var newInformationDto = new InformationDto()
+            {
+                Information = "Completed",
+                CategoryInformation = 1,
+            };
+
+            var resSaveInformationDtoAsync = await _repository.SaveInformationDtoAsync(newInformationDto);
+            if(!resSaveInformationDtoAsync)
+                _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}", fullPathDb);
+            
+            await LoadInformationOnStateDb();
         }
         catch (Exception e)
         {
@@ -101,7 +124,7 @@ public class ProjectsLocalHandler
         
     }
 
-    internal async Task SetRootWindowsSize(SizeF sizeBrowse)
+    internal void SetRootWindowsSize(SizeF sizeBrowse)
     {
         _imageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
     }

@@ -156,7 +156,7 @@ public class Helper
         return new SizeF() { Width = width, Height = height };
     }
 
-    public async Task<string> CreateTypeTextToPanel(TypeLabel typeLabel)
+    public string CreateTypeTextToPanel(TypeLabel typeLabel)
     {
         return typeLabel switch
         {

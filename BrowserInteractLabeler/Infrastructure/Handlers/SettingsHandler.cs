@@ -24,7 +24,7 @@ public class SettingsHandler
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
 
     }
-    internal async Task SetRootWindowsSize(SizeF sizeBrowse)
+    internal void SetRootWindowsSize(SizeF sizeBrowse)
     {
         _imageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
     }

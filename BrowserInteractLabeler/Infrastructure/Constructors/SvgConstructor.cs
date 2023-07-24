@@ -16,75 +16,80 @@ public class SvgConstructor
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
     }
 
-    public string CreateSVG(Annotation[] annotations, double thicknessLine)
-    {
-        if (annotations?.Any() == false)
-            return string.Empty;
+    // public string CreateSVG(Annotation[] annotations, double thicknessLine)
+    // {
+    //     if (annotations?.Any() == false)
+    //         return string.Empty;
+    //
+    //     var svg = string.Empty;
+    //
+    //
+    //     foreach (var annotation in annotations)
+    //     {
+    //         if (annotation.Points?.Any() == false)
+    //             continue;
+    //
+    //         if (annotation.State == StateAnnot.Hidden)
+    //             continue;
+    //
+    //         annotation.Points = annotation.Points.OrderBy(p => p.PositionInGroup).ToList();
+    //
+    //         var activeAnnot = annotation.State != StateAnnot.Finalized;
+    //
+    //         switch (annotation.LabelPattern)
+    //         {
+    //             case TypeLabel.None:
+    //                 break;
+    //             case TypeLabel.Box:
+    //                 svg += CreateSVGBox(annotation, activeAnnot, thicknessLine);
+    //                 break;
+    //             case TypeLabel.Polygon:
+    //                 svg += CreateSVGPolygon(annotation, activeAnnot, false, thicknessLine);
+    //                 break;
+    //             case TypeLabel.PolyLine:
+    //                 svg += CreateSVGPolygon(annotation, activeAnnot, true, thicknessLine);
+    //                 break;
+    //             case TypeLabel.Point:
+    //                 svg += CreateSVGPoint(annotation, activeAnnot, thicknessLine);
+    //                 break;
+    //             default:
+    //                 throw new ArgumentOutOfRangeException();
+    //         }
+    //     }
+    //
+    //
+    //     return svg;
+    // }
 
-        var svg = string.Empty;
-
-      
-        foreach (var annotation in annotations)
-        {
-            if (annotation.Points?.Any() == false)
-                continue;
-
-            var activeAnnot = annotation.State != StateAnnot.Finalized;
-
-            switch (annotation.LabelPattern)
-            {
-                case TypeLabel.None:
-                    break;
-                case TypeLabel.Box:
-                    svg += CreateSVGBox(annotation, activeAnnot, thicknessLine);
-                    break;
-                case TypeLabel.Polygon:
-                    svg += CreateSVGPolygon(annotation, activeAnnot, false, thicknessLine);
-                    break;
-                case TypeLabel.PolyLine:
-                    svg += CreateSVGPolygon(annotation, activeAnnot, true, thicknessLine);
-                    break;
-                case TypeLabel.Point:
-                    svg += CreateSVGPoint(annotation, activeAnnot, thicknessLine);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-
-        return svg;
-    }
-
-    public (bool checkCreateSvgCursor, string svgSting ) CreateSvgCursor(PointF point,  string color ="#ffffff")
-    {
-        if (point is null)
-            return (false, string.Empty);
-            
-        var retBoxs = new List<string>();
-        
-        var strokeWidth = 1D;
-       
-        var typeLine = "stroke-dasharray=\"4 2\"";
-
-        const int lenghtLine = 1; //100% width/height img
-
-        var xv1 = point.X;
-        var yv1 = point.Y - lenghtLine;
-        var xv2 = point.X;
-        var yv2 = point.Y + lenghtLine;
-        var xh1 = point.X - lenghtLine;
-        var yh1 = point.Y;
-        var xh2 = point.X + lenghtLine;
-        var yh2 = point.Y;
-
-        var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
-        retBoxs.Add(line1);
-        var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
-        retBoxs.Add(line2);
-
-        return (true, String.Join(" ", retBoxs));
-    }
+    // public (bool checkCreateSvgCursor, string svgSting ) CreateSvgCursor(PointF point, string color = "#ffffff")
+    // {
+    //     if (point is null)
+    //         return (false, string.Empty);
+    //
+    //     var retBoxs = new List<string>();
+    //
+    //     var strokeWidth = 1D;
+    //
+    //     var typeLine = "stroke-dasharray=\"4 2\"";
+    //
+    //     const int lenghtLine = 1; //100% width/height img
+    //
+    //     var xv1 = point.X;
+    //     var yv1 = point.Y - lenghtLine;
+    //     var xv2 = point.X;
+    //     var yv2 = point.Y + lenghtLine;
+    //     var xh1 = point.X - lenghtLine;
+    //     var yh1 = point.Y;
+    //     var xh2 = point.X + lenghtLine;
+    //     var yh2 = point.Y;
+    //
+    //     var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
+    //     retBoxs.Add(line1);
+    //     var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
+    //     retBoxs.Add(line2);
+    //
+    //     return (true, String.Join(" ", retBoxs));
+    // }
 
     private string CreateSVGPoint(Annotation annotation, bool activeAnnot, double thicknessLine)
     {
@@ -182,24 +187,24 @@ public class SvgConstructor
             retBoxs.AddRange(anchorPoints);
         }
 
-        if (annotation.Points.Count == 1)
-        {
-            const int lenghtLine = 1; //100% width/height img
-            var point = annotation.Points.First();
-            var xv1 = point.X;
-            var yv1 = point.Y - lenghtLine;
-            var xv2 = point.X;
-            var yv2 = point.Y + lenghtLine;
-            var xh1 = point.X - lenghtLine;
-            var yh1 = point.Y;
-            var xh2 = point.X + lenghtLine;
-            var yh2 = point.Y;
-        
-            var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
-            retBoxs.Add(line1);
-            var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
-            retBoxs.Add(line2);
-        }
+        // if (annotation.Points.Count == 1)
+        // {
+            // const int lenghtLine = 1; //100% width/height img
+            // var point = annotation.Points.First();
+            // var xv1 = point.X;
+            // var yv1 = point.Y - lenghtLine;
+            // var xv2 = point.X;
+            // var yv2 = point.Y + lenghtLine;
+            // var xh1 = point.X - lenghtLine;
+            // var yh1 = point.Y;
+            // var xh2 = point.X + lenghtLine;
+            // var yh2 = point.Y;
+            //
+            // var line1 = CreateLine(xv1, yv1, xv2, yv2, color, strokeWidth * 0.5f, typeLine);
+            // retBoxs.Add(line1);
+            // var line2 = CreateLine(xh1, yh1, xh2, yh2, color, strokeWidth * 0.5f, typeLine);
+            // retBoxs.Add(line2);
+        // }
 
         if (annotation.Points.Count == 2)
         {
@@ -272,4 +277,44 @@ public class SvgConstructor
         return
             $"<line x1=\"{x1 * 100}%\" y1=\"{y1 * 100}%\" x2=\"{x2 * 100}%\"  y2=\"{y2 * 100}%\" stroke=\"{colorModelColor}\" stroke-width=\"{strokeWidth}\"  {typeLine}> </line>";
     }
+
+    public string CreateFigure(Annotation annotation, double thicknessLine)
+    {
+        var figureRet = string.Empty;
+
+
+        if (annotation.Points?.Any() == false)
+            return figureRet;
+
+        if (annotation.State == StateAnnot.Hidden)
+            return figureRet;
+
+        annotation.Points = annotation.Points.OrderBy(p => p.PositionInGroup).ToList();
+
+        var activeAnnot = annotation.State != StateAnnot.Finalized;
+
+        switch (annotation.LabelPattern)
+        {
+            case TypeLabel.None:
+                break;
+            case TypeLabel.Box:
+                figureRet += CreateSVGBox(annotation, activeAnnot, thicknessLine);
+                break;
+            case TypeLabel.Polygon:
+                figureRet += CreateSVGPolygon(annotation, activeAnnot, false, thicknessLine);
+                break;
+            case TypeLabel.PolyLine:
+                figureRet += CreateSVGPolygon(annotation, activeAnnot, true, thicknessLine);
+                break;
+            case TypeLabel.Point:
+                figureRet += CreateSVGPoint(annotation, activeAnnot, thicknessLine);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+
+        return figureRet;
+    }
+    
 }

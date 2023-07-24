@@ -1,5 +1,28 @@
 @inherits SvgPanelModel
 
 
-@RenderfragmentToPanel
 
+<div style="width: 100%; height: 100%; ">
+    @{
+        foreach (var annotation in AnnotationsOnPanel)
+        {
+            <div style="width: 100%; 
+            height: 100%;
+             position: absolute; 
+                    "
+                 @key="@annotation.Id">
+                <svg width="100%" height="100%" >
+                    @GetRenderFragnent(annotation)
+
+                </svg>
+            </div>
+        }
+    }
+    <div style="width: 100%; height: 100%; position: absolute; ">
+        <svg width="100%" height="100%">
+            @CrosshairsTemplate
+        </svg>
+
+    </div>
+
+</div>
