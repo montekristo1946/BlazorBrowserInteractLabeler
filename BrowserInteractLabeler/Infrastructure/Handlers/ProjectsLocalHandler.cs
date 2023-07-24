@@ -80,7 +80,7 @@ public class ProjectsLocalHandler
 
     internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb) 
     {
-        if(fullPathDb is null || !fullPathDb.Any())
+        if(string.IsNullOrEmpty(fullPathDb))
             return;
 
         try
@@ -124,7 +124,7 @@ public class ProjectsLocalHandler
         
     }
 
-    internal async Task SetRootWindowsSize(SizeF sizeBrowse)
+    internal void SetRootWindowsSize(SizeF sizeBrowse)
     {
         _imageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
     }

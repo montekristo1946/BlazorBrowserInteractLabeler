@@ -67,13 +67,10 @@
                     HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandleRightClick="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmouseDownAsync"
-                  
-                    HandlerOnmousemove="@HandlerImagesPanelOnmouseupAsync"
-                    >
+                    HandlerOnmousemove="@HandlerImagesPanelOnmouseupAsync">
 
                     <SvgPanelTemplate>
                         <SvgPanel
-                            
                             AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel"
                             ScaleImg="@_cacheModel.ScaleCurrent">
                             <CrosshairsTemplate>
