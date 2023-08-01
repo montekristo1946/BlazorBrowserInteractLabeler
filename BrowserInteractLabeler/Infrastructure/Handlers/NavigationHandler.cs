@@ -125,7 +125,7 @@ public class NavigationHandler
         _cacheModel.ScaleCurrent = _defaultScale;
     }
 
-    public void  SetRootWindowsSize(SizeF sizeBrowse)
+    public void SetRootWindowsSize(SizeF sizeBrowse)
     {
         _cacheModel.ImageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
     }
@@ -154,7 +154,7 @@ public class NavigationHandler
         });
     }
 
-    public  Task RedoClick()
+    public Task RedoClick()
     {
         return Task.Run(() =>
         {
@@ -291,7 +291,7 @@ public class NavigationHandler
         if (moveDist.res)
             _cacheModel.OffsetDrawImage = _helper.CorrectOffset(moveDist.moveDist, _cacheModel.OffsetDrawImage);
     }
-    
+
     /// <summary>
     ///     Left button Mouse, 
     /// </summary>
@@ -343,13 +343,13 @@ public class NavigationHandler
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="timeClick"></param>
-    public void HandlerSelectPointAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    public void HandlerSelectPoint(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
 
-        _markupHandler.HandlerOnmousedownAsync(mouseEventArgs,
+        _markupHandler.PointSelection(mouseEventArgs,
             resultGetEditAnnotation.annot,
             timeClick,
             _cacheModel.SizeDrawImage);
@@ -411,5 +411,24 @@ public class NavigationHandler
         var currentY = (argOffsetY / _cacheModel.SizeDrawImage.Height);
 
         return new PointF() { X = (float)currentX, Y = (float)currentY };
+    }
+
+    public void HandlerRepositioningPoints(MouseEventArgs mouseEventArgs)
+    {
+        var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
+        if (!resultGetEditAnnotation.checkResult)
+            return;
+        
+        var (checkResult, annotation) =
+            _markupHandler.RepositioningPoints(mouseEventArgs, 
+                resultGetEditAnnotation.annot,
+                _cacheModel.SizeDrawImage,
+                DateTime.Now);
+
+        if (checkResult is false)
+            return;
+
+        _cacheAnnotation.UpdateAnnotation(annotation);
+        UpdateSvg();
     }
 }

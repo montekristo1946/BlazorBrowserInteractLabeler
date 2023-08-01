@@ -118,10 +118,6 @@ public class ProjectsLocalHandler
         {
             _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail: {PathDb}", fullPathDb);
         }
- 
-
-
-        
     }
 
     internal void SetRootWindowsSize(SizeF sizeBrowse)

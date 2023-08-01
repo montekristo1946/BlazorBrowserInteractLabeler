@@ -140,7 +140,13 @@ public class KeyMapHandler
         }
 
         _navigationHandler.ResetSelectPointAsync();
-        _navigationHandler.HandlerSelectPointAsync(arg, DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+        _navigationHandler.HandlerSelectPoint(arg, DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
+        
+        // _logger.Debug("HandlerImagesPanelOnmouseupAsync {@MouseEventArgs}",arg);
+
+        if (arg.ShiftKey)
+            _navigationHandler.HandlerRepositioningPoints(arg);
+        
     }
 
 

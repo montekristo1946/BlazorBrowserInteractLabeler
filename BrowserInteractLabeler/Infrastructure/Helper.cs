@@ -142,7 +142,7 @@ public class Helper
         const int minHeight = 400;
         const int minWeight = 800;
         const float widthDefault = 0.846f;
-        const float heightDefault = 0.87f;
+        const float heightDefault = 0.90f;
 
         if (sizeBrowse is null || sizeBrowse.Height < minHeight || sizeBrowse.Width < minWeight)
         {
@@ -179,8 +179,6 @@ public class Helper
 
     public int CalculationCurrentProgress(int cacheModelCurrentIdImg, int allIndexLength)
     {
-        // allIndexLength -= 1;
-
         if (allIndexLength <= 0)
             return 0;
         if (cacheModelCurrentIdImg == allIndexLength)
