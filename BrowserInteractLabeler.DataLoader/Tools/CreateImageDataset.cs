@@ -58,6 +58,7 @@ public class CreateImageDataset : IHostedService
             _logger.Error("[LoadDataset] fail GetDirectories");
             return;
         }
+
         foreach (var taskFolder in directories)
         {
             _logger.Debug("[LoadDataset] Load Folder:{ImageName}", taskFolder);
@@ -94,7 +95,7 @@ public class CreateImageDataset : IHostedService
     private async Task LoadAnnotations(string taskFolder, IRepository repository)
     {
         var exportDto = await GetDtoToJson(taskFolder);
-        if(!exportDto.Annotations.Any() || !exportDto.Images.Any())
+        if (!exportDto.Annotations.Any() || !exportDto.Images.Any())
             return;
 
         var annots = exportDto.Annotations;
@@ -105,16 +106,16 @@ public class CreateImageDataset : IHostedService
                 var importImg = exportDto.Images.FirstOrDefault(p => p.Id == groupAnnot.Key);
                 if (importImg is null)
                     throw new ArgumentException($"fail {groupAnnot.Key}");
-                return (importImg.NameImages,groupAnnot);
+                return (importImg.NameImages, groupAnnot);
             }).ToArray();
-        
+
         foreach (var frameInBase in frames)
         {
             var nameInBase = frameInBase.NameImages;
             var indexInBase = frameInBase.Id;
             var annotsImport = annotGroupByImgImport
                 .Where(p => p.NameImages == nameInBase)
-                .SelectMany(p=>p.groupAnnot)
+                .SelectMany(p => p.groupAnnot)
                 .Select(annot =>
                 {
                     // annot.Id = 0;
@@ -127,11 +128,11 @@ public class CreateImageDataset : IHostedService
                     };
                 })
                 .ToArray();
-            if(!annotsImport.Any())
+            if (!annotsImport.Any())
                 continue;
 
             var res = await repository.SaveAnnotationsAsync(annotsImport);
-            if(!res)
+            if (!res)
                 throw new Exception($"[GetDtoToJson] Fail SaveAnnotationsAsync, folder: {taskFolder}");
         }
     }
@@ -139,27 +140,36 @@ public class CreateImageDataset : IHostedService
     private async Task LoadLabels(string taskFolder, IRepository operativeFramesStorage)
     {
         var exportDto = await GetDtoToJson(taskFolder);
-        if(!exportDto.Labels.Any())
+        if (!exportDto.Labels.Any())
             throw new Exception($"[LoadLabels] Fail Labels, folder: {taskFolder}");
-        
+
         var res = await operativeFramesStorage.InsertLabels(exportDto.Labels);
         if (!res)
             throw new Exception($"[LoadDataset] Fail InsertLabel, name {taskFolder}");
     }
 
-    private static (int width, int height, byte[] img) ResizeImg(byte[] img)
+    private  (int width, int height, byte[] img) ResizeImg(byte[] img, string pathImg)
     {
         const int optimalHeightOnInterface = 800;
         const int optimalWidthOnInterface = 1600;
-        using var image = new MagickImage(img);
-        image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
-        image.Quality = 75;
-        image.Format = MagickFormat.Jpg;
-        var data = image.ToByteArray();
-        var width = image.Width;
-        var height = image.Height;
+        try
+        {
+            using var image = new MagickImage(img);
+            image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
+            image.Quality = 75;
+            image.Format = MagickFormat.Jpg;
+            var data = image.ToByteArray();
+            var width = image.Width;
+            var height = image.Height;
+            return (width, height, data);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("Error: File is corrupted: {PathImg} ",pathImg);
+            throw;
+        }
 
-        return (width, height, data);
+        
     }
 
     private async Task LoadImages(string taskFolder, IRepository operativeFramesStorage)
@@ -168,7 +178,7 @@ public class CreateImageDataset : IHostedService
 
         var arrFrames = GetPrimeNumbersParallel(allImagesPath);
         arrFrames = arrFrames.OrderBy(p => p.Key).ToArray();
-        
+
         var onlyFrame = arrFrames.Select(p => p.Value).ToArray();
 
         var res = await operativeFramesStorage.InsertImageFrames(onlyFrame);
@@ -176,7 +186,7 @@ public class CreateImageDataset : IHostedService
             throw new Exception($"[LoadDataset] Fail InsertImageFrame, taskFolder: {taskFolder}");
     }
 
-    private static KeyValuePair<string, ImageFrame>[] GetPrimeNumbersParallel(string[] pathImages)
+    private  KeyValuePair<string, ImageFrame>[] GetPrimeNumbersParallel(string[] pathImages)
     {
         var retDict = new ConcurrentDictionary<string, ImageFrame>();
         var options = new ParallelOptions() { MaxDegreeOfParallelism = _parallelism };
@@ -184,7 +194,7 @@ public class CreateImageDataset : IHostedService
         Parallel.ForEach(pathImages, options, pathImg =>
         {
             var img = File.ReadAllBytes(pathImg);
-            var resizeImg = ResizeImg(img);
+            var resizeImg = ResizeImg(img, pathImg);
             var imageFrame = new ImageFrame()
             {
                 Images = resizeImg.img,
