@@ -13,15 +13,15 @@ public class SettingsHandler
     
     internal SizeF RootWindowsSize =>_imageWindowsSize;
     
-    private readonly Helper _helper;
+    // private readonly Helper _helper;
     private readonly ILogger _logger = Log.ForContext<SettingsHandler>();
     private SizeF _imageWindowsSize { get; set; }= new() { Width = 1600, Height = 800 };
     private readonly ServiceConfigs _serviceConfigs;
     
 
-    public SettingsHandler(Helper helper,ServiceConfigs serviceConfigs)
+    public SettingsHandler(ServiceConfigs serviceConfigs)
     {
-        _helper = helper ?? throw new ArgumentNullException(nameof(helper));
+        // _helper = helper ?? throw new ArgumentNullException(nameof(helper));
         _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
 
     }

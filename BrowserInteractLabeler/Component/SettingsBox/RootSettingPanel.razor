@@ -10,14 +10,14 @@
                 Path to import tasks:
             </div>
             <div class="col-10  py-2  text-end color-text-main">
-                <input type="text" class="form-control text-center color-text-main" data-mdb-toggle="tooltip" data-mdb-placement="right"
+                <input type="text" class="form-control text-start color-text-main ps-3" data-mdb-toggle="tooltip" data-mdb-placement="right"
                        title="path db import" placeholder="" aria-describedby="button-addon1"
                        style=" padding: 0px 4px 1px; "
                        @bind="@Configs.PathSqlDb">
 
             </div>
 
-         
+
         </div>
 
         <div class="row ps-0 my-3 "
@@ -26,14 +26,26 @@
                 Path to export tasks:
             </div>
             <div class="col-10  py-2  text-end ">
-                <input type="text" class="form-control text-center color-text-main" data-mdb-toggle="tooltip" data-mdb-placement="right"
+                <input type="text" class="form-control text-start color-text-main ps-3" data-mdb-toggle="tooltip" data-mdb-placement="right"
                        title="path db export" placeholder="" aria-describedby="button-addon1"
                        style=" padding: 0px 4px 1px; "
                        @bind="@Configs.ExportCompletedTasks">
 
             </div>
+        </div>
 
-     
+        <div class="row ps-0 my-3 "
+             style="border:1px solid ; border-radius: 5px; border-color: #49505c; height: 45px; background: #ffffff; overflow: hidden;">
+            <div class="col-2 py-2 text-start color-text-main" style="">
+                Dot thickness: 0.5...10.0
+            </div>
+            <div class="col-4  py-2  text-end">
+                <input type="text" class="form-control text-center color-text-main" data-mdb-toggle="tooltip" data-mdb-placement="right"
+                       title="path db export" placeholder="" aria-describedby="button-addon1"
+                       style=" padding: 0px 4px 1px; "
+                       @bind="@Configs.StrokeWidth">
+
+            </div>
         </div>
 
         <div class="row ps-0 my-3 "
