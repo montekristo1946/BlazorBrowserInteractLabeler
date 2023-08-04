@@ -9,8 +9,9 @@ namespace BrowserInteractLabeler.Infrastructure;
 
 public class SettingsHandler
 {
-    internal string GetHeightSettingsPanel =>$"{(int)_imageWindowsSize.Height}px";
+    // internal string GetHeightSettingsPanel =>$"{(int)_imageWindowsSize.Height}px";
     
+    internal SizeF RootWindowsSize =>_imageWindowsSize;
     
     private readonly Helper _helper;
     private readonly ILogger _logger = Log.ForContext<SettingsHandler>();
@@ -26,7 +27,8 @@ public class SettingsHandler
     }
     internal void SetRootWindowsSize(SizeF sizeBrowse)
     {
-        _imageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
+        // _imageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
+        _imageWindowsSize = sizeBrowse;
     }
 
     public async Task UpdateColorModelAsync(ColorModel arg)

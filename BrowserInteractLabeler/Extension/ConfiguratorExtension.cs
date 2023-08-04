@@ -19,7 +19,7 @@ public static class ConfiguratorExtension
 
         }).ConfigureWebHostDefaults(webBuilder =>
         {
-            var urls = "http://localhost:5000";
+            var urls = "http://localhost:5001";
             webBuilder.UseStartup<Startup>();
             webBuilder.UseUrls(urls);
             webBuilder.UseContentRoot(AppDomain.CurrentDomain.BaseDirectory);

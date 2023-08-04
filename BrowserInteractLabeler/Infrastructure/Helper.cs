@@ -142,11 +142,11 @@ public class Helper
         const int minHeight = 400;
         const int minWeight = 800;
         const float widthDefault = 0.846f;
-        const float heightDefault = 0.90f;
+        const float heightDefault = 0.88f;
 
         if (sizeBrowse is null || sizeBrowse.Height < minHeight || sizeBrowse.Width < minWeight)
         {
-            _logger.Error("[Helper:CalculationRootWindowsSize]  Fail: {SizeBrowse}}", sizeBrowse);
+            _logger.Error("[Helper:CalculationRootWindowsSize]  Fail: {SizeBrowse}", sizeBrowse);
             return new SizeF() { Width = 1600, Height = 800 };
         }
 

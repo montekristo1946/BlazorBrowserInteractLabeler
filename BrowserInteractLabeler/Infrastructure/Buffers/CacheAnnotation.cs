@@ -11,63 +11,125 @@ public class CacheAnnotation
     private Annotation _lastAnnotation = new();
     private List<Annotation> _annotations = new();
     private readonly ILogger _logger = Log.ForContext<CacheAnnotation>();
+    private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
 
     public CacheAnnotation(IRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public  (bool checkResult, Annotation annot) GetEditAnnotation()
+    public (bool checkResult, Annotation annot) GetEditAnnotation()
     {
-        var annot = _annotations.FirstOrDefault(p => p.State != StateAnnot.Finalized);
-        if (annot is not null)
-            return (true, annot);
+        semaphoreSlim.Wait();
+        try
+        {
+            var annot = _annotations.FirstOrDefault(p => p.State != StateAnnot.Finalized);
+
+            if (annot is not null)
+                return (true, annot.CloneDeep());
+
+            return (false, new Annotation());
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[GetEditAnnotation] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
 
         return (false, new Annotation());
     }
 
     public void UpdateAnnotation(Annotation annotation)
     {
-        var currentAnnot = _annotations.FirstOrDefault(p => p.Id == annotation.Id);
-        if (currentAnnot is null)
-            _annotations.Add(annotation);
-        else
+        semaphoreSlim.Wait();
+        try
         {
-            _annotations.Remove(currentAnnot);
-            _annotations.Add(annotation);
+            var currentAnnot = _annotations.FirstOrDefault(p => p.Id == annotation.Id);
+            if (currentAnnot is null)
+                _annotations.Add(annotation);
+            else
+            {
+                _annotations.Remove(currentAnnot);
+                _annotations.Add(annotation);
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[UpdateAnnotation] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
         }
     }
 
-
-    public Annotation[] GetAllAnnotations(int imagesId)
+    private List<Annotation> CleanDuplicateIDAnnotations(List<Annotation> annotations)
     {
-        return _annotations.Where(p => p.ImageFrameId == imagesId).ToArray();
+        var retArr = annotations.DistinctBy(p => p.Id).ToList();
+        return retArr;
     }
+
+    public Annotation[] GetAllAnnotationsOnImg(int imagesId)
+    {
+        semaphoreSlim.Wait();
+        try
+        {
+            _annotations = CleanDuplicateIDAnnotations(_annotations);
+            
+            return _annotations.Where(p => p.ImageFrameId == imagesId).ToArray();
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[GetAllAnnotations] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+
+        return Array.Empty<Annotation>();
+    }
+
+ 
 
     public async Task SaveAnnotationsOnSqlAsync(int imagesId)
     {
-        var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-        var annotations = _annotations.CloneDeep();
-        var equalAnnotation = removeAnnot.Equality(annotations);
-        if (equalAnnotation)
-            return;
+        await semaphoreSlim.WaitAsync();
+        try
+        {
+            var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+            var annotations = _annotations.CloneDeep();
+            var equalAnnotation = removeAnnot.Equality(annotations);
+            if (equalAnnotation)
+                return;
+
+            _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
+                          "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
+                annotations.Count());
 
 
-        _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
-                      "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
-            annotations.Count());
+            await _repository.DeleteAnnotationsAsync(removeAnnot);
+            annotations = ClearFailAnnotation(annotations);
+            annotations = OrderPoints(annotations);
+            await _repository.SaveAnnotationsAsync(annotations);
 
-
-        await _repository.DeleteAnnotationsAsync(removeAnnot);
-        annotations = ClearFailAnnotation(annotations);
-        annotations = OrderPoints(annotations);
-        await _repository.SaveAnnotationsAsync(annotations);
-
-        var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-        _annotations = allAnnot.CloneDeep().ToList();
+            var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+            _annotations = allAnnot.CloneDeep().ToList();
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[SaveAnnotationsOnSqlAsync] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
     }
 
-    private Annotation []  OrderPoints( Annotation [] annotations)
+    private Annotation[] OrderPoints(Annotation[] annotations)
     {
         if (annotations?.Any() == null)
             return Array.Empty<Annotation>();
@@ -83,7 +145,7 @@ public class CacheAnnotation
         return retArr;
     }
 
-    private Annotation [] ClearFailAnnotation(Annotation[] annotations)
+    private Annotation[] ClearFailAnnotation(Annotation[] annotations)
     {
         if (annotations?.Any() == null)
             return Array.Empty<Annotation>();
@@ -92,7 +154,7 @@ public class CacheAnnotation
             .Where(annot =>
                 (annot.LabelPattern == TypeLabel.Box && annot.Points.Count > 1)
                 || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count > 1)
-                || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count > 2)
+                || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count >= 3)
                 || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count > 0)
             ).Select(annot =>
             {
@@ -100,76 +162,135 @@ public class CacheAnnotation
                 annot.Id = 0;
                 return annot;
             }).ToArray();
-        
+
         return retAnnots;
     }
 
-
-    public void RemoveLastAnnotation(int imagesId)
+    public bool RemoveLastAnnotation(int imagesId)
     {
-        var last = _annotations.LastOrDefault(p => p.ImageFrameId == imagesId);
-        if (last is null)
-            return;
-        _lastAnnotation = last;
-        _annotations.Remove(_lastAnnotation);
+        semaphoreSlim.Wait();
+        try
+        {
+            var last = _annotations.LastOrDefault(p => p.ImageFrameId == imagesId);
+            if (last is null)
+                return false;
+            _lastAnnotation = last;
+            _annotations.Remove(_lastAnnotation);
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[RemoveLastAnnotation] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+
+        return false;
     }
 
-    public void RestoreLastAnnotation(int imagesId)
+    public bool RestoreLastAnnotation(int imagesId)
     {
-        if (_lastAnnotation.Id < 0 || _lastAnnotation.ImageFrameId != imagesId)
-            return;
+        semaphoreSlim.Wait();
+        try
+        {
+            if (_lastAnnotation.Id < 0 || _lastAnnotation.ImageFrameId != imagesId)
+                return false;
 
-        _annotations.Add(_lastAnnotation);
-        _lastAnnotation = new Annotation();
+            _annotations.Add(_lastAnnotation);
+            _lastAnnotation = new Annotation();
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[RestoreLastAnnotation] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+
+        return false;
     }
 
     public async Task LoadAnnotationsSlowStorageAsync(int imagesId)
     {
-        var allAnnots = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
-        var cloneAnnots = allAnnots.CloneDeep().ToList();
-        var annotations = cloneAnnots.Select(annot =>
+        await semaphoreSlim.WaitAsync();
+        try
         {
-            if (annot.Points?.Any() == false)
+            var allAnnots = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+            var cloneAnnots = allAnnots.CloneDeep().ToList();
+            var annotations = cloneAnnots.Select(annot =>
+            {
+                if (annot.Points?.Any() == false)
+                    return annot;
+
+                var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
+                if (checkRestore == annot.Points.Count()) //restoration position
+                    annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
+
                 return annot;
+            }).OrderBy(p => p.LabelId).ToList();
 
-            var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
-            if (checkRestore == annot.Points.Count())//restoration position
-                annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
-            
-            return annot;
-        }).OrderBy(p => p.LabelId).ToList();
-
-        _annotations = annotations;
+            _annotations = annotations;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[LoadAnnotationsSlowStorageAsync] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
     }
 
     public void DeleteAnnotation()
     {
-        var last = _annotations.LastOrDefault(p => p.State != StateAnnot.Finalized);
-        if (last is null)
-            return;
-        _lastAnnotation = last;
-        _annotations.Remove(_lastAnnotation);
+        semaphoreSlim.Wait();
+        try
+        {
+            var last = _annotations.LastOrDefault(p => p.State != StateAnnot.Finalized);
+            if (last is null)
+                return;
+            _lastAnnotation = last;
+            _annotations.Remove(_lastAnnotation);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[DeleteAnnotation] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
     }
 
     private void CreateNewAnnot(int imagesId, TypeLabel typeLabel = TypeLabel.None)
     {
-
-        var lastAnnot = _annotations.MaxBy(p => p.Id);
-        var currentDb = 1;
-        
-        if (lastAnnot is not null)
-            currentDb = lastAnnot.Id + 1;
-            
-        var annot = new Annotation()
+        try
         {
-            Id = currentDb,
-            Points = new List<PointF>(),
-            ImageFrameId = imagesId,
-            State = StateAnnot.Edit,
-            LabelId = -1,
-            LabelPattern = typeLabel
-        };
-        _annotations.Add(annot);
+            var lastAnnot = _annotations.MaxBy(p => p.Id);
+            var currentDb = 1;
+
+            if (lastAnnot is not null)
+                currentDb = lastAnnot.Id + 1;
+
+            var annot = new Annotation()
+            {
+                Id = currentDb,
+                Points = new List<PointF>(),
+                ImageFrameId = imagesId,
+                State = StateAnnot.Edit,
+                LabelId = -1,
+                LabelPattern = typeLabel
+            };
+            _annotations.Add(annot);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[CreateNewAnnot] {@Exception}", e);
+        }
     }
 
     /// <summary>
@@ -178,12 +299,24 @@ public class CacheAnnotation
     /// <param name="imagesId"></param>
     public void EventEditAnnotForceCreateNew(int imagesId, TypeLabel typeLabel = TypeLabel.None)
     {
-        foreach (var annotation in _annotations)
+        semaphoreSlim.Wait();
+        try
         {
-            annotation.State = StateAnnot.Finalized;
-        }
+            foreach (var annotation in _annotations)
+            {
+                annotation.State = StateAnnot.Finalized;
+            }
 
-        CreateNewAnnot(imagesId, typeLabel);
+            CreateNewAnnot(imagesId, typeLabel);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[EventEditAnnotForceCreateNew] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
     }
 
     /// <summary>
@@ -192,59 +325,113 @@ public class CacheAnnotation
     /// <param name="imagesId"></param>
     public void EventEditAnnot(int imagesId)
     {
-        var last = _annotations.LastOrDefault(p => p.State != StateAnnot.Finalized);
-        if (last is not null)
+        semaphoreSlim.Wait();
+        try
         {
-            last.State = StateAnnot.Finalized;
-            return;
-        }
+            var last = _annotations.LastOrDefault(p => p.State != StateAnnot.Finalized);
+            if (last is not null)
+            {
+                last.State = StateAnnot.Finalized;
+                return;
+            }
 
-        CreateNewAnnot(imagesId);
+            CreateNewAnnot(imagesId);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[EventEditAnnot] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
     }
 
     public (bool checkRes, Annotation annotation ) SetActiveAnnot(int idAnnot)
     {
-        var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
-
-        if (current is null)
-            return (false, new Annotation());
-
-
-        foreach (var annotation in _annotations)
+        semaphoreSlim.Wait();
+        try
         {
-            annotation.State = StateAnnot.Finalized;
+            var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
+
+            if (current is null)
+                return (false, new Annotation());
+
+
+            foreach (var annotation in _annotations)
+            {
+                annotation.State = StateAnnot.Finalized;
+            }
+
+            current.State = StateAnnot.Active;
+
+            return (true, current);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[SetActiveAnnot] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
         }
 
-        current.State = StateAnnot.Active;
-
-        return (true, current);
+        return (false, new Annotation());
     }
 
     public void SetActiveIdLabel(int id)
     {
-        var current = _annotations.LastOrDefault(p => p.State != StateAnnot.Finalized);
-        if (current is not null)
+        semaphoreSlim.Wait();
+        try
         {
-            current.LabelId = id;
+            var current = _annotations.LastOrDefault(p => p.State != StateAnnot.Finalized);
+            if (current is not null)
+            {
+                current.LabelId = id;
+            }
         }
+        catch (Exception e)
+        {
+            _logger.Error("[GetAllAnnotations] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+        
+     
     }
 
 
     public (bool checkRes, Annotation annotation ) SetHiddenAnnot(int idAnnot)
     {
-        var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
-
-        if (current is null)
-            return (false, new Annotation());
-
-        var state = current.State != StateAnnot.Hidden ? StateAnnot.Hidden : StateAnnot.Active;
-        foreach (var annotation in _annotations)
-        {
-            annotation.State = StateAnnot.Finalized;
-        }
         
-        current.State = state;
+        semaphoreSlim.Wait();
+        try
+        {
+            var current = _annotations.LastOrDefault(p => p.Id == idAnnot);
 
-        return (true, current);
+            if (current is null)
+                return (false, new Annotation());
+
+            foreach (var annotation in _annotations)
+            {
+                annotation.State = StateAnnot.Finalized;
+            }
+
+            current.State = current.State != StateAnnot.Hidden ? StateAnnot.Hidden : StateAnnot.Active;
+
+            return (true, current);
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[SetHiddenAnnot] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+        return (false, new Annotation());
+
     }
 }

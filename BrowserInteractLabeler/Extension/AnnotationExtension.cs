@@ -7,29 +7,32 @@ public static class AnnotationExtension
 {
     public static Annotation[] CloneDeep(this IEnumerable<Annotation> annots)
     {
-        return annots.Select(annotSrc =>
-        {
-            var pointsNew = new List<PointF>();
-
-            if (annotSrc.Points is not null)
-                pointsNew = annotSrc.Points.Select(pointSrc => new PointF()
-                {
-                    X = pointSrc.X,
-                    Y = pointSrc.Y,
-                    Id = pointSrc.Id,
-                    PositionInGroup = pointSrc.PositionInGroup
-                }).ToList();
-
-            return new Annotation()
+        return annots is null ? Array.Empty<Annotation>() : annots.Select(annotSrc => annotSrc.CloneDeep()).ToArray();
+    }
+    
+    public static Annotation CloneDeep(this Annotation annotSrc)
+    {
+        var pointsNew = new List<PointF>();
+        if (annotSrc.Points is not null)
+            pointsNew = annotSrc.Points.Select(pointSrc => new PointF()
             {
-                Id = annotSrc.Id,
-                ImageFrameId = annotSrc.ImageFrameId,
-                LabelPattern = annotSrc.LabelPattern,
-                LabelId = annotSrc.LabelId,
-                State = annotSrc.State,
-                Points = pointsNew
-            };
-        }).ToArray();
+                X = pointSrc.X,
+                Y = pointSrc.Y,
+                Id = pointSrc.Id,
+                PositionInGroup = pointSrc.PositionInGroup,
+                AnnotationId = pointSrc.AnnotationId
+            }).ToList();
+
+        return new Annotation()
+        {
+            Id = annotSrc.Id,
+            ImageFrameId = annotSrc.ImageFrameId,
+            LabelPattern = annotSrc.LabelPattern,
+            LabelId = annotSrc.LabelId,
+            State = annotSrc.State,
+            Points = pointsNew,
+            Images = null
+        };
     }
 
     public static bool Equality(this Annotation[] initialAnnots, Annotation[]  comparable)

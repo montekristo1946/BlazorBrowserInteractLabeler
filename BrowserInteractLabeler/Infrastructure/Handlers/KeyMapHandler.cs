@@ -15,7 +15,9 @@ public class KeyMapHandler
     private readonly ServiceConfigs _serviceConfigs;
     private readonly ILogger _logger = Log.ForContext<NavigationHandler>();
     private Dictionary<string, string> mLookup;
-
+    const int leftButton = 0;
+    const int rightButton = 2;
+    
     public KeyMapHandler(NavigationHandler navigationHandler, ServiceConfigs serviceConfigs)
     {
         _navigationHandler = navigationHandler ?? throw new ArgumentNullException(nameof(navigationHandler));
@@ -44,7 +46,7 @@ public class KeyMapHandler
         if (findKey is null)
             return;
 
-        _navigationHandler.HandlerSetLabelIdAsync(findKey.IdLabel);
+        _navigationHandler.HandlerSetLabelId(findKey.IdLabel);
     }
 
     private async Task BasicFunctions(string codeKey)
@@ -112,8 +114,7 @@ public class KeyMapHandler
         if (arg.AltKey)
             return;
 
-        const int leftButton = 0;
-        const int rightButton = 2;
+       
 
         switch (arg.Button)
         {
@@ -132,6 +133,10 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandlerImagesPanelOnmouseDownAsync(MouseEventArgs arg)
     {
+        
+        if(arg.Button == rightButton)
+            return;
+        
         if (arg.AltKey)
         {
             _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
@@ -140,13 +145,15 @@ public class KeyMapHandler
         }
 
         _navigationHandler.ResetSelectPointAsync();
-        _navigationHandler.HandlerSelectPoint(arg, DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
-        
-        // _logger.Debug("HandlerImagesPanelOnmouseupAsync {@MouseEventArgs}",arg);
+        _navigationHandler.HandlerSelectPoint(arg,
+            DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
 
+        // _logger.Debug("HandlerImagesPanelOnmouseupAsync {@MouseEventArgs}",arg);
+        // _logger.Debug($"HandlerImagesPanelOnmouseupAsync OffsetX:{arg.OffsetX}; OffsetY:{arg.OffsetY}");
         if (arg.ShiftKey)
             _navigationHandler.HandlerRepositioningPoints(arg);
-        
+
+        await _navigationHandler.CancelFocusRootPanelAsync();
     }
 
 
@@ -183,11 +190,8 @@ public class KeyMapHandler
     ///     Общая панель для отрисовки , колесо мыши
     /// </summary>
     /// <param name="arg"></param>
-    public  Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
+    public Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
     {
-        return Task.Run(() =>
-        {
-            _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now);
-        });
+        return Task.Run(() => { _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now); });
     }
 }

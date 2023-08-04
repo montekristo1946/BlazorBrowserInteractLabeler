@@ -10,6 +10,7 @@ public class ServiceConfigs
     public ColorModel[] Colors { get; set; } = Array.Empty<ColorModel>();
     public string ExportCompletedTasks { get; set; } = String.Empty;
     
+    public double StrokeWidth { get; set; }  = 4;
     
     
     private static string _pathDirConfigs = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Settings");

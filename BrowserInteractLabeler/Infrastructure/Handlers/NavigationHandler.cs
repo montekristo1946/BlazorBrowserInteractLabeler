@@ -80,7 +80,7 @@ public class NavigationHandler
 
         _cacheModel.ScaleCurrent = _defaultScale;
         await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        // _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotationsOnImg(_cacheModel.CurrentIdImg);
         _cacheModel.NameImages = imageFrame.NameImages;
         UpdateSvg();
     }
@@ -133,7 +133,7 @@ public class NavigationHandler
 
     private void UpdateSvg()
     {
-        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotations(_cacheModel.CurrentIdImg);
+        _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotationsOnImg(_cacheModel.CurrentIdImg);
     }
 
     public Task SaveAnnotation()
@@ -176,7 +176,7 @@ public class NavigationHandler
         _cacheModel.StatePrecess = "Active";
         var activeLabelPattern = resSetActiveAnnot.annotation.LabelPattern;
         _markupHandler.ActiveTypeLabel = activeLabelPattern;
-        HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        HandlerSetLabelId(resSetActiveAnnot.annotation.LabelId);
         SetMainFocusRootPanel = true;
         _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
         _cacheModel.ActiveTypeLabel = activeLabelPattern;
@@ -197,7 +197,7 @@ public class NavigationHandler
         _cacheModel.StatePrecess = "Hidden";
         var activeLabelPattern = resSetActiveAnnot.annotation.LabelPattern;
         _markupHandler.ActiveTypeLabel = activeLabelPattern;
-        HandlerSetLabelIdAsync(resSetActiveAnnot.annotation.LabelId);
+        HandlerSetLabelId(resSetActiveAnnot.annotation.LabelId);
         SetMainFocusRootPanel = true;
         _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
         _cacheModel.ActiveTypeLabel = activeLabelPattern;
@@ -230,8 +230,7 @@ public class NavigationHandler
     public void EnableTypeLabel(TypeLabel typeLabel)
     {
         _markupHandler.ActiveTypeLabel = typeLabel;
-        var textToPanel = _helper.CreateTypeTextToPanel(typeLabel);
-        _cacheModel.ActiveTypeLabelText = textToPanel;
+        _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(typeLabel);
         _cacheModel.ActiveTypeLabel = typeLabel;
 
         _cacheAnnotation.EventEditAnnotForceCreateNew(_cacheModel.CurrentIdImg, typeLabel);
@@ -241,7 +240,7 @@ public class NavigationHandler
         UpdateSvg();
     }
 
-    public void HandlerSetLabelIdAsync(int activeIdLabel)
+    public void HandlerSetLabelId(int activeIdLabel)
     {
         _markupHandler.ActiveIdLabel = activeIdLabel;
         _cacheAnnotation.SetActiveIdLabel(activeIdLabel);
@@ -352,7 +351,8 @@ public class NavigationHandler
         _markupHandler.PointSelection(mouseEventArgs,
             resultGetEditAnnotation.annot,
             timeClick,
-            _cacheModel.SizeDrawImage);
+            _cacheModel.SizeDrawImage,
+            _cacheModel.ScaleCurrent);
     }
 
     /// <summary>
@@ -413,6 +413,11 @@ public class NavigationHandler
         return new PointF() { X = (float)currentX, Y = (float)currentY };
     }
 
+    
+    /// <summary>
+    ///     Перестроить порядок точек в фируге
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
     public void HandlerRepositioningPoints(MouseEventArgs mouseEventArgs)
     {
         var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
@@ -420,15 +425,13 @@ public class NavigationHandler
             return;
         
         var (checkResult, annotation) =
-            _markupHandler.RepositioningPoints(mouseEventArgs, 
-                resultGetEditAnnotation.annot,
-                _cacheModel.SizeDrawImage,
-                DateTime.Now);
+            _markupHandler.RepositioningPoints( resultGetEditAnnotation.annot);
 
         if (checkResult is false)
             return;
-
+        
         _cacheAnnotation.UpdateAnnotation(annotation);
+        HandlerSelectPoint(mouseEventArgs,DateTime.Now);
         UpdateSvg();
     }
 }

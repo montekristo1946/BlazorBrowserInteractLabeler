@@ -1,5 +1,6 @@
 @inherits TabSettingsPanelModel
 
+
 <div class="row m-0">
     <div class="col-12 ms-1 me-1 pt-1 ">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -20,7 +21,7 @@
 </div>
 
 
-<div class="tab-content overflow-auto" id="myTabContent" style="height: @HeightPanel;  width: 100%; ">
+<div class="tab-content overflow-auto" id="myTabContent" style="height: @GetHeightPanel();  width: 100%; ">
 
     <div class="tab-pane fade show active " id="color-tab-pane" role="tabpanel" aria-labelledby="color-tab" tabindex="0">
         <div class="ps-1 pe-1 " style="overflow: hidden;">

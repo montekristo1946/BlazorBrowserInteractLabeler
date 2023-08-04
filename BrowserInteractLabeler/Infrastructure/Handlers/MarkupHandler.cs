@@ -1,5 +1,6 @@
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
+using BrowserInteractLabeler.Infrastructure.Configs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -9,6 +10,7 @@ namespace BrowserInteractLabeler.Infrastructure;
 
 public class MarkupHandler
 {
+    private readonly ServiceConfigs _serviceConfigs;
     private readonly Serilog.ILogger _logger = Log.ForContext<MarkupHandler>();
 
     internal TypeLabel ActiveTypeLabel { get; set; } = TypeLabel.None;
@@ -17,8 +19,13 @@ public class MarkupHandler
     private (bool isMoved, PointF point, Annotation annot) _movedData = (isMoved: false, point: new PointF(),
         annot: new Annotation());
 
-    private static readonly TimeSpan _minTimeMove = TimeSpan.FromMilliseconds(50);
-    private DateTime _timeFirstPoint = DateTime.MinValue;
+    // private static readonly TimeSpan _minTimeMove = TimeSpan.FromMilliseconds(1500);
+    // private DateTime _timeFirstPoint = DateTime.MinValue;
+
+    public MarkupHandler(ServiceConfigs serviceConfigs)
+    {
+        _serviceConfigs = serviceConfigs ?? throw new ArgumentNullException(nameof(serviceConfigs));
+    }
 
 
     public (bool checkRes, Annotation res) HandleMouseClickAsync(MouseEventArgs mouseEventArgs,
@@ -120,30 +127,56 @@ public class MarkupHandler
     /// <param name="mouseEventArgs"></param>
     /// <param name="annotation"></param>
     /// <param name="timeClick"></param>
+    /// <param name="sizeDrawImage"></param>
+    /// <param name="cacheModelScaleCurrent"></param>
     /// <param name="cacheModelSizeDrawImage"></param>
     /// <param name="now"></param>
     public bool PointSelection(MouseEventArgs mouseEventArgs,
         Annotation annotation,
         DateTime timeClick,
-        SizeF sizeDrawImage)
+        SizeF sizeDrawImage, float scaleCurrent)
     {
+        // _logger.Debug($"PointSelection m1  ");
         ResetMovedCache();
         if (annotation.Points?.Any() == false)
             return false;
+        // _logger.Debug($"PointSelection m2  ");
+
 
         var currentX = mouseEventArgs.OffsetX / sizeDrawImage.Width;
         var currentY = mouseEventArgs.OffsetY / sizeDrawImage.Height;
-        const int maxPixelOverlapHaloPx = 5;
-        var overlapPercentageX = maxPixelOverlapHaloPx / sizeDrawImage.Width;
-        var overlapPercentageY = maxPixelOverlapHaloPx / sizeDrawImage.Height;
-        var movePoint = annotation.Points.FirstOrDefault(p => Math.Abs(p.X - currentX) < overlapPercentageX &&
-                                                              Math.Abs(p.Y - currentY) < overlapPercentageY);
+        // const double maxPixelOverlapHaloPx = 1.0;
+        // var overlapPercentageX = (_serviceConfigs.StrokeWidth *(1/scaleCurrent) / sizeDrawImage.Width) * maxPixelOverlapHaloPx;
+        // var overlapPercentageY = (_serviceConfigs.StrokeWidth*(1/scaleCurrent) / sizeDrawImage.Height)* maxPixelOverlapHaloPx;
+
+        var overlapPercentageX = (_serviceConfigs.StrokeWidth / sizeDrawImage.Width) * (1 / scaleCurrent);
+        var overlapPercentageY = (_serviceConfigs.StrokeWidth / sizeDrawImage.Height) * (1 / scaleCurrent);
+
+        var movePoint = annotation.Points.FirstOrDefault(p =>
+        {
+            var deltaX = Math.Abs(p.X - currentX);
+            var deltaY = Math.Abs(p.Y - currentY);
+            var res = deltaX <= overlapPercentageX && deltaY <= overlapPercentageY;
+            // Console.WriteLine(
+            //     $"fail {p.Y} currentY:{currentY} x:{deltaX} y:{deltaY}; overX:{overlapPercentageX}; overY:{overlapPercentageY};  Width:{sizeDrawImage.Width} Height:{sizeDrawImage.Height}");
+            // Console.WriteLine(
+            //     $"fail OffsetY:{mouseEventArgs.OffsetY}   p.Y:{p.Y * sizeDrawImage.Height}; overlapPercentageY: {overlapPercentageY * sizeDrawImage.Height}");
+
+            // if (res)
+            // {
+            //     Console.WriteLine(
+            //         $"true {p.Y} currentY:{currentY} x:{deltaX} y:{deltaY}; overX:{overlapPercentageX}; overY:{overlapPercentageY};  Width:{sizeDrawImage.Width} Height:{sizeDrawImage.Height}");
+            // }
+
+            return res;
+        });
+        // Console.WriteLine("----------");
         if (movePoint is null)
             return false;
 
-        _timeFirstPoint = timeClick;
+        // _timeFirstPoint = timeClick;
         _movedData = (isMoved: true, point: movePoint, annot: annotation);
-
+        // _logger.Debug($"PointSelection m3  ");
         return true;
     }
 
@@ -155,7 +188,7 @@ public class MarkupHandler
     private void ResetMovedCache()
     {
         _movedData = (isMoved: false, point: new PointF(), annot: new Annotation());
-        _timeFirstPoint = DateTime.MinValue;
+        // _timeFirstPoint = DateTime.MinValue;
     }
 
     /// <summary>
@@ -168,56 +201,63 @@ public class MarkupHandler
         DateTime timeClick,
         SizeF sizeImg)
     {
-        if (timeClick - _timeFirstPoint < _minTimeMove)
-            return (false, new Annotation());
-
-        if (!_movedData.isMoved || mouseEventArgs.Buttons != 1 || annotation.Id != _movedData.annot.Id)
+        // if (timeClick - _timeFirstPoint < _minTimeMove)
+        //     return (false, new Annotation());
+        try
         {
-            ResetMovedCache();
-            return (false, new Annotation());
+            if (!_movedData.isMoved || mouseEventArgs.Buttons != 1 || annotation.Id != _movedData.annot.Id)
+            {
+                ResetMovedCache();
+                return (false, new Annotation());
+            }
+
+
+            if (mouseEventArgs.OffsetX > sizeImg.Width ||
+                mouseEventArgs.OffsetY > sizeImg.Height ||
+                mouseEventArgs.OffsetX < 0 ||
+                mouseEventArgs.OffsetY < 0)
+            {
+                return (false, new Annotation());
+            }
+
+            var currentX = (float)(mouseEventArgs.OffsetX / sizeImg.Width);
+            var currentY = (float)(mouseEventArgs.OffsetY / sizeImg.Height);
+            var movePoint = _movedData.point;
+            var annot = _movedData.annot;
+            var removePoints = annot.Points.FirstOrDefault(p => p == movePoint);
+            if (removePoints is null)
+                return (false, new Annotation());
+
+            const int maxPixelOverlapHaloPx = 1;
+            const float edgeImg = 1.0F;
+            var minPercentStepX = maxPixelOverlapHaloPx / sizeImg.Width;
+            var minPercentStepY = maxPixelOverlapHaloPx / sizeImg.Height;
+
+            if ((Math.Abs(currentX - removePoints.X) < minPercentStepX &&
+                 Math.Abs(currentY - removePoints.Y) < minPercentStepY) ||
+                currentX > edgeImg || currentY > edgeImg ||
+                currentX < 0 || currentY < 0)
+                return (false, new Annotation());
+
+            var currentIndex = annot.Points.IndexOf(removePoints);
+            var oldPoints = annot.Points[currentIndex];
+            var newPoints = oldPoints with
+            {
+                X = currentX, Y = currentY, Id = 0, PositionInGroup = oldPoints.PositionInGroup
+            };
+            annot.Points[currentIndex] = newPoints;
+
+            _movedData = (true, newPoints, annot);
+
+            // _timeFirstPoint = timeClick;
+
+            return (true, annot);
         }
-
-
-        if (mouseEventArgs.OffsetX > sizeImg.Width ||
-            mouseEventArgs.OffsetY > sizeImg.Height ||
-            mouseEventArgs.OffsetX < 0 ||
-            mouseEventArgs.OffsetY < 0)
+        catch (Exception e)
         {
-            return (false, new Annotation());
+            _logger.Error("[MarkupHandler:HandlerOnmouseuplAsync] {Exception}",e);
         }
-
-        var currentX = (float)(mouseEventArgs.OffsetX / sizeImg.Width);
-        var currentY = (float)(mouseEventArgs.OffsetY / sizeImg.Height);
-        var movePoint = _movedData.point;
-        var annot = _movedData.annot;
-        var removePoints = annot.Points.FirstOrDefault(p => p == movePoint);
-        if (removePoints is null)
-            return (false, new Annotation());
-
-        const int maxPixelOverlapHaloPx = 1;
-        const float edgeImg = 1.0F;
-        var minPercentStepX = maxPixelOverlapHaloPx / sizeImg.Width;
-        var minPercentStepY = maxPixelOverlapHaloPx / sizeImg.Height;
-
-        if ((Math.Abs(currentX - removePoints.X) < minPercentStepX &&
-             Math.Abs(currentY - removePoints.Y) < minPercentStepY) ||
-            currentX > edgeImg || currentY > edgeImg ||
-            currentX < 0 || currentY < 0)
-            return (false, new Annotation());
-
-        var currentIndex = annot.Points.IndexOf(removePoints);
-        var oldPoints = annot.Points[currentIndex];
-        var newPoints = oldPoints with
-        {
-            X = currentX, Y = currentY, Id = 0, PositionInGroup = oldPoints.PositionInGroup
-        };
-        annot.Points[currentIndex] = newPoints;
-
-        _movedData = (true, newPoints, annot);
-
-        _timeFirstPoint = timeClick;
-
-        return (true, annot);
+        return (false, new Annotation());
     }
 
     /// <summary>
@@ -229,16 +269,14 @@ public class MarkupHandler
     /// <param name="dateTime"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public (bool checkResult, Annotation annotation) RepositioningPoints(MouseEventArgs mouseEventArgs,
-        Annotation annotation, SizeF sizeDrawImage,
-        DateTime dateTime)
+    public (bool checkResult, Annotation annotation) RepositioningPoints(Annotation annotation)
     {
         if (annotation.Points?.Any() == false)
             return (false, new Annotation());
 
-        var checkPointSelection = PointSelection(mouseEventArgs, annotation, dateTime, sizeDrawImage);
-        if (checkPointSelection is false)
-            return (false, new Annotation());
+        // var checkPointSelection = PointSelection(mouseEventArgs, annotation, dateTime, sizeDrawImage);
+        // if (checkPointSelection is false)
+        //     return (false, new Annotation());
 
         var activeAnnot = _movedData.annot;
         var activePoint = _movedData.point;
@@ -246,10 +284,10 @@ public class MarkupHandler
         switch (activeAnnot.LabelPattern)
         {
             case TypeLabel.None:
-            
+
             case TypeLabel.Point:
                 break;
-            
+
             case TypeLabel.Polygon:
                 return ReshapePositionPointsPolygon(activeAnnot, activePoint);
 
@@ -269,13 +307,12 @@ public class MarkupHandler
         Annotation annotation,
         PointF activePoint)
     {
-
         var positionActive = activePoint.PositionInGroup;
         var arrIndex = new List<int>();
         var oldPoints = annotation.Points;
-        if(oldPoints?.Any() == false)
+        if (oldPoints?.Any() == false)
             return (false, new Annotation());
-        
+
         var firstGroup = oldPoints.Where(p => p.PositionInGroup > positionActive)
             .Select(p => p.PositionInGroup).ToArray();
         arrIndex.AddRange(firstGroup);
@@ -284,13 +321,13 @@ public class MarkupHandler
         arrIndex.AddRange(lastGroup);
         arrIndex.Add(positionActive);
 
-        var sortPoints = arrIndex.Select(( oldPosition,index) =>
+        var sortPoints = arrIndex.Select((oldPosition, index) =>
         {
             var point = oldPoints.First(p => p.PositionInGroup == oldPosition);
 
             return point with { PositionInGroup = index };
         }).ToList();
-        
+
         annotation.Points = sortPoints;
         return (true, annotation);
     }

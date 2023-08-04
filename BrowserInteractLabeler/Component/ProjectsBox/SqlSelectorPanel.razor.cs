@@ -1,3 +1,4 @@
+using BrowserInteractLabeler.Common;
 using Microsoft.AspNetCore.Components;
 
 namespace BrowserInteractLabeler.Component.ProjectsBox;
@@ -7,12 +8,18 @@ public class SqlSelectorPanelModel : ComponentBase
     [Parameter] public string[] SqlDbNames { get; set; }
     [Parameter] public string CurrentSqlDbNames { get; set; }
     [Parameter] public string CurrentInformationSqlDb { get; set; }
-    [Parameter] public string HeightPanel { get; set; }
+    
+    [Parameter] public SizeF RootWindowsSize { get; set; }
     [Parameter] public bool IsShowSpinnerLpadDB { get; set; }
     [Parameter] public EventCallback<string> ChoseActiveDataBaseAsync { get; set; }
     [Parameter] public EventCallback<string> ChoseExportDataBaseAsync { get; set; }
 
-
+    internal string GetHeightPanel()
+    {
+        const double coef = 0.93d;
+        return $"{RootWindowsSize.Height*coef}px";
+    }
+    
     internal (string index, string name)[] GetSqlOnlyName()
     {
         if (SqlDbNames is null || !SqlDbNames.Any())
