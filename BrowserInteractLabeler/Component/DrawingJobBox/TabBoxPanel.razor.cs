@@ -9,7 +9,7 @@ namespace BrowserInteractLabeler.Component.DrawingJobBox;
 public class LabelsPanelModel : ComponentBase
 {
     [Parameter] public Annotation[] AnnotationsOnPanel { get; set; }
-    [Parameter] public string HeightMainWin { get; set; } = string.Empty;
+    // [Parameter] public string HeightMainWin { get; set; } = string.Empty;
     [Parameter] public Label[] LabelAll { get; set; } = Array.Empty<Label>();
     [Parameter] public ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
     [Parameter] public EventCallback<int> ChoseActiveAnnotationIdAsync { get; set; }
@@ -17,6 +17,15 @@ public class LabelsPanelModel : ComponentBase
     
     [Parameter] public EventCallback<int> ChoseHiddenLabelIdAsync { get; set; }
 
+    [Parameter] public SizeF RootWindowsSize { get; set; }
+    
+    
+    internal string GetHeightPanel()
+    {
+        const double coef = 0.84d;
+        return $"{RootWindowsSize.Height*coef}px";
+    }
+    
     internal async Task ButtonClickObjectAsync(int nameIdAnnot)
     {
         await ChoseActiveAnnotationIdAsync.InvokeAsync(nameIdAnnot);

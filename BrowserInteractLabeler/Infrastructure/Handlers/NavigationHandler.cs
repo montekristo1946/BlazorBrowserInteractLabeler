@@ -128,6 +128,7 @@ public class NavigationHandler
     public void SetRootWindowsSize(SizeF sizeBrowse)
     {
         _cacheModel.ImageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
+        _cacheModel.RootWindowsSize = sizeBrowse;
     }
 
 

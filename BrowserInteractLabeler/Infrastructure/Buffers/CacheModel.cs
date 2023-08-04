@@ -12,9 +12,6 @@ public class CacheModel
     internal string ImagesBase64 => $"data:image/jpg;base64," + Convert.ToBase64String(Images.Images);
     internal ImageFrame Images { get; set; } = new ImageFrame();
     
-    // internal string SvgModelString  { get; set; } = "";
-    // public string CursorStringStyle { get; set; }= "";
-    
     internal string CssScale =>
         $"transform: scale({ScaleCurrent}) translate({OffsetDrawImage.X}px, {OffsetDrawImage.Y}px)";
 
@@ -23,6 +20,8 @@ public class CacheModel
     internal SizeF SizeDrawImage { get; set; } = new();
     internal string WidthImg => $"{(int)SizeDrawImage.Width}px";
     internal string HeightImg => $"{(int)SizeDrawImage.Height}px";
+    
+    internal SizeF RootWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
     internal SizeF ImageWindowsSize { get; set; }= new() { Width = 1600, Height = 800 };
     internal string WidthMainWin => $"{(int)ImageWindowsSize.Width}px";
     internal string HeightMainWin => $"{(int)ImageWindowsSize.Height}px";
