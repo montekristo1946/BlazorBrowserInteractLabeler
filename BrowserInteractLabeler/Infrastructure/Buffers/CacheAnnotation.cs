@@ -121,7 +121,7 @@ public class CacheAnnotation
         }
         catch (Exception e)
         {
-            _logger.Error("[SaveAnnotationsOnSqlAsync] {@Exception}", e);
+            _logger.Error("[SaveAnnotationsOnSqlAsync] {@Exception}", e.Message);
         }
         finally
         {

@@ -1,7 +1,7 @@
 ﻿@inherits ColorPickerModel
 
 <div class="color-picker-modal  @cssClass"
-     tabindex="0" @onkeydown="@KeyDown" @ref="myPalette">
+     @onkeydown="@KeyDown" @ref="myPalette">
     <div class="color-picker-content">
         @if (!string.IsNullOrEmpty(Title))
         {
