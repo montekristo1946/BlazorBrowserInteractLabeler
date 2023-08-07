@@ -16,9 +16,10 @@ public class ImagesPanelModel : ComponentBase
     {
         get
         {
-            var background = $"url(\"{_currentImages}\")";
+            // var background = $"url(\"{_currentImages}\")";
+            return _currentImages;
 
-            return background;
+            // return background;
         }
         set => _currentImages = value;
     }

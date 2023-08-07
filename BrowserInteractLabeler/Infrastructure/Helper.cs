@@ -90,7 +90,7 @@ public class Helper
 
         const float maxScale = 3F;
         const float minScale = 0.5F;
-        const float stepScale = 0.10f;
+        const float stepScale = 0.20f;
 
         var scale = scaleInput;
         var offsetX = offsetDrawImage.X;
