@@ -1,10 +1,4 @@
 ﻿using System.Globalization;
-using BrowserInteractLabeler;
-using Serilog;
-using Serilog.Events;
-using Serilog.Exceptions;
-using Serilog.Sinks.RollingFileSizeLimit.Extensions;
-using Serilog.Sinks.RollingFileSizeLimit.Impl;
 
 namespace BrowserInteractLabeler;
 
