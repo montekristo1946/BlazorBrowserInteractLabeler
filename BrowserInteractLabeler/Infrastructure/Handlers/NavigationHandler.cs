@@ -274,9 +274,19 @@ public class NavigationHandler
     /// </summary>
     /// <param name="mouseEventArgs"></param>
     /// <param name="timeClick"></param>
-    public void HandlerImagesPanelOnmousedownAsync(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    public void HandlerImagesPanelOnmousedown(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
-        _moveImagesHandler.HandlerOnmousedownAsync(mouseEventArgs, timeClick);
+        _moveImagesHandler.HandlerOnmousedown(mouseEventArgs, timeClick);
+    }
+    
+    /// <summary>
+    ///     Перемешение изобаржения остановка
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="timeClick"></param>
+    public void HandlerImagesPanelOnmouseUp()
+    {
+        _moveImagesHandler.HandlerImagesPanelOnmouseUp();
     }
 
     /// <summary>

@@ -47,8 +47,18 @@ public class MarkerModel : ComponentBase
     {
         return Task.Run(() =>
         {
-            _keyMapHandler.HandlerImagesPanelOnmouseupAsync(arg);
-            _cacheModel.PointCursor = _navigationHandler.CalculateCursor(arg.OffsetX,arg.OffsetY);
+            const long button = 1;
+            if (arg is { AltKey: true, Buttons: button })
+            {
+                
+                _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg);
+            }
+            else
+            {
+                _keyMapHandler.HandlerImagesPanelOnmouseupAsync(arg);
+                _cacheModel.PointCursor = _navigationHandler.CalculateCursor(arg.OffsetX,arg.OffsetY);
+            }
+      
             
         });
     }

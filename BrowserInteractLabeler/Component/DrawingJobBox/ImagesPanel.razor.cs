@@ -16,7 +16,7 @@ public class ImagesPanelModel : ComponentBase
     {
         get
         {
-            // var background = $"url(\"{_currentImages}\")";
+            // return  $"url(\"{_currentImages}\")";
             return _currentImages;
 
             // return background;
@@ -36,12 +36,15 @@ public class ImagesPanelModel : ComponentBase
     [Parameter] public EventCallback<MouseEventArgs> HandleRightClick { get; set; }
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousedown { get; set; }
-    [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseup { get; set; }
+    // [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseup { get; set; }
     
+    [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseUp { get; set; }
     
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }
     
     [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
+    
+    [Parameter] public EventCallback<WheelEventArgs> HandleMouseWheel { get; set; }
     
     // [Parameter] public string CursorStyle { get; set; } = string.Empty;
     

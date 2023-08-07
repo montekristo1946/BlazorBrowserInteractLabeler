@@ -88,20 +88,20 @@ public class Helper
             imageWindowsSize is null)
             return (1, new PointF() { X = 0, Y = 0 });
 
-        const float maxScale = 3F;
-        const float minScale = 0.5F;
-        const float stepScale = 0.20f;
+        const float maxScale = 10F;
+        const float minScale = 0.1F;
+        const float stepScale = 0.16f;
 
         var scale = scaleInput;
         var offsetX = offsetDrawImage.X;
         var offsetY = offsetDrawImage.Y;
 
         if (args.DeltaY < 0)
-            scale += stepScale;
+            scale *= 1.0f+stepScale;
 
 
         if (args.DeltaY > 0)
-            scale -= stepScale;
+            scale *= 1.0f-stepScale;
 
 
         if (scale < minScale || scale > maxScale) //TODO: проверку offset 

@@ -8,21 +8,17 @@
             overflow: hidden;"
      id="drawing_panel_background">
     <div style="width:@WidthImg; height: @HeightImg;
-        @CssScale;
-        transition: all 0.080s;
-        transition-timing-function: linear;
-        background-repeat: no-repeat;
-        background-size: contain;
-        transform-origin: center;
-        background-position: center ;
-        "  
-         @onclick="HandleMouse"
-         @oncontextmenu="HandleRightClick"
-         @onmousedown="HandlerOnmousedown"
-         @onmouseup="HandlerOnmouseup"
-         @onmousemove="HandlerOnmousemove">
+        @CssScale;   
+        background-position: center ;"
+         @onclick="@HandleMouse"
+         @oncontextmenu="@HandleRightClick"
+         @onmousedown="@HandlerOnmousedown"
+            @onmouseup="@HandlerOnmouseUp"
+         @onmousemove="@HandlerOnmousemove"
+         @onmousewheel="@HandleMouseWheel">
+        
 
-        <img src=@ImagesBase64 alt="Red dot" style="width: 100%;  height: 100%;  position: absolute; transition: all 0.000s;  transition-timing-function: linear;" />
+        <img src=@ImagesBase64 alt="Red dot" style="width: 100%;  height: 100%;  position: absolute; transition: all 0.000s;  transition-timing-function: linear;"/>
         @SvgPanelTemplate
     </div>
 </div>

@@ -39,8 +39,7 @@
     <div class="row m-0" id="drawing_main_panel">
         <DrawingPanel
             CancelFocusRootPanel="_navigationHandler.CancelFocusRootPanelAsync"
-            HandleMouseWheel="@_keyMapHandler.HandleWheelDrawingPanelMouseEventAsync"
-            HandlerOnmousemove="@_keyMapHandler.HandlerDrawingPanelOnmousemoveAsync">
+            >
             <ToolsPanelTemplate>
                 <ToolsPanel
                     ButtonDefaultMoveClick="() => _navigationHandler.ButtonDefaultPositionImg()"
@@ -62,7 +61,9 @@
                     HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandleRightClick="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmouseDownAsync"
-                    HandlerOnmousemove="@HandlerImagesPanelOnmouseupAsync">
+                    HandlerOnmouseUp="@_keyMapHandler.HandlerImagesPanelOnmouseUp"
+                    HandlerOnmousemove="@HandlerImagesPanelOnmouseupAsync"
+                    HandleMouseWheel="@_keyMapHandler.HandleWheelDrawingPanelMouseEventAsync">
 
                     <SvgPanelTemplate>
                         <SvgPanel

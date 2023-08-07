@@ -17,8 +17,8 @@ public class DrawingPanelModel : ComponentBase,IAsyncDisposable
     
     [Parameter] public EventCallback CancelFocusRootPanel { get; set; }
     
-    [Parameter] public EventCallback<WheelEventArgs> HandleMouseWheel { get; set; }
-    [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }
+    // [Parameter] public EventCallback<WheelEventArgs> HandleMouseWheel { get; set; }
+    // [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }
 
 
     public ValueTask DisposeAsync()

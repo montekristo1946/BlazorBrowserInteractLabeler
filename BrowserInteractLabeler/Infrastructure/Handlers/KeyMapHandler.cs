@@ -139,7 +139,7 @@ public class KeyMapHandler
         
         if (arg.AltKey)
         {
-            _navigationHandler.HandlerImagesPanelOnmousedownAsync(arg,
+            _navigationHandler.HandlerImagesPanelOnmousedown(arg,
                 DateTime.Now); //кооректируе точку отчета при перемещении изображения (первое нажатие на мышь)
             return;
         }
@@ -161,16 +161,16 @@ public class KeyMapHandler
     ///     Общая панель для отрисовки перемещение мыши
     /// </summary>
     /// <param name="arg"></param>
-    public Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
-    {
-        const long button = 1;
-        if (arg is { AltKey: true, Buttons: button })
-        {
-            return Task.Run(() => { _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg); });
-        }
-
-        return Task.CompletedTask;
-    }
+    // public Task HandlerDrawingPanelOnmousemoveAsync(MouseEventArgs arg)
+    // {
+    //     const long button = 1;
+    //     if (arg is { AltKey: true, Buttons: button })
+    //     {
+    //         return Task.Run(() => { _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg); });
+    //     }
+    //
+    //     return Task.CompletedTask;
+    // }
 
     /// <summary>
     ///     Перемещение точки
@@ -193,5 +193,15 @@ public class KeyMapHandler
     public Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
     {
         return Task.Run(() => { _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now); });
+    }
+
+    
+    /// <summary>
+    ///     Перемешение изобаржения остановка
+    /// </summary>
+    /// <param name="obj"></param>
+    public void HandlerImagesPanelOnmouseUp(MouseEventArgs obj)
+    {
+        _navigationHandler.HandlerImagesPanelOnmouseUp();
     }
 }
