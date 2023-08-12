@@ -9,7 +9,8 @@
      id="drawing_panel_background">
     <div style="width:@WidthImg; height: @HeightImg;
         @CssScale;   
-        background-position: center ;"
+        background-position: center ;
+        transform-origin: center;"
          @onclick="@HandleMouse"
          @oncontextmenu="@HandleRightClick"
          @onmousedown="@HandlerOnmousedown"
@@ -17,7 +18,17 @@
          @onmousemove="@HandlerOnmousemove"
          @onmousewheel="@HandleMouseWheel">
 
-        <img src=@ImagesBase64 alt="Red dot" style="width: 100%;  height: 100%;  position: absolute; transition: all 0.000s;  transition-timing-function: linear;"/>
+
+@*          <img src=@ImagesBase64 alt="Red dot" style=" *@
+@*              width: 100%; *@
+@*              height: 100%; *@
+@*              position: absolute; *@
+@*               transition: all  0.000s; *@
+@*                transition-timing-function: linear;"/> *@
+
+        <canvas id="@IdCanvas" width="@WidthImg" height="@HeightImg" style="position: absolute; background-position: center ;"></canvas>
         @SvgPanelTemplate
-    </div>
+
+     </div>
+
 </div>

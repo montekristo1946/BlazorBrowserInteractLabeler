@@ -88,8 +88,8 @@ public class Helper
             imageWindowsSize is null)
             return (1, new PointF() { X = 0, Y = 0 });
 
-        const float maxScale = 10F;
-        const float minScale = 0.1F;
+        const float maxScale = 5F;
+        const float minScale = 0.5F;
         const float stepScale = 0.16f;
 
         var scale = scaleInput;

@@ -1,5 +1,6 @@
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
+using BrowserInteractLabeler.Component.DrawingJobBox;
 using BrowserInteractLabeler.Infrastructure.Configs;
 using BrowserInteractLabeler.Infrastructure.Constructors;
 using Microsoft.AspNetCore.Components;
@@ -24,6 +25,7 @@ public class NavigationHandler
     private readonly MarkupHandler _markupHandler;
 
     public bool SetMainFocusRootPanel { get; set; } = false;
+    public ImagesPanel ImagesPanelRef { get; set; }
 
     public NavigationHandler(
         CacheModel cacheModel,
@@ -52,6 +54,8 @@ public class NavigationHandler
         cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
         _cacheModel.CurrentIdImg = 1;
         UpdateSvg();
+        // if (ImagesPanelRef != null) 
+        //     ImagesPanelRef.LoadImageJSAsync().Wait();
     }
 
 
@@ -63,6 +67,7 @@ public class NavigationHandler
         _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
+      
     }
 
 
@@ -80,9 +85,9 @@ public class NavigationHandler
 
         _cacheModel.ScaleCurrent = _defaultScale;
         await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        // _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotationsOnImg(_cacheModel.CurrentIdImg);
         _cacheModel.NameImages = imageFrame.NameImages;
         UpdateSvg();
+        await ImagesPanelRef.LoadImageJSAsync();
     }
 
     private async Task HandlerClickNextAsync(int index)
@@ -102,6 +107,7 @@ public class NavigationHandler
         _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
         await CreateStartImagesState(index);
         _cacheModel.StatePrecess = "";
+ 
     }
 
     public async Task ButtonGoNextClick()
@@ -400,11 +406,11 @@ public class NavigationHandler
         UpdateSvg();
     }
 
-    public async Task ButtonEnterIdActiveIdImagesAsync(string indexImgString)
+    public async Task ButtonEnterIdActiveIdImagesAsync(int indexImg)
     {
-        var resultTryParse = Int32.TryParse(indexImgString, out var indexImg);
-        if (!resultTryParse)
-            return;
+        // var resultTryParse = Int32.TryParse(indexImgString, out var indexImg);
+        // if (!resultTryParse)
+        //     return;
 
         await HandlerClickNextAsync(indexImg);
     }

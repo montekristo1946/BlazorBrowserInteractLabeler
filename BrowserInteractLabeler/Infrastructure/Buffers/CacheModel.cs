@@ -1,3 +1,4 @@
+using System.Globalization;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 
@@ -18,13 +19,9 @@ public class CacheModel
     internal float ScaleCurrent  { get; set; } = 1.0F;
     internal PointF OffsetDrawImage { get; set; } = new();
     internal SizeF SizeDrawImage { get; set; } = new();
-    internal string WidthImg => $"{(int)SizeDrawImage.Width}px";
-    internal string HeightImg => $"{(int)SizeDrawImage.Height}px";
-    
     internal SizeF RootWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
     internal SizeF ImageWindowsSize { get; set; }= new() { Width = 1600, Height = 800 };
-    internal string WidthMainWin => $"{(int)ImageWindowsSize.Width}px";
-    internal string HeightMainWin => $"{(int)ImageWindowsSize.Height}px";
+
     internal Annotation[] AnnotationsOnPanel { get; set; } = Array.Empty<Annotation>();
     internal Label[] LabelAll { get; set; } = Array.Empty<Label>();
     internal ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();

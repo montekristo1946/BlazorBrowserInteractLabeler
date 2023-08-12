@@ -1,7 +1,10 @@
+using BrowserInteractLabeler.Common;
+using BrowserInteractLabeler.Common.DTO;
 using BrowserInteractLabeler.Infrastructure;
 using BrowserInteractLabeler.Repository;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using Serilog;
 using ILogger = Serilog.ILogger;
 
@@ -9,43 +12,52 @@ namespace BrowserInteractLabeler.Component.DrawingJobBox;
 
 public class ImagesPanelModel : ComponentBase
 {
-    private string _currentImages;
+    internal readonly string IdCanvas = "chartCanvas_1";
+    internal string CssScale => _cacheModel.CssScale;// "transform: scale(1.0) translate(+0%, -0%);";
+    internal string WidthImg => $"{(int)_cacheModel.SizeDrawImage.Width}px";
+    internal string HeightImg => $"{(int)_cacheModel.SizeDrawImage.Height}px";
 
-    [Parameter]
-    public string ImagesBase64
-    {
-        get
-        {
-            // return  $"url(\"{_currentImages}\")";
-            return _currentImages;
+    internal string WidthMainWin => $"{(int)_cacheModel.ImageWindowsSize.Width}px";
 
-            // return background;
-        }
-        set => _currentImages = value;
-    }
+    internal string HeightMainWin =>  $"{(int)_cacheModel.ImageWindowsSize.Height}px";
 
-    [Parameter] public string CssScale { get; set; } = string.Empty; // "transform: scale(1.0) translate(+0%, -0%);";
-    [Parameter] public string WidthImg { get; set; } = string.Empty;
-    [Parameter] public string HeightImg { get; set; } = string.Empty;
-    [Parameter] public string WidthMainWin { get; set; } = string.Empty;
-    
-    [Parameter] public string HeightMainWin { get; set; } = string.Empty;
-  
+    // internal string ImagesBase64 => _cacheModel.ImagesBase64;
     [Parameter] public EventCallback<MouseEventArgs> HandleMouse { get; set; }
-    
+
     [Parameter] public EventCallback<MouseEventArgs> HandleRightClick { get; set; }
-    
+
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousedown { get; set; }
-    // [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseup { get; set; }
-    
+
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmouseUp { get; set; }
-    
+
     [Parameter] public EventCallback<MouseEventArgs> HandlerOnmousemove { get; set; }
-    
+
     [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
-    
+
     [Parameter] public EventCallback<WheelEventArgs> HandleMouseWheel { get; set; }
     
-    // [Parameter] public string CursorStyle { get; set; } = string.Empty;
+    [Inject] internal IJSRuntime _JSRuntime { get; set; }
     
+    private readonly ILogger _logger = Log.ForContext<MockupRepository>();
+
+    [Inject] internal CacheModel _cacheModel { get; set; }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadImageJSAsync();
+        }
+    }
+
+    private string Temp = string.Empty;
+    internal async Task LoadImageJSAsync()
+    {
+        // var imagesSize = _cacheModel.SizeDrawImage;
+        var width = (int)_cacheModel.SizeDrawImage.Width;
+        var height  =(int)_cacheModel.SizeDrawImage.Height;
+        await _JSRuntime.InvokeVoidAsync("LoadImg", IdCanvas,_cacheModel.ImagesBase64, width, height);
+        // _logger.Debug("button_testClick");
+        // StateHasChanged();
+    }
 }

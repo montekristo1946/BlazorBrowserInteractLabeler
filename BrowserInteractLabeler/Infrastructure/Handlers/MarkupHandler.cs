@@ -159,9 +159,10 @@ public class MarkupHandler
             var res = deltaX <= overlapPercentageX && deltaY <= overlapPercentageY;
             // Console.WriteLine(
             //     $"fail {p.Y} currentY:{currentY} x:{deltaX} y:{deltaY}; overX:{overlapPercentageX}; overY:{overlapPercentageY};  Width:{sizeDrawImage.Width} Height:{sizeDrawImage.Height}");
-            // Console.WriteLine(
+            //
+            //     Console.WriteLine(
             //     $"fail OffsetY:{mouseEventArgs.OffsetY}   p.Y:{p.Y * sizeDrawImage.Height}; overlapPercentageY: {overlapPercentageY * sizeDrawImage.Height}");
-
+            //
             // if (res)
             // {
             //     Console.WriteLine(

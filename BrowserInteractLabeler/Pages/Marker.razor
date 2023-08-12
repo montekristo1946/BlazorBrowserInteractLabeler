@@ -21,7 +21,7 @@
                     Color="@_cacheModel.ActiveLabelColor"
                     TypeLabel="@_cacheModel.ActiveTypeLabelText"
                     StatePrecess="@_cacheModel.StatePrecess"
-                    IdActiveIdImages="@_cacheModel.CurrentIdImg.ToString()"
+                    CurrentIdImg="@_cacheModel.CurrentIdImg"
                     ButtonEnterIdActiveIdImages="_navigationHandler.ButtonEnterIdActiveIdImagesAsync">
                 </SwipePanel>
 
@@ -52,12 +52,7 @@
             </ToolsPanelTemplate>
             <ImagesPamelTemplate>
                 <ImagesPanel
-                    ImagesBase64="@_cacheModel.ImagesBase64"
-                    CssScale="@_cacheModel.CssScale"
-                    WidthImg="@_cacheModel.WidthImg"
-                    HeightImg="@_cacheModel.HeightImg"
-                    WidthMainWin="@_cacheModel.WidthMainWin"
-                    HeightMainWin="@_cacheModel.HeightMainWin"
+                    @ref="@_navigationHandler.ImagesPanelRef"
                     HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandleRightClick="@_keyMapHandler.HandleImagePanelMouseAsync"
                     HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmouseDownAsync"

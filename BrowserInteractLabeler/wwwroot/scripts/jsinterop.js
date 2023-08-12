@@ -71,3 +71,30 @@ function FocusElement (id){
         return
     element.focus({ preventScroll: true });
 }
+
+async function LoadImg (idCanvas,imgBase64, width,height){
+    if (imgBase64 == null || width <=0 || height<=0 ) {
+        console.log("Fail input data");
+        return;
+    }
+    const img = new Image();
+    await new Promise(r => {
+        img.onload = r;
+        img.src = imgBase64;
+    });
+
+    // console.log("chartCanvas  ",imgBase64);
+    
+    const canvas = document.getElementById(idCanvas);
+    if (canvas == null) {
+        console.log("canvas null",idCanvas);
+        return -1;
+    }
+
+    
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0,width,height);
+    
+    ctx.drawImage(img, 0, 0,width,height);
+
+}
