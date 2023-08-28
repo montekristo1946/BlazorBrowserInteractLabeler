@@ -67,27 +67,34 @@ public class NavigationHandler
         _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
-      
     }
 
 
     private async Task CreateStartImagesState(int indexImg)
     {
-        var imageFrame = await _repository.GetImagesByIndexAsync(indexImg);
-        if (!imageFrame.Images.Any())
-            return;
+        try
+        {
+            var imageFrame = await _repository.GetImagesByIndexAsync(indexImg);
+            if (!imageFrame.Images.Any())
+                return;
 
-        _cacheModel.Images = imageFrame;
-        _cacheModel.SizeDrawImage = _helper.CalculationOptimalSize(imageFrame.SizeImage, _cacheModel.ImageWindowsSize);
-        _cacheModel.OffsetDrawImage =
-            _helper.CalculationDefaultOffsetImg(_cacheModel.SizeDrawImage, _cacheModel.ImageWindowsSize);
+            _cacheModel.Images = imageFrame;
+            _cacheModel.SizeDrawImage =
+                _helper.CalculationOptimalSize(imageFrame.SizeImage, _cacheModel.ImageWindowsSize);
+            _cacheModel.OffsetDrawImage =
+                _helper.CalculationDefaultOffsetImg(_cacheModel.SizeDrawImage, _cacheModel.ImageWindowsSize);
 
 
-        _cacheModel.ScaleCurrent = _defaultScale;
-        await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-        _cacheModel.NameImages = imageFrame.NameImages;
-        UpdateSvg();
-        await ImagesPanelRef.LoadImageJSAsync();
+            _cacheModel.ScaleCurrent = _defaultScale;
+            await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
+            _cacheModel.NameImages = imageFrame.NameImages;
+            UpdateSvg();
+            await ImagesPanelRef.LoadImageJSAsync();
+        }
+        catch (Exception e)
+        {
+           _logger.Error("[CreateStartImagesState] {Exception}",e);
+        }
     }
 
     private async Task HandlerClickNextAsync(int index)
@@ -107,7 +114,6 @@ public class NavigationHandler
         _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
         await CreateStartImagesState(index);
         _cacheModel.StatePrecess = "";
- 
     }
 
     public async Task ButtonGoNextClick()
@@ -284,7 +290,7 @@ public class NavigationHandler
     {
         _moveImagesHandler.HandlerOnmousedown(mouseEventArgs, timeClick);
     }
-    
+
     /// <summary>
     ///     Перемешение изобаржения остановка
     /// </summary>
@@ -430,7 +436,7 @@ public class NavigationHandler
         return new PointF() { X = (float)currentX, Y = (float)currentY };
     }
 
-    
+
     /// <summary>
     ///     Перестроить порядок точек в фируге
     /// </summary>
@@ -440,15 +446,15 @@ public class NavigationHandler
         var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
-        
+
         var (checkResult, annotation) =
-            _markupHandler.RepositioningPoints( resultGetEditAnnotation.annot);
+            _markupHandler.RepositioningPoints(resultGetEditAnnotation.annot);
 
         if (checkResult is false)
             return;
-        
+
         _cacheAnnotation.UpdateAnnotation(annotation);
-        HandlerSelectPoint(mouseEventArgs,DateTime.Now);
+        HandlerSelectPoint(mouseEventArgs, DateTime.Now);
         UpdateSvg();
     }
 }

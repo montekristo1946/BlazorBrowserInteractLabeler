@@ -72,6 +72,7 @@ public class SqlRepository : IRepository
 
     public async Task<ImageFrame> GetImagesByIndexAsync(int imagesId)
     {
+
         if (_db is null)
             return new ImageFrame();
 
