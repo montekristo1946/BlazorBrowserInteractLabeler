@@ -49,7 +49,7 @@ public class Helper
         retWidth *= coef;
         retHeight *= coef;
 
-        return new SizeF() { Height = retHeight, Width = retWidth };
+        return new SizeF() { Height = (int)retHeight, Width = (int)retWidth };
     }
 
     public PointF CalculationDefaultOffsetImg(SizeF? imageFrameSize, SizeF? maxSizeDrawWindow)

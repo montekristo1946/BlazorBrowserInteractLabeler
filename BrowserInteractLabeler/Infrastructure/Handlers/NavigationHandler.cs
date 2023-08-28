@@ -89,11 +89,18 @@ public class NavigationHandler
             await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
             _cacheModel.NameImages = imageFrame.NameImages;
             UpdateSvg();
+            
+            if (ImagesPanelRef is null)
+            {
+                _logger.Error("[CreateStartImagesState] not init ImagesPanelRef");
+                return;
+            }
+            
             await ImagesPanelRef.LoadImageJSAsync();
         }
         catch (Exception e)
         {
-           _logger.Error("[CreateStartImagesState] {Exception}",e);
+            _logger.Error("[CreateStartImagesState] {Exception}", e);
         }
     }
 
@@ -321,6 +328,8 @@ public class NavigationHandler
     /// <param name="now"></param>
     public void HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
+        // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}",mouseEventArgs);
+         
         var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
@@ -333,6 +342,7 @@ public class NavigationHandler
         if (checkResult is false)
             return;
 
+        
         _cacheAnnotation.UpdateAnnotation(annotation);
         UpdateSvg();
     }

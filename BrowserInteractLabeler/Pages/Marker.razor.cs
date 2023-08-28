@@ -55,6 +55,7 @@ public class MarkerModel : ComponentBase
             }
             else
             {
+                // Console.WriteLine($"{arg.OffsetX} {arg.ClientX}");
                 _keyMapHandler.HandlerImagesPanelOnmouseupAsync(arg);
                 _cacheModel.PointCursor = _navigationHandler.CalculateCursor(arg.OffsetX,arg.OffsetY);
             }

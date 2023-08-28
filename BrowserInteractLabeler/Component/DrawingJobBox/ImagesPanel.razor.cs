@@ -21,7 +21,6 @@ public class ImagesPanelModel : ComponentBase
 
     internal string HeightMainWin =>  $"{(int)_cacheModel.ImageWindowsSize.Height}px";
 
-    // internal string ImagesBase64 => _cacheModel.ImagesBase64;
     [Parameter] public EventCallback<MouseEventArgs> HandleMouse { get; set; }
 
     [Parameter] public EventCallback<MouseEventArgs> HandleRightClick { get; set; }
