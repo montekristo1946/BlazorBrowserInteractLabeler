@@ -134,21 +134,15 @@ public class MarkupHandler
     public bool PointSelection(MouseEventArgs mouseEventArgs,
         Annotation annotation,
         DateTime timeClick,
-        SizeF sizeDrawImage, float scaleCurrent)
+        SizeF sizeDrawImage, double scaleCurrent)
     {
-        // _logger.Debug($"PointSelection m1  ");
         ResetMovedCache();
         if (annotation.Points?.Any() == false)
             return false;
-        // _logger.Debug($"PointSelection m2  ");
-
-
+     
         var currentX = mouseEventArgs.OffsetX / sizeDrawImage.Width;
         var currentY = mouseEventArgs.OffsetY / sizeDrawImage.Height;
-        // const double maxPixelOverlapHaloPx = 1.0;
-        // var overlapPercentageX = (_serviceConfigs.StrokeWidth *(1/scaleCurrent) / sizeDrawImage.Width) * maxPixelOverlapHaloPx;
-        // var overlapPercentageY = (_serviceConfigs.StrokeWidth*(1/scaleCurrent) / sizeDrawImage.Height)* maxPixelOverlapHaloPx;
-
+    
         var overlapPercentageX = (_serviceConfigs.StrokeWidth / sizeDrawImage.Width) * (1 / scaleCurrent);
         var overlapPercentageY = (_serviceConfigs.StrokeWidth / sizeDrawImage.Height) * (1 / scaleCurrent);
 
@@ -157,27 +151,14 @@ public class MarkupHandler
             var deltaX = Math.Abs(p.X - currentX);
             var deltaY = Math.Abs(p.Y - currentY);
             var res = deltaX <= overlapPercentageX && deltaY <= overlapPercentageY;
-            // Console.WriteLine(
-            //     $"fail {p.Y} currentY:{currentY} x:{deltaX} y:{deltaY}; overX:{overlapPercentageX}; overY:{overlapPercentageY};  Width:{sizeDrawImage.Width} Height:{sizeDrawImage.Height}");
-            //
-            //     Console.WriteLine(
-            //     $"fail OffsetY:{mouseEventArgs.OffsetY}   p.Y:{p.Y * sizeDrawImage.Height}; overlapPercentageY: {overlapPercentageY * sizeDrawImage.Height}");
-            //
-            // if (res)
-            // {
-            //     Console.WriteLine(
-            //         $"true {p.Y} currentY:{currentY} x:{deltaX} y:{deltaY}; overX:{overlapPercentageX}; overY:{overlapPercentageY};  Width:{sizeDrawImage.Width} Height:{sizeDrawImage.Height}");
-            // }
 
             return res;
         });
-        // Console.WriteLine("----------");
+        
         if (movePoint is null)
             return false;
 
-        // _timeFirstPoint = timeClick;
         _movedData = (isMoved: true, point: movePoint, annot: annotation);
-        // _logger.Debug($"PointSelection m3  ");
         return true;
     }
 
@@ -189,7 +170,6 @@ public class MarkupHandler
     private void ResetMovedCache()
     {
         _movedData = (isMoved: false, point: new PointF(), annot: new Annotation());
-        // _timeFirstPoint = DateTime.MinValue;
     }
 
     /// <summary>

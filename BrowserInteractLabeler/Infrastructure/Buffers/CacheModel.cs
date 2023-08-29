@@ -16,7 +16,7 @@ public class CacheModel
     internal string CssScale =>
         $"transform: scale({ScaleCurrent}) translate({OffsetDrawImage.X}px, {OffsetDrawImage.Y}px)";
 
-    internal float ScaleCurrent  { get; set; } = 1.0F;
+    internal double ScaleCurrent  { get; set; } = 1.0F;
     internal PointF OffsetDrawImage { get; set; } = new();
     internal SizeF SizeDrawImage { get; set; } = new();
     internal SizeF RootWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
@@ -33,7 +33,5 @@ public class CacheModel
     public int CurrentProgress { get; set; } = 0;
 
     public PointF PointCursor { get; set; } = new PointF() { X = 0, Y = 0 };
-
-    // public bool DrawCrosshair { get; set; } = false;
-
+    
 }

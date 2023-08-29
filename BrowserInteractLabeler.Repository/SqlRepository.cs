@@ -7,20 +7,22 @@ namespace BrowserInteractLabeler.Repository;
 
 public class SqlRepository : IRepository
 {
-    private ApplicationDbContext _db = null;
+    private ApplicationDbContext _db = null!;
     private readonly ILogger _logger = Log.ForContext<SqlRepository>();
+    private readonly object _locker = new();
 
-    public async Task<bool> LoadDatabaseAsync(string pathDb)
+    public Task<bool> LoadDatabaseAsync(string pathDb)
     {
-        return await Task.Run(() =>
+        try
         {
-            try
+            lock (_locker)
             {
                 if (_db is not null)
                 {
                     _db.Dispose();
                     _db = null;
                 }
+
                 _logger.Debug("[LoadDatabaseAsync] Init  {PathDb}", pathDb);
                 var databaseConnectionString = $@"Data Source={pathDb};foreign keys=true;";
                 var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -28,15 +30,16 @@ public class SqlRepository : IRepository
                     .Options;
                 _db = new ApplicationDbContext(contextOptions);
                 _logger.Debug("[LoadDatabaseAsync] Load ok {PathDb}", pathDb);
-                
-                return true;
+
+                return Task.FromResult(true);
             }
-            catch (Exception e)
-            {
-                _logger.Debug("[LoadDatabaseAsync] {Exception}", e);
-            }
-            return false;
-        });
+        }
+        catch (Exception e)
+        {
+            _logger.Debug("[LoadDatabaseAsync] {Exception}", e);
+        }
+
+        return Task.FromResult(false);
     }
 
     public void Dispose()
@@ -65,14 +68,13 @@ public class SqlRepository : IRepository
     {
         if (_db is null)
             return Array.Empty<Annotation>();
-        
-        var retArr = await _db.Annotations.Include(p=>p.Points).ToArrayAsync();
+
+        var retArr = await _db.Annotations.Include(p => p.Points).ToArrayAsync();
         return retArr;
     }
 
     public async Task<ImageFrame> GetImagesByIndexAsync(int imagesId)
     {
-
         if (_db is null)
             return new ImageFrame();
 

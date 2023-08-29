@@ -78,8 +78,8 @@ public class Helper
         return new PointF() { Y = offsetY, X = offsetX };
     }
 
-    internal (float scale, PointF offset) CalculationScale(WheelEventArgs args,
-        float? scaleInput,
+    internal (double scale, PointF offset) CalculationScale(WheelEventArgs args,
+        double? scaleInput,
         SizeF? sizeDrawImage,
         PointF? offsetDrawImage,
         SizeF? imageWindowsSize)
@@ -87,10 +87,10 @@ public class Helper
         if (args is null || scaleInput is null || sizeDrawImage is null || offsetDrawImage is null ||
             imageWindowsSize is null)
             return (1, new PointF() { X = 0, Y = 0 });
-
-        const float maxScale = 5F;
-        const float minScale = 0.5F;
-        const float stepScale = 0.16f;
+        
+        const double maxScale = 5F;
+        const double minScale = 0.5F;
+        const double stepScale = 0.16f;
 
         var scale = scaleInput;
         var offsetX = offsetDrawImage.X;
@@ -105,20 +105,20 @@ public class Helper
 
 
         if (scale < minScale || scale > maxScale) //TODO: проверку offset 
-            return ((float scale, PointF offset))(scaleInput, offsetDrawImage);
+            return ((double scale, PointF offset))(scaleInput, offsetDrawImage);
 
 
         var positionX = offsetDrawImage.X / (1 / scaleInput);
         var offX = positionX * (1 / scale);
         offsetX = (float)offX;
-
+        
         var positionY = offsetDrawImage.Y / (1 / scaleInput);
         var offY = positionY * (1 / scale);
         offsetY = (float)offY;
-
+        //
         var offset = new PointF() { X = offsetX, Y = offsetY };
-
-        return ((float scale, PointF offset))(scale, offset);
+        
+        return ((double scale, PointF offset))(scale, offset);
     }
 
     public PointF CorrectOffset(SizeF? moveDist, PointF? offsetDrawImage)
