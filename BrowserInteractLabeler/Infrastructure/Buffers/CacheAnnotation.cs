@@ -23,7 +23,8 @@ public class CacheAnnotation
         semaphoreSlim.Wait();
         try
         {
-            var annot = _annotations.FirstOrDefault(p => p.State != StateAnnot.Finalized);
+            var annot = _annotations.FirstOrDefault(p => 
+                p.State != StateAnnot.Finalized && p.State != StateAnnot.Hidden);
 
             if (annot is not null)
                 return (true, annot.CloneDeep());
@@ -433,5 +434,55 @@ public class CacheAnnotation
         }
         return (false, new Annotation());
 
+    }
+
+    public bool SetHiddenAllAnnot()
+    {
+        semaphoreSlim.Wait();
+        try
+        {
+       
+
+            foreach (var annotation in _annotations)
+            {
+                annotation.State = StateAnnot.Hidden;
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[SetHiddenAllAnnot] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+
+        return false;
+    }
+
+    public bool SetFinalizeAllAnnot()
+    {
+        semaphoreSlim.Wait();
+        try
+        {
+            foreach (var annotation in _annotations)
+            {
+                annotation.State = StateAnnot.Finalized;
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[SetHiddenAllAnnot] {@Exception}", e);
+        }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
+
+        return false;
     }
 }

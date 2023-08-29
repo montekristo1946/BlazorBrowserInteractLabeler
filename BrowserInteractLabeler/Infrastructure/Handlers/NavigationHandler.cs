@@ -222,6 +222,28 @@ public class NavigationHandler
         _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
         _cacheModel.ActiveTypeLabel = activeLabelPattern;
     }
+    
+    /// <summary>
+    ///     Скрыть все лейблы
+    /// </summary>
+    /// <param name="isHidden"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task HiddenAllLabels(bool isHidden)
+    {
+        if (isHidden)
+        {
+            _cacheModel.StatePrecess = "Hidden";
+            var resSetHiddenAllAnnot = _cacheAnnotation.SetHiddenAllAnnot();
+        
+        }
+        else
+        {
+            _cacheModel.StatePrecess = "";
+            var resSetHiddenAllAnnot = _cacheAnnotation.SetFinalizeAllAnnot();
+        }
+        
+    }
 
     public void DeleteAnnotation()
     {
@@ -467,4 +489,6 @@ public class NavigationHandler
         HandlerSelectPoint(mouseEventArgs, DateTime.Now);
         UpdateSvg();
     }
+
+   
 }

@@ -17,6 +17,8 @@ public class LabelsPanelModel : ComponentBase
     
     [Parameter] public EventCallback<int> ChoseHiddenLabelIdAsync { get; set; }
 
+    [Parameter] public EventCallback<bool> HiddenAllLabelsAsync { get; set; }
+    
     [Parameter] public SizeF RootWindowsSize { get; set; }
     
     
@@ -33,6 +35,11 @@ public class LabelsPanelModel : ComponentBase
     internal async Task ButtonClickObjectHiddenAsync(int nameIdAnnot)
     {
         await ChoseHiddenLabelIdAsync.InvokeAsync(nameIdAnnot);
+    }
+    
+    internal async Task ButtonClickObjectHiddenAllAsync(bool isHidden)
+    {
+        await HiddenAllLabelsAsync.InvokeAsync(isHidden);
     }
 
     internal async Task ButtonClickLabelAsync(int nameIdAnnot)
