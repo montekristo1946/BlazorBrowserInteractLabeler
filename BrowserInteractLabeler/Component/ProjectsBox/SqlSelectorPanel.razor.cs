@@ -49,10 +49,13 @@ public class SqlSelectorPanelModel : ComponentBase
         await ChoseActiveDataBaseAsync.InvokeAsync(path);
     }
 
-    internal async Task ButtonClickSaveTaskAsync(string nameFile)
+    internal async Task ButtonClickSaveTaskAsync(string nameFile, bool save)
     {
-        var path = FindFullPath(nameFile);
-        await ChoseExportDataBaseAsync.InvokeAsync(path);
+        if (save)
+        {
+            var path = FindFullPath(nameFile);
+            await ChoseExportDataBaseAsync.InvokeAsync(path);
+        }
     }
 
     internal bool CheckActivePanel(string nameFile)

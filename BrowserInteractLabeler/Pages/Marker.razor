@@ -29,13 +29,13 @@
             <ProgressPanelTemplate>
                 <ProgressPanel
                     NameFileEdit="@_cacheModel.NameImages"
-                    CurrentProgress="@_cacheModel.CurrentProgress">
-
+                    CurrentProgress="@_cacheModel.CurrentProgress"
+                    CurrentSqlDbName ="@_cacheModel.CurrentSqlDbNames">
+                    
                 </ProgressPanel>
             </ProgressPanelTemplate>
         </NavigationPanel>
     </div>
-
     <div class="row m-0" id="drawing_main_panel">
         <DrawingPanel
             CancelFocusRootPanel="_navigationHandler.CancelFocusRootPanelAsync"

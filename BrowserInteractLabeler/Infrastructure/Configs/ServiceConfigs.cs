@@ -59,7 +59,7 @@ public class ServiceConfigs
 
     private ServiceConfigs Init()
     {
-        PathSqlDb = "/mnt/Disk_D/TMP/29.06.2023/KPTP_cupling/KPTP_DS_001/";
+        PathSqlDb = "./Example";
         ExportCompletedTasks = PathSqlDb;
         Colors = InitDefaultColorModel();
         return this;

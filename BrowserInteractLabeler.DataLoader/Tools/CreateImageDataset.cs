@@ -72,7 +72,7 @@ public class CreateImageDataset : IHostedService
 
             // using var sqlContext = new ApplicationDbContext(fullPathDb);
             using IRepository operativeFramesStorage = new SqlRepository();
-            await operativeFramesStorage.LoadDatabaseAsync(fullPathDb);
+             operativeFramesStorage.LoadDatabase(fullPathDb);
             await LoadImages(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadLabels(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadAnnotations(taskFolder, operativeFramesStorage).ConfigureAwait(false);
@@ -99,7 +99,7 @@ public class CreateImageDataset : IHostedService
             return;
 
         var annots = exportDto.Annotations;
-        var frames = await repository.GetAllImagesAsync();
+        var frames = repository.GetAllImages();
         var annotGroupByImgImport = annots.GroupBy(p => p.ImageFrameId)
             .Select(groupAnnot =>
             {
@@ -131,7 +131,7 @@ public class CreateImageDataset : IHostedService
             if (!annotsImport.Any())
                 continue;
 
-            var res = await repository.SaveAnnotationsAsync(annotsImport);
+            var res =  repository.SaveAnnotations(annotsImport);
             if (!res)
                 throw new Exception($"[GetDtoToJson] Fail SaveAnnotationsAsync, folder: {taskFolder}");
         }
@@ -143,7 +143,7 @@ public class CreateImageDataset : IHostedService
         if (!exportDto.Labels.Any())
             throw new Exception($"[LoadLabels] Fail Labels, folder: {taskFolder}");
 
-        var res = await operativeFramesStorage.InsertLabels(exportDto.Labels);
+        var res =  operativeFramesStorage.InsertLabels(exportDto.Labels);
         if (!res)
             throw new Exception($"[LoadDataset] Fail InsertLabel, name {taskFolder}");
     }
@@ -181,7 +181,7 @@ public class CreateImageDataset : IHostedService
 
         var onlyFrame = arrFrames.Select(p => p.Value).ToArray();
 
-        var res = await operativeFramesStorage.InsertImageFrames(onlyFrame);
+        var res = operativeFramesStorage.InsertImageFrames(onlyFrame);
         if (!res)
             throw new Exception($"[LoadDataset] Fail InsertImageFrame, taskFolder: {taskFolder}");
     }

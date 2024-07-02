@@ -58,13 +58,18 @@ public class NavigationHandler
         //     ImagesPanelRef.LoadImageJSAsync().Wait();
     }
 
+    public async Task GetDbName(string dbName)
+    {
+        var name = Path.GetFileNameWithoutExtension(dbName);
+        _cacheModel.CurrentSqlDbNames = name;
+    }
 
     public async Task LoadFirstImg()
     {
         _cacheModel.CurrentIdImg = 1;
         _cacheModel.CurrentProgress = 0;
         await CreateStartImagesState(_cacheModel.CurrentIdImg);
-        _cacheModel.LabelAll = await _repository.GetAllLabelsAsync();
+        _cacheModel.LabelAll = _repository.GetAllLabels();
         _cacheModel.ColorAll = _serviceConfigs.Colors;
         SetMainFocusRootPanel = true;
     }
@@ -74,7 +79,7 @@ public class NavigationHandler
     {
         try
         {
-            var imageFrame = await _repository.GetImagesByIndexAsync(indexImg);
+            var imageFrame = _repository.GetImagesByIndex(indexImg);
             if (!imageFrame.Images.Any())
                 return;
 
@@ -89,13 +94,13 @@ public class NavigationHandler
             await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
             _cacheModel.NameImages = imageFrame.NameImages;
             UpdateSvg();
-            
+
             if (ImagesPanelRef is null)
             {
                 _logger.Error("[CreateStartImagesState] not init ImagesPanelRef");
                 return;
             }
-            
+
             await ImagesPanelRef.LoadImageJSAsync();
         }
         catch (Exception e)
@@ -106,7 +111,7 @@ public class NavigationHandler
 
     private async Task HandlerClickNextAsync(int index)
     {
-        var allIndex = await _repository.GetAllIndexImagesAsync();
+        var allIndex =_repository.GetAllIndexImages();
 
         if (index > allIndex.Length || index < 1)
         {
@@ -222,7 +227,7 @@ public class NavigationHandler
         _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
         _cacheModel.ActiveTypeLabel = activeLabelPattern;
     }
-    
+
     /// <summary>
     ///     Скрыть все лейблы
     /// </summary>
@@ -235,14 +240,12 @@ public class NavigationHandler
         {
             _cacheModel.StatePrecess = "Hidden";
             var resSetHiddenAllAnnot = _cacheAnnotation.SetHiddenAllAnnot();
-        
         }
         else
         {
             _cacheModel.StatePrecess = "";
             var resSetHiddenAllAnnot = _cacheAnnotation.SetFinalizeAllAnnot();
         }
-        
     }
 
     public void DeleteAnnotation()
@@ -351,7 +354,7 @@ public class NavigationHandler
     public void HandleImagePanelMouseAsync(MouseEventArgs mouseEventArgs, DateTime now)
     {
         // _logger.Debug("[HandleImagePanelMouseAsync] {@MouseEventArgs}",mouseEventArgs);
-         
+
         var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
@@ -364,7 +367,7 @@ public class NavigationHandler
         if (checkResult is false)
             return;
 
-        
+
         _cacheAnnotation.UpdateAnnotation(annotation);
         UpdateSvg();
     }
@@ -473,15 +476,16 @@ public class NavigationHandler
     ///     Перестроить порядок точек в фируге
     /// </summary>
     /// <param name="mouseEventArgs"></param>
-    public void HandlerRepositioningPoints(MouseEventArgs mouseEventArgs)
+    /// <param name="reverse"></param>
+    /// <param name="remove"></param>
+    public void HandlerRepositioningPoints(MouseEventArgs mouseEventArgs, bool reverse, bool remove)
     {
         var resultGetEditAnnotation = _cacheAnnotation.GetEditAnnotation();
         if (!resultGetEditAnnotation.checkResult)
             return;
 
         var (checkResult, annotation) =
-            _markupHandler.RepositioningPoints(resultGetEditAnnotation.annot);
-
+            _markupHandler.RepositioningPoints(resultGetEditAnnotation.annot, reverse, remove);
         if (checkResult is false)
             return;
 
@@ -489,6 +493,4 @@ public class NavigationHandler
         HandlerSelectPoint(mouseEventArgs, DateTime.Now);
         UpdateSvg();
     }
-
-   
 }

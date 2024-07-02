@@ -9,6 +9,6 @@ public record ImageFrame
     [JsonIgnore] public byte [] Images { get; set; } = Array.Empty<byte>();
     public string NameImages { get; set; } = String.Empty;
 
-    [JsonIgnore] public List<Annotation>? Annotations { get; set; } = new List<Annotation>();
+    [JsonIgnore] public List<Annotation>? Annotations { get; set; } = new();
 
 }

@@ -14,7 +14,7 @@
             {
                 var isActivePanel = CheckActivePanel(complexName.name);
                 var colorButton = isActivePanel ? "#d8d8d8b2" : "#ffffff";
-                var textToActive = isActivePanel && CurrentInformationSqlDb.Any() ?  CurrentInformationSqlDb:"";
+                var textToActive = isActivePanel && CurrentInformationSqlDb.Any() ? CurrentInformationSqlDb : "";
                 var visibilitySpinner = isActivePanel && IsShowSpinnerLpadDB ? "visible" : "hidden";
                 <div class="row m-0 my-2">
                     <div class="col-2"></div>
@@ -49,13 +49,13 @@
                                         </button>
                                     </div>
                                     <div class="col-6 " style="">
-                                        <button type="button" class="btn btn-outline-success" @onclick="@(() => ButtonClickSaveTaskAsync(complexName.name))">
+                                        <button type="button" class="btn btn-outline-success" @onclick="@(() => ButtonClickSaveTaskAsync(complexName.name, isActivePanel))">
                                             Export task
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="col-2"></div>

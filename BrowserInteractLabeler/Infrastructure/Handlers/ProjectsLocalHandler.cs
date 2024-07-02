@@ -60,7 +60,7 @@ public class ProjectsLocalHandler
         if (!File.Exists(arg))
             return;
 
-        var res = await _repository.LoadDatabaseAsync(arg);
+        var res = _repository.LoadDatabase(arg);
         if (!res)
         {
             _logger.Error("[HandlerChoseActiveDataBaseAsync] fail LoadDatabaseAsync {PathDb}", arg);
@@ -68,14 +68,14 @@ public class ProjectsLocalHandler
         }
 
         await LoadInformationOnStateDb();
-
+        await _navigationHandler.GetDbName(CurrentSqlDbName);
         await _navigationHandler.LoadFirstImg();
         LoadingDB = false;
     }
 
     private async Task LoadInformationOnStateDb()
     {
-        var allInformation = await _repository.GetInformationDtoAsync();
+        var allInformation = _repository.GetInformationDto();
         var currentInfo = allInformation.Where(p => p.CategoryInformation == 1);
         var lastInfo = currentInfo.MaxBy(p => p.Id);
         CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "Being processed ...";
@@ -88,9 +88,9 @@ public class ProjectsLocalHandler
 
         try
         {
-            var labels = await _repository.GetAllLabelsAsync();
-            var frames = await _repository.GetAllImagesAsync();
-            var annots = await _repository.GetAllAnnotationsAsync();
+            var labels = _repository.GetAllLabels();
+            var frames = _repository.GetAllImages();
+            var annots = _repository.GetAllAnnotations();
             var saveJson = new ExportDTO()
             {
                 Labels = labels,
@@ -111,7 +111,7 @@ public class ProjectsLocalHandler
                 CategoryInformation = 1,
             };
 
-            var resSaveInformationDtoAsync = await _repository.SaveInformationDtoAsync(newInformationDto);
+            var resSaveInformationDtoAsync = _repository.SaveInformationDto(newInformationDto);
             if (!resSaveInformationDtoAsync)
                 _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}",
                     fullPathDb);

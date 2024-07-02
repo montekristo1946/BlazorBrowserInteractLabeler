@@ -23,7 +23,7 @@ public class CacheAnnotation
         semaphoreSlim.Wait();
         try
         {
-            var annot = _annotations.FirstOrDefault(p => 
+            var annot = _annotations.FirstOrDefault(p =>
                 p.State != StateAnnot.Finalized && p.State != StateAnnot.Hidden);
 
             if (annot is not null)
@@ -79,7 +79,7 @@ public class CacheAnnotation
         try
         {
             _annotations = CleanDuplicateIDAnnotations(_annotations);
-            
+
             return _annotations.Where(p => p.ImageFrameId == imagesId).ToArray();
         }
         catch (Exception e)
@@ -94,14 +94,13 @@ public class CacheAnnotation
         return Array.Empty<Annotation>();
     }
 
- 
 
     public async Task SaveAnnotationsOnSqlAsync(int imagesId)
     {
         await semaphoreSlim.WaitAsync();
         try
         {
-            var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+            var removeAnnot = _repository.GetAnnotationsFromImgId(imagesId);
             var annotations = _annotations.CloneDeep();
             var equalAnnotation = removeAnnot.Equality(annotations);
             if (equalAnnotation)
@@ -112,12 +111,12 @@ public class CacheAnnotation
                 annotations.Count());
 
 
-            await _repository.DeleteAnnotationsAsync(removeAnnot);
+            _repository.DeleteAnnotations(removeAnnot);
             annotations = ClearFailAnnotation(annotations);
             annotations = OrderPoints(annotations);
-            await _repository.SaveAnnotationsAsync(annotations);
+            _repository.SaveAnnotations(annotations);
 
-            var allAnnot = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+            var allAnnot = _repository.GetAnnotationsFromImgId(imagesId);
             _annotations = allAnnot.CloneDeep().ToList();
         }
         catch (Exception e)
@@ -220,7 +219,7 @@ public class CacheAnnotation
         await semaphoreSlim.WaitAsync();
         try
         {
-            var allAnnots = await _repository.GetAnnotationsFromImgIdAsync(imagesId);
+            var allAnnots = _repository.GetAnnotationsFromImgId(imagesId);
             var cloneAnnots = allAnnots.CloneDeep().ToList();
             var annotations = cloneAnnots.Select(annot =>
             {
@@ -303,7 +302,7 @@ public class CacheAnnotation
         semaphoreSlim.Wait();
         try
         {
-            foreach (var annotation in _annotations)
+            foreach (var annotation in _annotations.Where(annotation => annotation.State != StateAnnot.Hidden))
             {
                 annotation.State = StateAnnot.Finalized;
             }
@@ -399,8 +398,6 @@ public class CacheAnnotation
         {
             semaphoreSlim.Release();
         }
-        
-     
     }
 
 
@@ -432,8 +429,8 @@ public class CacheAnnotation
         {
             semaphoreSlim.Release();
         }
-        return (false, new Annotation());
 
+        return (false, new Annotation());
     }
 
     public bool SetHiddenAllAnnot()
@@ -441,8 +438,6 @@ public class CacheAnnotation
         semaphoreSlim.Wait();
         try
         {
-       
-
             foreach (var annotation in _annotations)
             {
                 annotation.State = StateAnnot.Hidden;

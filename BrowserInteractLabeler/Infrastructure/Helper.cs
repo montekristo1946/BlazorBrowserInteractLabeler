@@ -172,9 +172,7 @@ public class Helper
     public string CreateColorTextToPanel(int id, ColorModel[] cacheModelColorAll)
     {
         var colorMap = cacheModelColorAll.FirstOrDefault(p => p.IdLabel == id);
-        if (colorMap is null)
-            return "";
-        return colorMap.Color;
+        return colorMap is null ? "" : colorMap.Color;
     }
 
     public int CalculationCurrentProgress(int cacheModelCurrentIdImg, int allIndexLength)

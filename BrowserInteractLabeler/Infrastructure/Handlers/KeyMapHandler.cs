@@ -17,7 +17,7 @@ public class KeyMapHandler
     private Dictionary<string, string> mLookup;
     const int leftButton = 0;
     const int rightButton = 2;
-    
+
     public KeyMapHandler(NavigationHandler navigationHandler, ServiceConfigs serviceConfigs)
     {
         _navigationHandler = navigationHandler ?? throw new ArgumentNullException(nameof(navigationHandler));
@@ -114,14 +114,25 @@ public class KeyMapHandler
         if (arg.AltKey)
             return;
 
-       
-
-        switch (arg.Button)
+        switch (arg)
         {
-            case leftButton:
+            case { CtrlKey: true, Button: leftButton }:
+                _navigationHandler.HandlerRepositioningPoints(arg,true, true);
+                break;
+
+            case { ShiftKey: true, Button: rightButton }:
+                _navigationHandler.HandlerRepositioningPoints(arg, true, false);
+                break;
+
+            case { ShiftKey: true, Button: leftButton }:
+                _navigationHandler.HandlerRepositioningPoints(arg, false, false);
+                break;
+
+            case { Button: leftButton }:
                 _navigationHandler.HandleImagePanelMouseAsync(arg, DateTime.Now);
                 break;
-            case rightButton:
+
+            case { Button: rightButton }:
                 _navigationHandler.HandleImagePanelMouseRightButtonAsync();
                 break;
         }
@@ -133,10 +144,9 @@ public class KeyMapHandler
     /// <param name="arg"></param>
     public async Task HandlerImagesPanelOnmouseDownAsync(MouseEventArgs arg)
     {
-        
-        if(arg.Button == rightButton)
+        if (arg.Button == rightButton)
             return;
-        
+
         if (arg.AltKey)
         {
             _navigationHandler.HandlerImagesPanelOnmousedown(arg,
@@ -150,8 +160,6 @@ public class KeyMapHandler
 
         // _logger.Debug("HandlerImagesPanelOnmouseupAsync {@MouseEventArgs}",arg);
         // _logger.Debug($"HandlerImagesPanelOnmouseupAsync OffsetX:{arg.OffsetX}; OffsetY:{arg.OffsetY}");
-        if (arg.ShiftKey)
-            _navigationHandler.HandlerRepositioningPoints(arg);
 
         await _navigationHandler.CancelFocusRootPanelAsync();
     }
@@ -195,7 +203,7 @@ public class KeyMapHandler
         return Task.Run(() => { _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now); });
     }
 
-    
+
     /// <summary>
     ///     Перемешение изобаржения остановка
     /// </summary>

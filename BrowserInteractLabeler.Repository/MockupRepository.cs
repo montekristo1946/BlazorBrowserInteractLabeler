@@ -7,7 +7,7 @@ using SizeF = BrowserInteractLabeler.Common.SizeF;
 
 namespace BrowserInteractLabeler.Repository;
 
-public class MockupRepository : IRepository
+public class MockupRepository 
 {
     private readonly ILogger _logger = Log.ForContext<MockupRepository>();
     private string[] _allImagesPath = Array.Empty<string>();

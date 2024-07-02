@@ -13,15 +13,15 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
      `dotnet publish ./BrowserInteractLabeler/BrowserInteractLabeler.csproj -c Release -r linux-x64 -o ./linux-x64/webserver --force`
 4. Start server<br>
      `./linux-x64/webserver/BrowserInteractLabeler`
-5. Run chrome browser http://localhost:5000<br>
+5. Run Chrome browser http://localhost:5000<br>
 
 ## How to start marking up:
 1. In the settings, specify the path to the directory with datasets
-   ![plot](./Example/Info/settings.jpg)
+   ![plot](./Info/settings.jpg)
 2. In the boot menu, select the desired dataset
-   ![plot](./Example/Info/load_db.jpg)
+   ![plot](./Info/load_db.jpg)
 3. Marking up
-   ![plot](./Example/Info/start_page.jpg)
+   ![plot](./Info/start_page.jpg)
 
 ## Hotkeys <br>
 1. Zoom in/out image alt + mouse wheel

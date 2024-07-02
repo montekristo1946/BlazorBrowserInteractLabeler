@@ -2,31 +2,33 @@ using BrowserInteractLabeler.Common.DTO;
 
 namespace BrowserInteractLabeler.Common;
 
-public interface IRepository: IDisposable
+public interface IRepository : IDisposable
 {
-     public Task<bool> LoadDatabaseAsync(string path);
+    public bool LoadDatabase(string path);
 
-    public Task <int[]> GetAllIndexImagesAsync();
-
-    public Task<ImageFrame[]> GetAllImagesAsync();
-    public Task<Annotation[]> GetAllAnnotationsAsync();
+    public int[] GetAllIndexImages();
     
-    public Task <ImageFrame> GetImagesByIndexAsync(int imagesId);
+    ImageFrame[] GetAllImages();
     
-    public Task<Label[]> GetAllLabelsAsync();
+    public Annotation[] GetAllAnnotations();
 
-    public Task<Annotation[]> GetAnnotationsFromImgIdAsync(int imagesId);
+    public ImageFrame GetImagesByIndex(int imagesId);
 
-    public Task<bool> DeleteAnnotationsAsync(Annotation[] removeAnnot);
-    public Task<bool> SaveAnnotationsAsync(Annotation[] toArray);
-    public Task<int> GetLastIndexAnnotation();
+    public Label[] GetAllLabels();
 
-    public Task<bool> InsertImageFrames(ImageFrame[]? frame);
+    public Annotation[] GetAnnotationsFromImgId(int imagesId);
 
-    public Task<bool> InsertLabels(Label?[]? frame);
+    public bool DeleteAnnotations(Annotation[] removeAnnot);
     
-    public Task<bool> SaveInformationDtoAsync(InformationDto frame);
+    public bool SaveAnnotations(Annotation[] toArray);
+    
+    public int GetLastIndexAnnotation();
 
-    public Task<InformationDto[]> GetInformationDtoAsync();
+    public bool InsertImageFrames(ImageFrame[]? frame);
+
+    public bool InsertLabels(Label?[]? frame);
+
+    public bool SaveInformationDto(InformationDto frame);
+
+    public InformationDto[] GetInformationDto();
 }
-

@@ -139,10 +139,10 @@ public class MarkupHandler
         ResetMovedCache();
         if (annotation.Points?.Any() == false)
             return false;
-     
+
         var currentX = mouseEventArgs.OffsetX / sizeDrawImage.Width;
         var currentY = mouseEventArgs.OffsetY / sizeDrawImage.Height;
-    
+
         var overlapPercentageX = (_serviceConfigs.StrokeWidth / sizeDrawImage.Width) * (1 / scaleCurrent);
         var overlapPercentageY = (_serviceConfigs.StrokeWidth / sizeDrawImage.Height) * (1 / scaleCurrent);
 
@@ -154,7 +154,7 @@ public class MarkupHandler
 
             return res;
         });
-        
+
         if (movePoint is null)
             return false;
 
@@ -236,28 +236,24 @@ public class MarkupHandler
         }
         catch (Exception e)
         {
-            _logger.Error("[MarkupHandler:HandlerOnmouseuplAsync] {Exception}",e);
+            _logger.Error("[MarkupHandler:HandlerOnmouseuplAsync] {Exception}", e);
         }
+
         return (false, new Annotation());
     }
 
     /// <summary>
     ///     Назначит выделленую точку последней в массиве точек
     /// </summary>
-    /// <param name="mouseEventArgs"></param>
     /// <param name="annotation"></param>
-    /// <param name="sizeDrawImage"></param>
-    /// <param name="dateTime"></param>
-    /// <returns></returns>
+    /// <param name="reverse"></param>
+    /// <param name="remove"></param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public (bool checkResult, Annotation annotation) RepositioningPoints(Annotation annotation)
+    public (bool checkResult, Annotation annotation) RepositioningPoints(Annotation annotation, bool reverse,
+        bool remove)
     {
         if (annotation.Points?.Any() == false)
             return (false, new Annotation());
-
-        // var checkPointSelection = PointSelection(mouseEventArgs, annotation, dateTime, sizeDrawImage);
-        // if (checkPointSelection is false)
-        //     return (false, new Annotation());
 
         var activeAnnot = _movedData.annot;
         var activePoint = _movedData.point;
@@ -270,11 +266,17 @@ public class MarkupHandler
                 break;
 
             case TypeLabel.Polygon:
-                return ReshapePositionPointsPolygon(activeAnnot, activePoint);
+                return remove
+                    ? RemovePositionPointPolygon(activeAnnot, activePoint)
+                    : ReshapePositionPointsPolygon(activeAnnot, activePoint, reverse);
+
 
             case TypeLabel.Box:
             case TypeLabel.PolyLine:
-                return ReshapePositionPointsPolyLine(activeAnnot, activePoint);
+                return remove
+                    ? RemovePositionPointPolyLine(activeAnnot, activePoint)
+                    : ReshapePositionPointsPolyLine(activeAnnot, activePoint);
+
 
             default:
                 throw new ArgumentOutOfRangeException($"[RepositioningPoints] Fail: {activeAnnot.LabelPattern}");
@@ -284,23 +286,37 @@ public class MarkupHandler
         return (false, new Annotation());
     }
 
-    private (bool checkResult, Annotation annotation) ReshapePositionPointsPolygon(
-        Annotation annotation,
+    private (bool checkResult, Annotation annotation) ReshapePositionPointsPolygon(Annotation annotation,
+        PointF activePoint, bool reverse)
+    {
+        var (oldPoints, arrIndex) = GetPointInPolygon(annotation, activePoint);
+
+        arrIndex.Add(activePoint.PositionInGroup);
+
+        var sortPoints = arrIndex.Select((oldPosition, index) =>
+        {
+            var point = oldPoints.First(p => p.PositionInGroup == oldPosition);
+
+            return point with { PositionInGroup = index };
+        }).ToList();
+
+        if (reverse)
+        {
+            sortPoints = annotation.Points.OrderByDescending(p => p.PositionInGroup).Select((point, index) =>
+            {
+                point.PositionInGroup = index;
+                return point;
+            }).ToList();
+        }
+
+        annotation.Points = sortPoints;
+        return (true, annotation);
+    }
+
+    private (bool checkResult, Annotation annotation) RemovePositionPointPolygon(Annotation annotation,
         PointF activePoint)
     {
-        var positionActive = activePoint.PositionInGroup;
-        var arrIndex = new List<int>();
-        var oldPoints = annotation.Points;
-        if (oldPoints?.Any() == false)
-            return (false, new Annotation());
-
-        var firstGroup = oldPoints.Where(p => p.PositionInGroup > positionActive)
-            .Select(p => p.PositionInGroup).ToArray();
-        arrIndex.AddRange(firstGroup);
-        var lastGroup = oldPoints.Where(p => p.PositionInGroup < positionActive)
-            .Select(p => p.PositionInGroup).ToArray();
-        arrIndex.AddRange(lastGroup);
-        arrIndex.Add(positionActive);
+        var (oldPoints, arrIndex) = GetPointInPolygon(annotation, activePoint);
 
         var sortPoints = arrIndex.Select((oldPosition, index) =>
         {
@@ -331,5 +347,48 @@ public class MarkupHandler
 
         annotation.Points = sortPoints;
         return (true, annotation);
+    }
+
+    private (bool checkResult, Annotation annotation) RemovePositionPointPolyLine(Annotation annotation,
+        PointF activePoint)
+    {
+        var positionActive = activePoint.PositionInGroup;
+        var oldPoints = annotation.Points;
+        if (oldPoints?.Any() == false)
+            return (false, new Annotation());
+
+        var group = oldPoints.Where(p => p.PositionInGroup != positionActive)
+            .Select(p => p.PositionInGroup).ToArray();
+
+        var sortPoints = group.Select((oldPosition, index) =>
+        {
+            var point = oldPoints.First(p => p.PositionInGroup == oldPosition);
+
+            return point with { PositionInGroup = index };
+        }).ToList();
+
+        annotation.Points = sortPoints;
+        return (true, annotation);
+    }
+
+
+    private (List<PointF>, List<int>) GetPointInPolygon(Annotation annotation,
+        PointF activePoint)
+    {
+        var positionActive = activePoint.PositionInGroup;
+        var arrIndex = new List<int>();
+        var oldPoints = annotation.Points;
+        if (oldPoints?.Any() == false)
+            return (new List<PointF>(), new List<int>());
+
+        var firstGroup = oldPoints.Where(p => p.PositionInGroup > positionActive)
+            .Select(p => p.PositionInGroup).ToArray();
+        arrIndex.AddRange(firstGroup);
+
+        var lastGroup = oldPoints.Where(p => p.PositionInGroup < positionActive)
+            .Select(p => p.PositionInGroup).ToArray();
+
+        arrIndex.AddRange(lastGroup);
+        return (oldPoints, arrIndex);
     }
 }

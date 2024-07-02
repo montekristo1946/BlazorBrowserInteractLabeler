@@ -11,7 +11,7 @@ public class SqlRepository : IRepository
     private readonly ILogger _logger = Log.ForContext<SqlRepository>();
     private readonly object _locker = new();
 
-    public Task<bool> LoadDatabaseAsync(string pathDb)
+    public bool LoadDatabase(string pathDb)
     {
         try
         {
@@ -31,7 +31,7 @@ public class SqlRepository : IRepository
                 _db = new ApplicationDbContext(contextOptions);
                 _logger.Debug("[LoadDatabaseAsync] Load ok {PathDb}", pathDb);
 
-                return Task.FromResult(true);
+                return true;
             }
         }
         catch (Exception e)
@@ -39,7 +39,7 @@ public class SqlRepository : IRepository
             _logger.Debug("[LoadDatabaseAsync] {Exception}", e);
         }
 
-        return Task.FromResult(false);
+        return false;
     }
 
     public void Dispose()
@@ -47,141 +47,172 @@ public class SqlRepository : IRepository
         _db?.Dispose();
     }
 
-    public async Task<int[]> GetAllIndexImagesAsync()
+    public int[] GetAllIndexImages()
     {
-        if (_db is null)
-            return Array.Empty<int>();
-
-        var retArr = await _db.ImageFrames.Select(p => p.Id).ToArrayAsync();
-        return retArr;
+        lock (_locker)
+        {
+            var retArr = _db.ImageFrames.Select(p => p.Id).ToArray();
+            return retArr;
+        }
     }
 
-    public async Task<ImageFrame[]> GetAllImagesAsync()
+    public ImageFrame[] GetAllImages()
     {
-        if (_db is null)
-            return Array.Empty<ImageFrame>();
-        var retArr = await _db.ImageFrames.ToArrayAsync();
-        return retArr;
+        lock (_locker)
+        {
+            if (_db is null)
+                return Array.Empty<ImageFrame>();
+
+            var retArr = _db.ImageFrames.ToArray();
+            return retArr;
+        }
     }
 
-    public async Task<Annotation[]> GetAllAnnotationsAsync()
+    public Annotation[] GetAllAnnotations()
     {
-        if (_db is null)
-            return Array.Empty<Annotation>();
+        lock (_locker)
+        {
+            if (_db is null)
+                return Array.Empty<Annotation>();
 
-        var retArr = await _db.Annotations.Include(p => p.Points).ToArrayAsync();
-        return retArr;
+            var retArr = _db.Annotations.Include(p => p.Points).ToArray();
+            return retArr;
+        }
     }
 
-    public async Task<ImageFrame> GetImagesByIndexAsync(int imagesId)
+    public ImageFrame GetImagesByIndex(int imagesId)
     {
-        if (_db is null)
-            return new ImageFrame();
+        lock (_locker)
+        {
+            if (_db is null)
+                return new ImageFrame();
 
-        var res = await _db.ImageFrames.Include(p => p.SizeImage)
-            .FirstOrDefaultAsync(i => i.Id == imagesId);
-        if (res is null)
-            return new ImageFrame();
-
-        return res;
+            var res = _db.ImageFrames.Include(p => p.SizeImage)
+                .FirstOrDefault(i => i.Id == imagesId);
+            return res ?? new ImageFrame();
+        }
     }
 
-    public async Task<Label[]> GetAllLabelsAsync()
+    public Label[] GetAllLabels()
     {
-        if (_db is null)
-            return Array.Empty<Label>();
+        lock (_locker)
+        {
+            if (_db is null)
+                return Array.Empty<Label>();
 
-        var labels = await _db.Labels.ToArrayAsync();
-        return labels;
+            var labels = _db.Labels.ToArray();
+            return labels;
+        }
     }
 
-    public async Task<Annotation[]> GetAnnotationsFromImgIdAsync(int imagesId)
+    public Annotation[] GetAnnotationsFromImgId(int imagesId)
     {
-        if (_db is null)
-            return Array.Empty<Annotation>();
+        lock (_locker)
+        {
+            if (_db is null)
+                return Array.Empty<Annotation>();
 
-        var annotations = await _db.Annotations
-            .Include(point => point.Points)
-            .Where(p => p.ImageFrameId == imagesId).ToArrayAsync();
+            var annotations = _db.Annotations
+                .Include(point => point.Points)
+                .Where(p => p.ImageFrameId == imagesId).ToArray();
 
-        return annotations;
+            return annotations;
+        }
     }
 
 
-    public async Task<bool> DeleteAnnotationsAsync(Annotation[] removeAnnot)
+    public bool DeleteAnnotations(Annotation[] removeAnnot)
     {
-        if (removeAnnot is null || !removeAnnot.Any() || _db is null)
-            return false;
+        lock (_locker)
+        {
+            if (removeAnnot is null || !removeAnnot.Any() || _db is null)
+                return false;
 
-        _db.Annotations.RemoveRange(removeAnnot);
-        await _db.SaveChangesAsync();
-        return true;
+            _db.Annotations.RemoveRange(removeAnnot);
+            _db.SaveChanges();
+            return true;
+        }
     }
 
-    public async Task<bool> SaveAnnotationsAsync(Annotation[]? annotations)
+    public bool SaveAnnotations(Annotation[] annotations)
     {
-        if (annotations is null || !annotations.Any() || _db is null)
-            return false;
+        lock (_locker)
+        {
+            if (annotations is null || !annotations.Any() || _db is null)
+                return false;
 
+            _db.Annotations.AddRangeAsync(annotations);
+            _db.SaveChangesAsync();
 
-        await _db.Annotations.AddRangeAsync(annotations);
-        await _db.SaveChangesAsync();
-
-
-        return true;
+            return true;
+        }
     }
 
-    public async Task<int> GetLastIndexAnnotation()
+    public int GetLastIndexAnnotation()
     {
-        if (_db is null)
-            return -1;
+        lock (_locker)
+        {
+            if (_db is null)
+                return -1;
 
-        var lastIdAnnot = await _db.Annotations.OrderBy(a => a.Id).LastOrDefaultAsync();
-        if (lastIdAnnot is null)
-            return -1;
+            var lastIdAnnot = _db.Annotations.OrderBy(a => a.Id).LastOrDefaultAsync();
 
-        return lastIdAnnot.Id;
+            if (lastIdAnnot is null)
+                return -1;
+
+            return lastIdAnnot.Id;
+        }
     }
 
-    public async Task<bool> InsertImageFrames(ImageFrame[]? frames)
+    public bool InsertImageFrames(ImageFrame[]? frames)
     {
-        if (frames is null || !frames.Any() || _db is null)
-            return false;
+        lock (_locker)
+        {
+            if (frames is null || !frames.Any() || _db is null)
+                return false;
 
-        await _db.ImageFrames.AddRangeAsync(frames);
-        await _db.SaveChangesAsync();
-        return true;
+            _db.ImageFrames.AddRangeAsync(frames);
+            _db.SaveChangesAsync();
+            return true;
+        }
     }
 
-    public async Task<bool> InsertLabels(Label?[]? labels)
+    public bool InsertLabels(Label?[]? labels)
     {
-        if (labels is null || !labels.Any() || _db is null)
-            return false;
+        lock (_locker)
+        {
+            if (labels is null || !labels.Any() || _db is null)
+                return false;
 
-        await _db.Labels.AddRangeAsync(labels!);
-        await _db.SaveChangesAsync();
+            _db.Labels.AddRangeAsync(labels!);
+            _db.SaveChangesAsync();
 
-        return true;
+            return true;
+        }
     }
 
-    public async Task<bool> SaveInformationDtoAsync(InformationDto frame)
+    public bool SaveInformationDto(InformationDto frame)
     {
-        if (frame is null || _db is null)
-            return false;
+        lock (_locker)
+        {
+            if (frame is null || _db is null)
+                return false;
+            
+            _db.InformationState.AddAsync(frame);
+            _db.SaveChangesAsync();
 
-        await _db.InformationState.AddAsync(frame);
-        await _db.SaveChangesAsync();
-
-        return true;
+            return true;
+        }
     }
 
-    public async Task<InformationDto[]> GetInformationDtoAsync()
+    public InformationDto[] GetInformationDto()
     {
-        if (_db is null)
-            return Array.Empty<InformationDto>();
 
-        var annotations = await _db.InformationState.ToArrayAsync();
+        lock (_locker)
+        {
+            var annotations = _db.InformationState.ToArray();
 
-        return annotations;
+            return annotations;
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace BrowserInteractLabeler.Infrastructure;
 /// </summary>
 public class CacheModel
 {
+    public string CurrentSqlDbNames { get; set; } = "";
     public int CurrentIdImg { get; set; } = 0;
     internal string ImagesBase64 => $"data:image/jpg;base64," + Convert.ToBase64String(Images.Images);
     internal ImageFrame Images { get; set; } = new ImageFrame();

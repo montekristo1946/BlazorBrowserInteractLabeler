@@ -1,0 +1,21 @@
+<Project>
+    <PropertyGroup>
+        <TargetFrameworkVersion>net8.0</TargetFrameworkVersion>
+        <SerilogVersion>[4.0.0,5.0.0)</SerilogVersion>
+        <SerilogAspNetCoreVersion>[8.0.0,9.0.0)</SerilogAspNetCoreVersion>
+        <SerilogEnrichersEnvironmentVersion>[3.0.0,4.0.0)</SerilogEnrichersEnvironmentVersion>
+        <SerilogEnrichersProcessVersion>[3.0.0,4.0.0)</SerilogEnrichersProcessVersion>
+        <SerilogExceptionsVersion>[8.0.0,9.0.0)</SerilogExceptionsVersion>
+        <SerilogSinksRollingFileSizeLimitVersion>[1.0.0,2.0.0)</SerilogSinksRollingFileSizeLimitVersion>
+        <SerilogSinksConsoleVersion>[5.0.0,6.0.0)</SerilogSinksConsoleVersion>
+        <SerilogExtensionsHostingVersion>[8.0.0,9.0.0)</SerilogExtensionsHostingVersion>
+        
+        <MicrosoftEntityFrameworkCoreAbstractionsVersion>[8.0.0,9.0.0)</MicrosoftEntityFrameworkCoreAbstractionsVersion>
+        <NewtonsoftJsonVersion>[13,14)</NewtonsoftJsonVersion>
+        <MicrosoftExtensionsHostingVersion>[8.0.0,9.0.0)</MicrosoftExtensionsHostingVersion>
+        <MagickNET-Q8-x64Version>[13.0.0,14.0.0)</MagickNET-Q8-x64Version>
+        <EntityFrameworkVersion>[8.0.0,9.0.0)</EntityFrameworkVersion>
+       
+        <AutoFixtureVersion>[4.0.0,5.0.0)</AutoFixtureVersion>
+    </PropertyGroup>
+</Project>
