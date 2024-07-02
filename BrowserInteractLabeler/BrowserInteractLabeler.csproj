@@ -15,7 +15,6 @@
         <PackageReference Include="Serilog.Exceptions" Version="$(SerilogExceptionsVersion)" />
         <PackageReference Include="Serilog.Sinks.RollingFileSizeLimit" Version="$(SerilogSinksRollingFileSizeLimitVersion)" />
     </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj" />
       <ProjectReference Include="..\BrowserInteractLabeler.Repository\BrowserInteractLabeler.Repository.csproj" />
