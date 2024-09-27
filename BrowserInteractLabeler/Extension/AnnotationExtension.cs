@@ -9,7 +9,7 @@ public static class AnnotationExtension
     {
         return annots is null ? Array.Empty<Annotation>() : annots.Select(annotSrc => annotSrc.CloneDeep()).ToArray();
     }
-    
+
     public static Annotation CloneDeep(this Annotation annotSrc)
     {
         var pointsNew = new List<PointF>();
@@ -35,7 +35,7 @@ public static class AnnotationExtension
         };
     }
 
-    public static bool Equality(this Annotation[] initialAnnots, Annotation[]  comparable)
+    public static bool Equality(this Annotation[] initialAnnots, Annotation[] comparable)
     {
         if (initialAnnots.Count() != comparable.Count())
             return false;

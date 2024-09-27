@@ -7,7 +7,7 @@ using ILogger = Serilog.ILogger;
 
 namespace BrowserInteractLabeler.Shared;
 
-public class NavMenuModel:ComponentBase
+public class NavMenuModel : ComponentBase
 {
     private readonly ILogger _logger = Log.ForContext<NavMenuModel>();
     [Inject] public IJSRuntime JSRuntime { get; set; }
@@ -18,11 +18,11 @@ public class NavMenuModel:ComponentBase
     {
 
         var sizeBrowse = await JSRuntime.InvokeAsync<SizeF>("GetBrowseSize");
-         _navigationHandler.SetRootWindowsSize(sizeBrowse);
-         _projectsLocalHandler.SetRootWindowsSize(sizeBrowse);
-         _settingsHandler.SetRootWindowsSize(sizeBrowse);
-        
-        
+        _navigationHandler.SetRootWindowsSize(sizeBrowse);
+        _projectsLocalHandler.SetRootWindowsSize(sizeBrowse);
+        _settingsHandler.SetRootWindowsSize(sizeBrowse);
+
+
     }
 
 }

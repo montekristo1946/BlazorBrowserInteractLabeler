@@ -9,16 +9,16 @@ public class ServiceConfigs
     public string PathSqlDb { get; set; } = String.Empty;
     public ColorModel[] Colors { get; set; } = Array.Empty<ColorModel>();
     public string ExportCompletedTasks { get; set; } = String.Empty;
-    
-    private double _strokeWidth  = 2.5;
+
+    private double _strokeWidth = 2.5;
     public double StrokeWidth
     {
         get => _strokeWidth;
-        set => _strokeWidth = value is >= 0.5 and <= 10? value : 2.5;
+        set => _strokeWidth = value is >= 0.5 and <= 10 ? value : 2.5;
 
-    } 
-    
-    
+    }
+
+
     private static string _pathDirConfigs = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Settings");
     private static string _pathConfig = Path.Join(_pathDirConfigs, $"{nameof(ServiceConfigs)}.json");
     private readonly Serilog.ILogger _logger = Log.ForContext<ServiceConfigs>();
@@ -45,11 +45,11 @@ public class ServiceConfigs
     {
         if (!Directory.Exists(_pathDirConfigs))
             Directory.CreateDirectory(_pathDirConfigs);
-        
+
         if (!File.Exists(_pathConfig))
             SaveInFile(new ServiceConfigs().Init());
-        
-        
+
+
         var config = JsonConvert.DeserializeObject<ServiceConfigs>(File.ReadAllText(_pathConfig));
         if (config is null)
             throw new Exception($"[LoadInFile] fail DeserializeObject {_pathConfig}");
@@ -67,7 +67,7 @@ public class ServiceConfigs
 
     private ColorModel[] InitDefaultColorModel()
     {
-        return  new[]
+        return new[]
         {
             new ColorModel()
             {
@@ -75,7 +75,7 @@ public class ServiceConfigs
                 IdLabel = 1,
                 KeyOnBoardName = "1",
                 KeyCode = "Digit1"
-                
+
             },
             new ColorModel()
             {
@@ -147,8 +147,8 @@ public class ServiceConfigs
                 KeyOnBoardName = "j",
                 KeyCode = "KeyJ"
             },
-            
-            
+
+
         };
     }
 

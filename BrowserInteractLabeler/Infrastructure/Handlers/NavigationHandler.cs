@@ -3,6 +3,7 @@ using BrowserInteractLabeler.Common.DTO;
 using BrowserInteractLabeler.Component.DrawingJobBox;
 using BrowserInteractLabeler.Infrastructure.Configs;
 using BrowserInteractLabeler.Infrastructure.Constructors;
+using BrowserInteractLabeler.Properties;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Serilog;
@@ -46,7 +47,8 @@ public class NavigationHandler
 
         cacheModel.Images = new ImageFrame()
         {
-            Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/error_1.png")),
+            // Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/error_1.png")),
+            Images = Resources.ImagesMoq,
             Id = -1
         };
 
@@ -111,7 +113,7 @@ public class NavigationHandler
 
     private async Task HandlerClickNextAsync(int index)
     {
-        var allIndex =_repository.GetAllIndexImages();
+        var allIndex = _repository.GetAllIndexImages();
 
         if (index > allIndex.Length || index < 1)
         {

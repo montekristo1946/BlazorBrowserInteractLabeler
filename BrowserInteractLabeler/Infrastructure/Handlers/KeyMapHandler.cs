@@ -55,52 +55,52 @@ public class KeyMapHandler
         {
             case "KeyD":
             case "ArrowLeft":
-            {
-                await _navigationHandler.ButtonGoBackClick();
-                break;
-            }
+                {
+                    await _navigationHandler.ButtonGoBackClick();
+                    break;
+                }
             case "KeyF":
             case "ArrowRight":
-            {
-                await _navigationHandler.ButtonGoNextClick();
-                break;
-            }
+                {
+                    await _navigationHandler.ButtonGoNextClick();
+                    break;
+                }
             case "Delete":
             case "KeyX":
-            {
-                _navigationHandler.DeleteAnnotation();
-                break;
-            }
+                {
+                    _navigationHandler.DeleteAnnotation();
+                    break;
+                }
             case "KeyE":
-            {
-                _navigationHandler.EventEditAnnot();
-                break;
-            }
+                {
+                    _navigationHandler.EventEditAnnot();
+                    break;
+                }
             case "KeyQ":
-            {
-                _navigationHandler.EnableTypeLabel(TypeLabel.Box);
-                break;
-            }
+                {
+                    _navigationHandler.EnableTypeLabel(TypeLabel.Box);
+                    break;
+                }
             case "KeyW":
-            {
-                _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
-                break;
-            }
+                {
+                    _navigationHandler.EnableTypeLabel(TypeLabel.Polygon);
+                    break;
+                }
             case "KeyA":
-            {
-                _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
-                break;
-            }
+                {
+                    _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine);
+                    break;
+                }
             case "KeyS":
-            {
-                _navigationHandler.EnableTypeLabel(TypeLabel.Point);
-                break;
-            }
+                {
+                    _navigationHandler.EnableTypeLabel(TypeLabel.Point);
+                    break;
+                }
             case "Space": //Sapase
-            {
-                await _navigationHandler.ButtonDefaultPositionImg();
-                break;
-            }
+                {
+                    await _navigationHandler.ButtonDefaultPositionImg();
+                    break;
+                }
         }
     }
 
@@ -117,7 +117,7 @@ public class KeyMapHandler
         switch (arg)
         {
             case { CtrlKey: true, Button: leftButton }:
-                _navigationHandler.HandlerRepositioningPoints(arg,true, true);
+                _navigationHandler.HandlerRepositioningPoints(arg, true, true);
                 break;
 
             case { ShiftKey: true, Button: rightButton }:

@@ -14,7 +14,7 @@ public class MoveImagesHandler
     // private static readonly TimeSpan _minTimeMove = TimeSpan.FromMilliseconds(1);
 
 
-    public void  HandlerOnmousedown(MouseEventArgs mouseEventArgs, DateTime timeClick)
+    public void HandlerOnmousedown(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
         _firstPosition = new PointF() { X = (float)mouseEventArgs.ClientX, Y = (float)mouseEventArgs.ClientY };
         // _timeFirstPoint = timeClick;
@@ -28,25 +28,25 @@ public class MoveImagesHandler
 
     public (bool res, SizeF moveDist) HandlerOnMouseMove(MouseEventArgs mouseEventArgs, double stepCoeff)
     {
-        if(_firstPosition.X <0 || _firstPosition.Y<0 )
+        if (_firstPosition.X < 0 || _firstPosition.Y < 0)
             return (false, new SizeF());
-        
+
         var retMove = new SizeF()
         {
-            Width = (float)((mouseEventArgs.ClientX - _firstPosition.X)*stepCoeff),
-            Height = (float)((mouseEventArgs.ClientY - _firstPosition.Y)*stepCoeff)
+            Width = (float)((mouseEventArgs.ClientX - _firstPosition.X) * stepCoeff),
+            Height = (float)((mouseEventArgs.ClientY - _firstPosition.Y) * stepCoeff)
         };
 
         // _logger.Debug($"[HandlerOnMouseMove] M:{mouseEventArgs.ClientX};{mouseEventArgs.ClientY } F:{_firstPosition.X} {_firstPosition.Y}");
 
-        
+
         if (retMove is { Width: 0, Height: 0 })
             return (false, new SizeF());
 
-       
+
         _firstPosition = new PointF() { X = (float)mouseEventArgs.ClientX, Y = (float)mouseEventArgs.ClientY };
         return (true, retMove);
     }
 
-   
+
 }

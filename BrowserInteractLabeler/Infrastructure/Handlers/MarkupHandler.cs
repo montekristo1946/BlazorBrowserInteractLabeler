@@ -224,7 +224,10 @@ public class MarkupHandler
             var oldPoints = annot.Points[currentIndex];
             var newPoints = oldPoints with
             {
-                X = currentX, Y = currentY, Id = 0, PositionInGroup = oldPoints.PositionInGroup
+                X = currentX,
+                Y = currentY,
+                Id = 0,
+                PositionInGroup = oldPoints.PositionInGroup
             };
             annot.Points[currentIndex] = newPoints;
 

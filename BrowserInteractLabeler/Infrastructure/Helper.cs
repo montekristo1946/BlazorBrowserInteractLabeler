@@ -87,7 +87,7 @@ public class Helper
         if (args is null || scaleInput is null || sizeDrawImage is null || offsetDrawImage is null ||
             imageWindowsSize is null)
             return (1, new PointF() { X = 0, Y = 0 });
-        
+
         const double maxScale = 5F;
         const double minScale = 0.5F;
         const double stepScale = 0.16f;
@@ -97,11 +97,11 @@ public class Helper
         var offsetY = offsetDrawImage.Y;
 
         if (args.DeltaY < 0)
-            scale *= 1.0f+stepScale;
+            scale *= 1.0f + stepScale;
 
 
         if (args.DeltaY > 0)
-            scale *= 1.0f-stepScale;
+            scale *= 1.0f - stepScale;
 
 
         if (scale < minScale || scale > maxScale) //TODO: проверку offset 
@@ -111,13 +111,13 @@ public class Helper
         var positionX = offsetDrawImage.X / (1 / scaleInput);
         var offX = positionX * (1 / scale);
         offsetX = (float)offX;
-        
+
         var positionY = offsetDrawImage.Y / (1 / scaleInput);
         var offY = positionY * (1 / scale);
         offsetY = (float)offY;
         //
         var offset = new PointF() { X = offsetX, Y = offsetY };
-        
+
         return ((double scale, PointF offset))(scale, offset);
     }
 
@@ -185,5 +185,5 @@ public class Helper
         return (int)ret;
     }
 
-    
+
 }

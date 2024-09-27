@@ -50,17 +50,17 @@ public class MarkerModel : ComponentBase
             const long button = 1;
             if (arg is { AltKey: true, Buttons: button })
             {
-                
+
                 _navigationHandler.HandlerDrawingPanelOnmousemoveAsync(arg);
             }
             else
             {
                 // Console.WriteLine($"{arg.OffsetX} {arg.ClientX}");
                 _keyMapHandler.HandlerImagesPanelOnmouseupAsync(arg);
-                _cacheModel.PointCursor = _navigationHandler.CalculateCursor(arg.OffsetX,arg.OffsetY);
+                _cacheModel.PointCursor = _navigationHandler.CalculateCursor(arg.OffsetX, arg.OffsetY);
             }
-      
-            
+
+
         });
     }
 }

@@ -105,7 +105,7 @@ public class SvgConstructor
 
             var x2 = drawPoint.Item2.X;
             var y2 = drawPoint.Item2.Y;
-            var line = CreateLine(x1, y1, x2, y2, color, thickness* _lineCorrectionFactor, typeLine);
+            var line = CreateLine(x1, y1, x2, y2, color, thickness * _lineCorrectionFactor, typeLine);
             retPolygon.Add(line);
         }
 
@@ -125,7 +125,7 @@ public class SvgConstructor
 
             var x2 = last.X;
             var y2 = last.Y;
-            var line = CreateLine(x1, y1, x2, y2, color, thickness*_lineCorrectionFactor, typeLine);
+            var line = CreateLine(x1, y1, x2, y2, color, thickness * _lineCorrectionFactor, typeLine);
             retPolygon.Add(line);
         }
 
@@ -194,9 +194,9 @@ public class SvgConstructor
 
             var x2 = drawPoint.Item2.X;
             var y2 = drawPoint.Item2.Y;
-            var line = CreateLine(x1, y1, x2, y2, color, thickness* _lineCorrectionFactor, typeLine);
-            
-            
+            var line = CreateLine(x1, y1, x2, y2, color, thickness * _lineCorrectionFactor, typeLine);
+
+
             retPolygon.Add(line);
         }
 
@@ -278,13 +278,13 @@ public class SvgConstructor
         var x4 = leftPoint.X;
         var y4 = rightPoint.Y;
 
-        var line1 = CreateLine(x1, y1, x2, y2, color, thicknessLine*_lineCorrectionFactor, typeLine);
+        var line1 = CreateLine(x1, y1, x2, y2, color, thicknessLine * _lineCorrectionFactor, typeLine);
         retSvg.Add(line1);
-        var line2 = CreateLine(x2, y2, x3, y3, color, thicknessLine*_lineCorrectionFactor, typeLine);
+        var line2 = CreateLine(x2, y2, x3, y3, color, thicknessLine * _lineCorrectionFactor, typeLine);
         retSvg.Add(line2);
-        var line3 = CreateLine(x3, y3, x4, y4, color, thicknessLine*_lineCorrectionFactor, typeLine);
+        var line3 = CreateLine(x3, y3, x4, y4, color, thicknessLine * _lineCorrectionFactor, typeLine);
         retSvg.Add(line3);
-        var line4 = CreateLine(x4, y4, x1, y1, color, thicknessLine*_lineCorrectionFactor, typeLine);
+        var line4 = CreateLine(x4, y4, x1, y1, color, thicknessLine * _lineCorrectionFactor, typeLine);
         retSvg.Add(line4);
 
         if (activeAnnot)
@@ -327,8 +327,8 @@ public class SvgConstructor
     private string CreateCircle(double cx, double cy, double r, string color, double strokeWidth)
     {
         // return
-            // $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"{color}\" fill-opacity=\"1\"></circle>";
-        return  $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
+        // $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"{color}\" fill-opacity=\"1\"></circle>";
+        return $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
     }
 
     private string CreateLine(double x1, double y1, double x2, double y2, string colorModelColor, double strokeWidth,

@@ -7,7 +7,7 @@ using ILogger = Serilog.ILogger;
 
 namespace BrowserInteractLabeler.Component;
 
-public class SwipePanelModel:ComponentBase
+public class SwipePanelModel : ComponentBase
 {
     [Parameter] public EventCallback ButtonGoNextClick { get; set; }
     [Parameter] public EventCallback ButtonGoBackClick { get; set; }
@@ -15,13 +15,13 @@ public class SwipePanelModel:ComponentBase
     [Parameter] public string Color { get; set; } = "";
 
     [Parameter] public string TypeLabel { get; set; } = "";
-    
+
     [Parameter] public string StatePrecess { get; set; } = "";
 
     [Parameter] public int CurrentIdImg { get; set; } = 0;
-    
-    [Parameter] public EventCallback<int> ButtonEnterIdActiveIdImages{ get; set; }
-    
+
+    [Parameter] public EventCallback<int> ButtonEnterIdActiveIdImages { get; set; }
+
     private readonly ILogger _logger = Log.ForContext<SwipePanelModel>();
 
     internal int CurrentIdImgDraw;
@@ -40,11 +40,11 @@ public class SwipePanelModel:ComponentBase
         var resultTryParse = Int32.TryParse((string?)arg.Value, out var indexImg);
         if (!resultTryParse)
             return;
-        
+
         // _logger.Debug($"[EventOninput] {arg.Value} {CurrentIdImgDraw}");
         CurrentIdImgDraw = indexImg;
     }
-    
+
     protected async Task ButtonEnter(KeyboardEventArgs arg)
     {
         if (arg.Key == "Enter")
@@ -55,6 +55,6 @@ public class SwipePanelModel:ComponentBase
             // StateHasChanged();
         }
     }
-    
-   
+
+
 }

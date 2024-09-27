@@ -15,7 +15,7 @@ public class SvgPanelModel : ComponentBase
     [Parameter] public double ScaleImg { get; set; }
     [Parameter] public RenderFragment CrosshairsTemplate { get; set; }
     [Inject] internal SvgConstructor _svgConstructor { get; set; }
-    
+
     internal RenderFragment GetRenderFragnent(Annotation annotation) => (builder) =>
     {
         var thicknessLine = 1 / ScaleImg;

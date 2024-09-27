@@ -10,14 +10,14 @@ namespace BrowserInteractLabeler.Infrastructure;
 public class SettingsHandler
 {
     // internal string GetHeightSettingsPanel =>$"{(int)_imageWindowsSize.Height}px";
-    
-    internal SizeF RootWindowsSize =>_imageWindowsSize;
-    
+
+    internal SizeF RootWindowsSize => _imageWindowsSize;
+
     // private readonly Helper _helper;
     private readonly ILogger _logger = Log.ForContext<SettingsHandler>();
-    private SizeF _imageWindowsSize { get; set; }= new() { Width = 1600, Height = 800 };
+    private SizeF _imageWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
     private readonly ServiceConfigs _serviceConfigs;
-    
+
 
     public SettingsHandler(ServiceConfigs serviceConfigs)
     {

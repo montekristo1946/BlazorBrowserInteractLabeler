@@ -19,7 +19,7 @@ public class ImagesPanelModel : ComponentBase
 
     internal string WidthMainWin => $"{(int)_cacheModel.ImageWindowsSize.Width}px";
 
-    internal string HeightMainWin =>  $"{(int)_cacheModel.ImageWindowsSize.Height}px";
+    internal string HeightMainWin => $"{(int)_cacheModel.ImageWindowsSize.Height}px";
 
     [Parameter] public EventCallback<MouseEventArgs> HandleMouse { get; set; }
 
@@ -34,13 +34,13 @@ public class ImagesPanelModel : ComponentBase
     [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
 
     [Parameter] public EventCallback<WheelEventArgs> HandleMouseWheel { get; set; }
-    
+
     [Inject] internal IJSRuntime _JSRuntime { get; set; }
-    
+
     private readonly ILogger _logger = Log.ForContext<MockupRepository>();
 
     [Inject] internal CacheModel _cacheModel { get; set; }
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -54,8 +54,8 @@ public class ImagesPanelModel : ComponentBase
     {
         // var imagesSize = _cacheModel.SizeDrawImage;
         var width = (int)_cacheModel.SizeDrawImage.Width;
-        var height  =(int)_cacheModel.SizeDrawImage.Height;
-        await _JSRuntime.InvokeVoidAsync("LoadImg", IdCanvas,_cacheModel.ImagesBase64, width, height);
+        var height = (int)_cacheModel.SizeDrawImage.Height;
+        await _JSRuntime.InvokeVoidAsync("LoadImg", IdCanvas, _cacheModel.ImagesBase64, width, height);
         // _logger.Debug("button_testClick");
         // StateHasChanged();
     }

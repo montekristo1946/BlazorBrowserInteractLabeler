@@ -14,20 +14,20 @@ public class LabelsPanelModel : ComponentBase
     [Parameter] public ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
     [Parameter] public EventCallback<int> ChoseActiveAnnotationIdAsync { get; set; }
     [Parameter] public EventCallback<int> ChoseActiveLabelIdAsync { get; set; }
-    
+
     [Parameter] public EventCallback<int> ChoseHiddenLabelIdAsync { get; set; }
 
     [Parameter] public EventCallback<bool> HiddenAllLabelsAsync { get; set; }
-    
+
     [Parameter] public SizeF RootWindowsSize { get; set; }
-    
-    
+
+
     internal string GetHeightPanel()
     {
         const double coef = 0.84d;
-        return $"{RootWindowsSize.Height*coef}px";
+        return $"{RootWindowsSize.Height * coef}px";
     }
-    
+
     internal async Task ButtonClickObjectAsync(int nameIdAnnot)
     {
         await ChoseActiveAnnotationIdAsync.InvokeAsync(nameIdAnnot);
@@ -36,7 +36,7 @@ public class LabelsPanelModel : ComponentBase
     {
         await ChoseHiddenLabelIdAsync.InvokeAsync(nameIdAnnot);
     }
-    
+
     internal async Task ButtonClickObjectHiddenAllAsync(bool isHidden)
     {
         await HiddenAllLabelsAsync.InvokeAsync(isHidden);
@@ -64,7 +64,7 @@ public class LabelsPanelModel : ComponentBase
             default:
                 throw new ArgumentOutOfRangeException(nameof(labelPattern), labelPattern, null);
         }
-        
-        
+
+
     }
 }

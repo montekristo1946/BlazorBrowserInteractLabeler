@@ -72,7 +72,7 @@ public class CreateImageDataset : IHostedService
 
             // using var sqlContext = new ApplicationDbContext(fullPathDb);
             using IRepository operativeFramesStorage = new SqlRepository();
-             operativeFramesStorage.LoadDatabase(fullPathDb);
+            operativeFramesStorage.LoadDatabase(fullPathDb);
             await LoadImages(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadLabels(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadAnnotations(taskFolder, operativeFramesStorage).ConfigureAwait(false);
@@ -131,7 +131,7 @@ public class CreateImageDataset : IHostedService
             if (!annotsImport.Any())
                 continue;
 
-            var res =  repository.SaveAnnotations(annotsImport);
+            var res = repository.SaveAnnotations(annotsImport);
             if (!res)
                 throw new Exception($"[GetDtoToJson] Fail SaveAnnotationsAsync, folder: {taskFolder}");
         }
@@ -143,20 +143,20 @@ public class CreateImageDataset : IHostedService
         if (!exportDto.Labels.Any())
             throw new Exception($"[LoadLabels] Fail Labels, folder: {taskFolder}");
 
-        var res =  operativeFramesStorage.InsertLabels(exportDto.Labels);
+        var res = operativeFramesStorage.InsertLabels(exportDto.Labels);
         if (!res)
             throw new Exception($"[LoadDataset] Fail InsertLabel, name {taskFolder}");
     }
 
-    private  (int width, int height, byte[] img) ResizeImg(byte[] img, string pathImg)
+    private (int width, int height, byte[] img) ResizeImg(byte[] img, string pathImg)
     {
-        const int optimalHeightOnInterface = 800;
-        const int optimalWidthOnInterface = 1600;
+        const int optimalHeightOnInterface = 640;
+        const int optimalWidthOnInterface = 1280;
         try
         {
             using var image = new MagickImage(img);
             image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
-            image.Quality = 75;
+            image.Quality = 95;
             image.Format = MagickFormat.Jpg;
             var data = image.ToByteArray();
             var width = image.Width;
@@ -165,11 +165,9 @@ public class CreateImageDataset : IHostedService
         }
         catch (Exception e)
         {
-            _logger.Error("Error: File is corrupted: {PathImg} ",pathImg);
+            _logger.Error("Error: File is corrupted: {PathImg} ", pathImg);
             throw;
         }
-
-        
     }
 
     private async Task LoadImages(string taskFolder, IRepository operativeFramesStorage)
@@ -186,7 +184,7 @@ public class CreateImageDataset : IHostedService
             throw new Exception($"[LoadDataset] Fail InsertImageFrame, taskFolder: {taskFolder}");
     }
 
-    private  KeyValuePair<string, ImageFrame>[] GetPrimeNumbersParallel(string[] pathImages)
+    private KeyValuePair<string, ImageFrame>[] GetPrimeNumbersParallel(string[] pathImages)
     {
         var retDict = new ConcurrentDictionary<string, ImageFrame>();
         var options = new ParallelOptions() { MaxDegreeOfParallelism = _parallelism };

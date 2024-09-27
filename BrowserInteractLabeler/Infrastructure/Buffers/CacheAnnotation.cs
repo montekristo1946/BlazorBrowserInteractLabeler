@@ -347,7 +347,7 @@ public class CacheAnnotation
         }
     }
 
-    public (bool checkRes, Annotation annotation ) SetActiveAnnot(int idAnnot)
+    public (bool checkRes, Annotation annotation) SetActiveAnnot(int idAnnot)
     {
         semaphoreSlim.Wait();
         try
@@ -401,9 +401,9 @@ public class CacheAnnotation
     }
 
 
-    public (bool checkRes, Annotation annotation ) SetHiddenAnnot(int idAnnot)
+    public (bool checkRes, Annotation annotation) SetHiddenAnnot(int idAnnot)
     {
-        
+
         semaphoreSlim.Wait();
         try
         {

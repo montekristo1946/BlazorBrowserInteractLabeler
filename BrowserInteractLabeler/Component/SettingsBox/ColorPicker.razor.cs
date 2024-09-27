@@ -3,7 +3,7 @@ namespace BrowserInteractLabeler.Component.SettingsBox;
 
 using Microsoft.AspNetCore.Components.Web;
 
-public class ColorPickerModel: ComponentBase
+public class ColorPickerModel : ComponentBase
 {
     [Parameter]
     public string Title { get; set; }
@@ -27,7 +27,7 @@ public class ColorPickerModel: ComponentBase
     internal string cssClass => IsOpened ? "color-picker-show" : "color-picker-hide";
     internal List<string> colors = new();
     protected ElementReference myPalette; // set by the @ref attribute
-		
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await myPalette.FocusAsync();
@@ -35,19 +35,19 @@ public class ColorPickerModel: ComponentBase
 
     protected override void OnParametersSet()
     {
-			colors.Clear();
-			//My own color pallet
-			if (MyColorPallet != null && MyColorPallet.Count() > 0)
-			{
-				colors.AddRange(MyColorPallet);
-				return;
-			}
-			
-			#region PROVIDE COLORS LIST
-			
-			//The default colors
-			// Red
-			colors.Add("#FFE4E9");
+        colors.Clear();
+        //My own color pallet
+        if (MyColorPallet != null && MyColorPallet.Count() > 0)
+        {
+            colors.AddRange(MyColorPallet);
+            return;
+        }
+
+        #region PROVIDE COLORS LIST
+
+        //The default colors
+        // Red
+        colors.Add("#FFE4E9");
         colors.Add("#FFCDD2");
         colors.Add("#EE9A9A");
         colors.Add("#E57373");
@@ -255,7 +255,7 @@ public class ColorPickerModel: ComponentBase
         colors.Add("#465A65");
         colors.Add("#36474F");
         colors.Add("#273238");
-			
+
         #endregion
     }
 
