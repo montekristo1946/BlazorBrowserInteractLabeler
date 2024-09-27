@@ -13,7 +13,7 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
      `dotnet publish ./BrowserInteractLabeler/BrowserInteractLabeler.csproj -c Release -r linux-x64 -o ./linux-x64/webserver --force`
 4. Start server<br>
      `./linux-x64/webserver/BrowserInteractLabeler`
-5. Run Chrome browser http://localhost:5000<br>
+5. Run Chrome browser http://localhost:5001<br>
 
 ## How to start marking up:
 1. In the settings, specify the path to the directory with datasets
@@ -27,3 +27,9 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
 1. Zoom in/out image alt + mouse wheel
 2. Return to original position spase key
 3. Object markup start and end [e] key
+4. Next image key 'F'
+5. Previous image key 'D'
+6. Key delete duplicate on key 'X'
+
+## Convert format  <br>
+Convert from BlazorBrowserInteractLabeler in yolo,  An example of conversion is located `pythonConverter/convert_BIL_to_yolo.py`

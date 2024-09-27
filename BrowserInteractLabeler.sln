@@ -17,6 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_SolutionItems", "_Solution
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
+		pythonConverter\convert_BIL_to_yolo.py = pythonConverter\convert_BIL_to_yolo.py
+		pythonConverter\Common.py = pythonConverter\Common.py
+		pythonConverter\BILDto.py = pythonConverter\BILDto.py
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{73A592E4-FA99-4141-910E-B0BE9E0DCBCD}"
