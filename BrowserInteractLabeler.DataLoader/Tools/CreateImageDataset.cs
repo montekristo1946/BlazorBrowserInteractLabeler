@@ -106,21 +106,19 @@ public class CreateImageDataset : IHostedService
                 var importImg = exportDto.Images.FirstOrDefault(p => p.Id == groupAnnot.Key);
                 if (importImg is null)
                     throw new ArgumentException($"fail {groupAnnot.Key}");
-                return (importImg.NameImages, groupAnnot);
+                var nameImages = Path.GetFileNameWithoutExtension(importImg.NameImages);
+                return (nameImages, groupAnnot);
             }).ToArray();
 
         foreach (var frameInBase in frames)
         {
-            var nameInBase = frameInBase.NameImages;
+            var nameInBase = Path.GetFileNameWithoutExtension(frameInBase.NameImages);
             var indexInBase = frameInBase.Id;
             var annotsImport = annotGroupByImgImport
-                .Where(p => p.NameImages == nameInBase)
+                .Where(p => p.nameImages == nameInBase)
                 .SelectMany(p => p.groupAnnot)
                 .Select(annot =>
                 {
-                    // annot.Id = 0;
-                    // annot.ImageFrameId = indexInBase;
-                    // annot.Points = annot.Points?.Select(p => p with { Id = 0 }).ToList();
                     return annot with
                     {
                         Id = 0, ImageFrameId = indexInBase,
