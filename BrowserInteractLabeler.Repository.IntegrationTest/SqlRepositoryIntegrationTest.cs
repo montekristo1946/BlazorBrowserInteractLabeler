@@ -2,6 +2,7 @@ using System.Diagnostics;
 using AutoFixture;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
+using BrowserInteractLabeler.Web.Extension;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrowserInteractLabeler.Repository.IntegrationTest;

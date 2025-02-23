@@ -1,0 +1,273 @@
+html, body  {
+	background-color: #fff;
+	color: #000;
+	font-family: 'Roboto Light', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	
+}
+div:focus {
+	outline:none;
+}
+
+.color-text-main{
+	color: #49505c;
+	font-size: 16px;
+}
+
+.prevent-select {
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
+}
+
+
+.nav-bar-style-text {
+	font-size: 18px;
+}
+
+html {
+
+	width: 100%;
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+
+
+.bottom-shadow {
+	box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.00);
+	transition: all .1s;
+}
+
+.bottom-shadow:hover {
+	box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.25);
+}
+
+
+
+.image-name-details p {
+	color: #999;
+	font-size: 2px;
+	height: 20px;
+	margin-bottom: 0px;
+	overflow: hidden;
+}
+
+.object-panel-name-details p {
+	color: #212529;
+	font-size: 2px;
+	text-align: start;
+}
+
+.label-name-details p {
+	color: #030000;
+	font-size: 3px;
+	height: 20px;
+	margin-bottom: 0px;
+	overflow: hidden;
+}
+
+.col-md-leftPanel {
+	width: 3.0%;
+	height: 100%;
+}
+
+.col-md-imagePanel {
+	width: 85.0%;
+	height: 100%;
+}
+
+.col-md-rightPanel {
+	width: 12.0%;
+	height: 100%;
+}
+
+.badge-font-size {
+	font-family: 'Roboto Light', sans-serif;
+	font-size: 10px;
+}
+
+
+
+.spinner-4 {
+	width: 40px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	border: 8px solid #0000;
+	border-right-color: #81818150;
+	position: relative;
+	animation: s4 1s infinite linear;
+}
+.spinner-4:before,
+.spinner-4:after {
+	content: "";
+	position: absolute;
+	inset: -8px;
+	border-radius: 50%;
+	border: inherit;
+	animation: inherit;
+	animation-duration: 2s;
+}
+.spinner-4:after {
+	animation-duration: 4s;
+}
+
+@keyframes s4 {
+	100% {transform: rotate(1turn)}
+}
+
+/*___*/
+.buttonColor {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-bottom: 2px;
+}
+
+.color-picker-modal {
+	z-index: 99;
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.3)
+}
+
+﻿.color-picker-modal:target {
+	display: block;
+}
+
+
+.color-picker-content {
+	height: 320px;
+	width: 608px;
+	margin: auto;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 0 12px #9d9d9d;
+	-moz-box-shadow: 0 0 12px #9d9d9d;
+	box-shadow: 0 0 12px #9d9d9d;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.color-picker-case {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	width: 32px;
+	height: 32px;
+}
+
+.color-picker-case:hover {
+	border: 1px solid #FFF;
+	cursor: pointer;
+}
+
+
+.color-picker-palette {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: 320px;
+}
+
+
+.color-picker-show {
+	display: block;
+	animation-name: show-animation;
+	animation-duration: 0.5s;
+}
+
+@keyframes show-animation {
+	from {
+		opacity: 0
+	}
+
+	to {
+		opacity: 1
+	}
+}
+
+.color-picker-hide {
+	display: none;
+}
+
+.color-picker-header {
+	background-color: #d9d9d9;
+	padding: 3px;
+	color: white;
+}
+
+.color-picker-title {
+	margin: 5px;
+	display: inline-block;
+}
+
+.color-picker-close-button {
+	float: right;
+	margin: 5px;
+	cursor: pointer;
+}
+
+.color-picker-close-button:hover {
+	color: red;
+}
+
+
+@media (max-width: 767px) {
+	.color-picker-palette {
+		flex-direction: row-reverse;
+		height: 608px;
+	}
+
+	.color-picker-content {
+		width: 320px;
+		height: 608px;
+	}
+}
+
+
+
+.mycursor {
+	cursor: none;
+	width: 97px;
+	height: 137px;
+	background: url('icons/015_crosshaiir.svg') no-repeat left top;
+	/*position: absolute;*/
+	/*display: none;*/
+	/*top: 0;*/
+	/*left: 0;*/
+	/*z-index: 10000;*/
+}
+
+.border-enveloping-custom {
+	border: 1px solid;
+	border-color: #ced4da;
+	border-radius: 5px 5px 5px 5px;
+}
+
+/*.settings-panel {*/
+/*	border:1px solid ;*/
+/*	border-radius: 5px;*/
+/*	border-color: transparent;*/
+/*	height: 45px;*/
+/*	width: auto;*/
+/*	overflow: hidden;*/
+/*}*/
+

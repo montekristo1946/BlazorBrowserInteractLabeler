@@ -1,0 +1,136 @@
+@using BrowserInteractLabeler.Common.DTO
+
+<div class="row no-select">
+    <div class="col-12">
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active prevent-select" id="object-tab" data-bs-toggle="tab"
+                        data-bs-target="#object-tab-panel"
+                        type="button" role="tab" aria-controls="object-tab-panel" aria-selected="true">
+                    Object
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link prevent-select" id="labels-tab" data-bs-toggle="tab"
+                        data-bs-target="#labels-tab-pane" type="button"
+                        role="tab" aria-controls="labels-tab-pane" aria-selected="false">
+                    Labels
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="tab-content prevent-select" id="myTabContent" style="">
+    <div class="tab-pane fade show active m-0" id="object-tab-panel" role="tabpanel" aria-labelledby="object-tab">
+
+        <div class="list-group overflow-auto m-0 p-0 no-select"
+             style=" height: @GetHeightPanel(); width: 100%; padding: 0px 0px 0px 0px;"
+             id="verticalPanel">
+
+            @{
+                var pathSvg = _isHiddenState ? "icons/015_open_eye_icon.svg" : "icons/016_close_eye_icon.svg";
+
+                <div class="row " style="padding: 2px 1px 1px 13px; ">
+                    <div class="col-1 border-enveloping-custom bottom-shadow btn btn-light"
+                         style="width: 35px; height: 35px; padding: 4px 0px 0px 0px; "
+                         title="Hidden"
+                         @onclick="@(() => ButtonClickObjectHiddenAllAsync(Switcher()))">
+
+                        <img src="@pathSvg" width="20" height="20" alt=""/>
+
+                    </div>
+                    <div class="col-1 p-0 m-0" style="width: 2px; height: 100%">
+                    </div>
+
+
+                    <div class="col-1 border-enveloping-custom text-center"
+                         style=" width: 35px;  height: 35px; padding: 6px 0px 0px 0px;"
+                         title="Count Annotations">
+                        @AnnotationsOnPanel.Length
+                    </div>
+                </div>
+            }
+
+            @{
+                foreach (var annotation in AnnotationsOnPanel)
+                {
+                    var id = $"annot_{annotation.Id}";
+                    var colorPallet = ColorAll.FirstOrDefault(p => p.IdLabel == annotation.LabelId)?.Color ?? "#ffffff";
+
+                    var name = LabelAll.FirstOrDefault(p => p.Id == annotation.LabelId)?.NameLabel ?? " ... ";
+                    var colorButton = "#49505c00";
+                    if (annotation.State != StateAnnot.Finalized)
+                        colorButton = "#d8d8d8b2";
+
+                    <div class="row border border-1  border-dark rounded "
+                         style="padding: 0px 0px 0px 0px; margin:0px 0px 4px 0px ;">
+                        <div class="col-10 m-0 p-0 " style="">
+                            <button type="button" class="  color-text-main border border-0  bottom-shadow "
+                                    @key="annotation.Id"
+                                    id="@id"
+                                    style=" text-align: start; background: @colorButton; height: 40px; width: 95% ;"
+                                    @onclick="@(() => ButtonClickObjectAsync(annotation.Id))"
+                                    title="@name">
+
+                                <div class=" row" style="margin: 1px 1px 0px 0px;">
+                                    <div class="col-2" style="background: @colorPallet; border-radius:  15%; "
+                                         title="Id:@annotation.Id"></div>
+                                    <div class="col-10" style="overflow: hidden; ">
+                                        @name
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="col-2 m-0 p-0 border-start border-1 bottom-shadow " style="margin-right: 4px">
+                            <button type="button" class="bottom-shadow color-text-main border border-0"
+                                    style=" text-align: start;
+                                        background: @colorButton; height: 40px; width: 95% "
+                                    @onclick="@(() => ButtonClickObjectHiddenAsync(annotation.Id))"
+                                    title="Hidden">
+                                <img src="@GetSvgPath(annotation.LabelPattern)" width="25" height="25"/>
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade " id="labels-tab-pane" role="tabpanel" aria-labelledby="labels-tab">
+        <div class="list-group overflow-auto " style="display: flex;  height:@GetHeightPanel(); ">
+
+            @{
+                foreach (var label in LabelAll)
+                {
+                    var id = $"label_{label.Id}";
+                    var colorModel = ColorAll.FirstOrDefault(p => p.IdLabel == label.Id);
+                    var alpha = "ff"; //ff*0.3=76
+                    var color = colorModel?.Color + alpha;
+                    var textKey = $"[{colorModel?.KeyOnBoardName}]";
+
+                    var name = label.NameLabel;
+                    <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"
+                            @key="label.Id"
+                            id="@id"
+                            style=" text-align: start; margin: 2px;border-radius: 5px; border-color: #49505c;"
+                            @onclick="@(() => ButtonClickLabelAsync(label.Id))"
+                            title="@name">
+
+                        <div class=" row ps-1 pe-1 " style="">
+
+                            <div class="col-1" style="background: @color; border-radius:  15%;"></div>
+                            <div class="col-8" style="overflow: hidden;">
+                                @name
+                            </div>
+                            <div class="col-2" style="overflow: hidden;">@textKey</div>
+                        </div>
+                    </button>
+                }
+            }
+        </div>
+    </div>
+</div>

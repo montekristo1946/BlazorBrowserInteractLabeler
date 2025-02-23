@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler", "BrowserInteractLabeler\BrowserInteractLabeler.csproj", "{B7287A07-0F7B-49A6-A917-0F296881C51F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Web", "BrowserInteractLabeler.Web\BrowserInteractLabeler.Web.csproj", "{B7287A07-0F7B-49A6-A917-0F296881C51F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Common", "BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj", "{93DF7F29-7ED6-49B3-B80E-A5A8843210AA}"
 EndProject
