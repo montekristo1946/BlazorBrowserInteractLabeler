@@ -154,7 +154,7 @@ public class CreateImageDataset : IHostedService
         {
             using var image = new MagickImage(img);
             image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
-            image.Quality = 95;
+            image.Quality = 98;
             image.Format = MagickFormat.Jpg;
             var data = image.ToByteArray();
             var width = image.Width;

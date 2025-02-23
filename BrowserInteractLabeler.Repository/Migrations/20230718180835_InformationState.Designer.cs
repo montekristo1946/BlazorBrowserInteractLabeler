@@ -19,7 +19,7 @@ namespace BrowserInteractLabeler.Repository.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.Annotation", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.Annotation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.ToTable("Annotations");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.ImageFrame", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.ImageFrame", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.ToTable("ImageFrames");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.InformationDto", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.InformationDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.ToTable("InformationState");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.Label", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.Label", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,7 +101,7 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.ToTable("Labels");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.PointF", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.PointF", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,7 +126,7 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.ToTable("Points");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.SizeF", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.SizeF", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,9 +143,9 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.ToTable("Sizes");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.Annotation", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.Annotation", b =>
                 {
-                    b.HasOne("BrowserInteractLabeler.Common.DTO.ImageFrame", "Images")
+                    b.HasOne("BrowserInteractLabeler.Web.Common.DTO.ImageFrame", "Images")
                         .WithMany("Annotations")
                         .HasForeignKey("ImageFrameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -154,9 +154,9 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.ImageFrame", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.ImageFrame", b =>
                 {
-                    b.HasOne("BrowserInteractLabeler.Common.SizeF", "SizeImage")
+                    b.HasOne("BrowserInteractLabeler.Web.Common.SizeF", "SizeImage")
                         .WithMany()
                         .HasForeignKey("SizeImageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -165,9 +165,9 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.Navigation("SizeImage");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.PointF", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.PointF", b =>
                 {
-                    b.HasOne("BrowserInteractLabeler.Common.DTO.Annotation", "Annot")
+                    b.HasOne("BrowserInteractLabeler.Web.Common.DTO.Annotation", "Annot")
                         .WithMany("Points")
                         .HasForeignKey("AnnotationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -176,12 +176,12 @@ namespace BrowserInteractLabeler.Repository.Migrations
                     b.Navigation("Annot");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.Annotation", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.Annotation", b =>
                 {
                     b.Navigation("Points");
                 });
 
-            modelBuilder.Entity("BrowserInteractLabeler.Common.DTO.ImageFrame", b =>
+            modelBuilder.Entity("BrowserInteractLabeler.Web.Common.DTO.ImageFrame", b =>
                 {
                     b.Navigation("Annotations");
                 });

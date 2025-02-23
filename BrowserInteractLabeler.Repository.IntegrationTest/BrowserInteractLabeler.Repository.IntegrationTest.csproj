@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\BrowserInteractLabeler.Repository\BrowserInteractLabeler.Repository.csproj" />
-        <ProjectReference Include="..\BrowserInteractLabeler\BrowserInteractLabeler.csproj" />
+        <ProjectReference Include="..\BrowserInteractLabeler.Web\BrowserInteractLabeler.Web.csproj" />
     </ItemGroup>
 
     <ItemGroup>
