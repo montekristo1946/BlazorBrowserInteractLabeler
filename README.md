@@ -6,11 +6,13 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
 
 ## Install:
 1. Build a utility to create a dataset <br>
-   `dotnet publish ./BrowserInteractLabeler.DataLoader/BrowserInteractLabeler.DataLoader.csproj -c Release -r linux-x64 -o ./linux-x64/DataLoader --force`
+   `dotnet publish ./BrowserInteractLabeler.DataLoader/BrowserInteractLabeler.DataLoader.csproj -c Release -r linux-x64 -o ./Deploy/DataLoader --force`<br>
+
 2. Run the dataset assembly utility.<br>
      `./linux-x64/DataLoader/BrowserInteractLabeler.DataLoader typeWork=loadImg pathImg=./Example`
 3. Build a server<br>
-     `dotnet publish ./BrowserInteractLabeler/BrowserInteractLabeler.csproj -c Release -r linux-x64 -o ./linux-x64/webserver --force`
+     `dotnet publish ./BrowserInteractLabeler.Web/BrowserInteractLabeler.Web.csproj -c Release -r linux-x64 -o ./Deploy/linux-x64 --self-contained true`<br>
+     `dotnet publish ./BrowserInteractLabeler.Web/BrowserInteractLabeler.Web.csproj -c Release -r win-x64 -o ./Deploy/win-x64 --self-contained true`<br>
 4. Start server<br>
      `./linux-x64/webserver/BrowserInteractLabeler`
 5. Run Chrome browser http://localhost:5001<br>

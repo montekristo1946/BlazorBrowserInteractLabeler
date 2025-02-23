@@ -229,15 +229,11 @@ public class SvgConstructor
         var cy = lastPoint.Y;
 
         const double coefBlack = 1;
-        // var blackPoint =
-        //     $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{strokeWidth * coefBlack}\" stroke=\"{black}\" stroke-width=\"{strokeWidth }\" fill-opacity=\"1\"></circle>";
 
         var blackPoint =
             $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{strokeWidth * coefBlack}\" fill=\"{_black}\" />$";
         const double coefWhite = 0.8;
-        // var whitePoint =
-        //     $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{strokeWidth * coefWhite}\" stroke=\"{white}\" stroke-width=\"{10}\" fill-opacity=\"{white}\"></circle>";
-
+   
         var whitePoint =
             $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{strokeWidth * coefWhite}\" fill=\"{_white}\" />$";
         retPolygon.Add(blackPoint);
@@ -258,9 +254,6 @@ public class SvgConstructor
         var pointSrc = annotation.Points;
         var colorModel = _serviceConfigs.GetColor(annotation.LabelId);
         var color = colorModel.Color;
-
-        // if (pointSrc.Count != 2) 
-        //     return String.Join(" ", retSvg);
 
         var points = annotation.Points;
         var leftPoint = points.OrderByDescending(p => p.X).First();
@@ -326,8 +319,6 @@ public class SvgConstructor
 
     private string CreateCircle(double cx, double cy, double r, string color, double strokeWidth)
     {
-        // return
-        // $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"{color}\" fill-opacity=\"1\"></circle>";
         return $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
     }
 
