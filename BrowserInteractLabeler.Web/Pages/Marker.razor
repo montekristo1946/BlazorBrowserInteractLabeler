@@ -41,6 +41,7 @@
     <div class="row m-0" id="drawing_main_panel">
         <DrawingPanel
             CancelFocusRootPanel="_navigationHandler.CancelFocusRootPanelAsync">
+            
             <ToolsPanelTemplate>
                 <ToolsPanel
                     ButtonDefaultMoveClick="() => _navigationHandler.ButtonDefaultPositionImg()"
@@ -48,9 +49,9 @@
                     ButtonOnPolygonClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Polygon)"
                     ButtonOnPolyLineClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine)"
                     ButtonOnPointsClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Point)">
-
                 </ToolsPanel>
             </ToolsPanelTemplate>
+            
             <ImagesPamelTemplate>
                 <ImagesPanel
                     @ref="@_navigationHandler.ImagesPanelRef"
@@ -76,20 +77,12 @@
                             </CrosshairsTemplate>
                         </SvgPanel>
                     </SvgPanelTemplate>
-
+                    
                 </ImagesPanel>
             </ImagesPamelTemplate>
+            
             <TabBoxPanelTemplate>
-                <TabBoxPanel
-                    RootWindowsSize="@_cacheModel.RootWindowsSize"
-                    AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel"
-                    LabelAll="@_cacheModel.LabelAll"
-                    ColorAll="@_cacheModel.ColorAll"
-                    ChoseActiveAnnotationIdAsync="@_navigationHandler.SetActiveIdAnnotation"
-                    ChoseHiddenLabelIdAsync="@_navigationHandler.SetHiddenIdAnnotation"
-                    HiddenAllLabelsAsync="@_navigationHandler.HiddenAllLabels"
-                    ChoseActiveLabelIdAsync="@_navigationHandler.HandlerSetLabelId">
-                </TabBoxPanel>
+                @_tabBoxPanelTemplate
             </TabBoxPanelTemplate>
         </DrawingPanel>
     </div>

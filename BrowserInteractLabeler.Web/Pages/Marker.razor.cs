@@ -29,6 +29,21 @@ public class MarkerModel : ComponentBase
     protected override void OnInitialized()
     {
         _tabBoxPanelTemplate  = CreateTabBoxPanelTemplate();
+        _navigationHandler.IsNewImageRendered = IsNewImageRendered;
+        _navigationHandler.IsUpdatedUi = UpdateUi;
+
+    }
+
+    private void UpdateUi()
+    {
+        StateHasChanged();
+    }
+
+
+    private void IsNewImageRendered()
+    {
+         _tabBoxPanel?.IsNewImageRendered();
+         StateHasChanged();
     }
 
     private RenderFragment CreateTabBoxPanelTemplate() => builder =>

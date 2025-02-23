@@ -13,6 +13,11 @@ namespace BrowserInteractLabeler.Web.Infrastructure.Handlers;
 
 public class NavigationHandler
 {
+    public Action IsNewImageRendered { get; set; } = null;
+    public Action IsUpdatedUi { get; set; } = null;
+    public bool SetMainFocusRootPanel { get; set; } = false;
+    public ImagesPanel ImagesPanelRef { get; set; }
+
     private const float _defaultScale = 1.0F;
 
     private readonly CacheModel _cacheModel;
@@ -23,9 +28,6 @@ public class NavigationHandler
     private readonly ServiceConfigs _serviceConfigs;
     private readonly MoveImagesHandler _moveImagesHandler;
     private readonly MarkupHandler _markupHandler;
-
-    public bool SetMainFocusRootPanel { get; set; } = false;
-    public ImagesPanel ImagesPanelRef { get; set; }
 
     public NavigationHandler(
         CacheModel cacheModel,
@@ -127,6 +129,8 @@ public class NavigationHandler
         _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
         await CreateStartImagesState(index);
         _cacheModel.StatePrecess = "";
+        
+        IsNewImageRendered?.Invoke();
     }
 
     public async Task ButtonGoNextClick()
@@ -206,6 +210,8 @@ public class NavigationHandler
         SetMainFocusRootPanel = true;
         _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
         _cacheModel.ActiveTypeLabel = activeLabelPattern;
+        IsNewImageRendered.Invoke();
+        IsUpdatedUi.Invoke();
     }
 
     /// <summary>
@@ -214,7 +220,7 @@ public class NavigationHandler
     /// <param name="arg"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task SetHiddenIdAnnotation(int id)
+    public void SetHiddenIdAnnotation(int id)
     {
         var resSetActiveAnnot = _cacheAnnotation.SetHiddenAnnot(id);
         if (!resSetActiveAnnot.checkRes)
@@ -227,6 +233,8 @@ public class NavigationHandler
         SetMainFocusRootPanel = true;
         _cacheModel.ActiveTypeLabelText = _helper.CreateTypeTextToPanel(activeLabelPattern);
         _cacheModel.ActiveTypeLabel = activeLabelPattern;
+        // UpdateSvg();
+        IsUpdatedUi.Invoke();
     }
 
     /// <summary>
@@ -235,7 +243,7 @@ public class NavigationHandler
     /// <param name="isHidden"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task HiddenAllLabels(bool isHidden)
+    public void HiddenAllLabels(bool isHidden)
     {
         if (isHidden)
         {
@@ -247,6 +255,8 @@ public class NavigationHandler
             _cacheModel.StatePrecess = "";
             var resSetHiddenAllAnnot = _cacheAnnotation.SetFinalizeAllAnnot();
         }
+       
+        IsUpdatedUi.Invoke();
     }
 
     public void DeleteAnnotation()

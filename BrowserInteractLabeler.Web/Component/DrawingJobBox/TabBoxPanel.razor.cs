@@ -13,12 +13,12 @@ public partial class  TabBoxPanel : ComponentBase
     [Parameter] public Annotation[] AnnotationsOnPanel { get; set; }
     [Parameter] public Label[] LabelAll { get; set; } = Array.Empty<Label>();
     [Parameter] public ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
-    [Parameter] public EventCallback<int> ChoseActiveAnnotationIdAsync { get; set; }
-    [Parameter] public EventCallback<int> ChoseActiveLabelIdAsync { get; set; }
+    [Parameter] public Action<int> ChoseActiveAnnotationIdAsync { get; set; }
+    [Parameter] public Action<int> ChoseActiveLabelIdAsync { get; set; }
 
-    [Parameter] public EventCallback<int> ChoseHiddenLabelIdAsync { get; set; }
+    [Parameter] public Action<int> ChoseHiddenLabelIdAsync { get; set; }
 
-    [Parameter] public EventCallback<bool> HiddenAllLabelsAsync { get; set; }
+    [Parameter] public Action<bool> HiddenAllLabelsAsync { get; set; }
 
     [Parameter] public SizeF RootWindowsSize { get; set; }
 
@@ -31,24 +31,28 @@ public partial class  TabBoxPanel : ComponentBase
         return $"{RootWindowsSize.Height * coef}px";
     }
 
-    private async Task ButtonClickObjectAsync(int nameIdAnnot)
+    private  Task ButtonClickObjectAsync(int nameIdAnnot)
     {
-        await ChoseActiveAnnotationIdAsync.InvokeAsync(nameIdAnnot);
+         ChoseActiveAnnotationIdAsync?.Invoke(nameIdAnnot);
+         return Task.CompletedTask;
     }
 
-    private async Task ButtonClickObjectHiddenAsync(int nameIdAnnot)
+    private  Task ButtonClickObjectHiddenAsync(int nameIdAnnot)
     {
-        await ChoseHiddenLabelIdAsync.InvokeAsync(nameIdAnnot);
+         ChoseHiddenLabelIdAsync?.Invoke(nameIdAnnot);
+        return Task.CompletedTask;
     }
 
-    private async Task ButtonClickObjectHiddenAllAsync(bool isHidden)
+    private  Task ButtonClickObjectHiddenAllAsync(bool isHidden)
     {
-        await HiddenAllLabelsAsync.InvokeAsync(isHidden);
+         HiddenAllLabelsAsync?.Invoke(isHidden);
+        return Task.CompletedTask;
     }
 
-    private async Task ButtonClickLabelAsync(int nameIdAnnot)
+    private  Task ButtonClickLabelAsync(int nameIdAnnot)
     {
-        await ChoseActiveLabelIdAsync.InvokeAsync(nameIdAnnot);
+         ChoseActiveLabelIdAsync?.Invoke(nameIdAnnot);
+        return Task.CompletedTask;
     }
 
     private string GetSvgPath(TypeLabel labelPattern)
@@ -78,5 +82,10 @@ public partial class  TabBoxPanel : ComponentBase
                 true => _isHiddenState = false,
                 false => _isHiddenState = true};
         
+    }
+
+    public void IsNewImageRendered()
+    {
+        _isHiddenState = false;
     }
 }
