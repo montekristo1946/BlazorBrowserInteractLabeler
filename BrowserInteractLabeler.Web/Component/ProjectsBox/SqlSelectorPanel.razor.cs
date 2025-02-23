@@ -67,4 +67,9 @@ public class SqlSelectorPanelModel : ComponentBase
 
         return name == nameFile;
     }
+    
+    internal bool InvertValueToBool(bool value)
+    {
+        return !value;
+    }
 }

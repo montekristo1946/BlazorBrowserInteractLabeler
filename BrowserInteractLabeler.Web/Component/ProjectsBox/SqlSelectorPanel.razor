@@ -49,7 +49,10 @@
                                         </button>
                                     </div>
                                     <div class="col-6 " style="">
-                                        <button type="button" class="btn btn-outline-success" @onclick="@(() => ButtonClickSaveTaskAsync(complexName.name, isActivePanel))">
+                                        <button type="button" 
+                                                class="btn btn-outline-success" 
+                                                @onclick="@(() => ButtonClickSaveTaskAsync(complexName.name, isActivePanel))"
+                                                disabled=@InvertValueToBool(isActivePanel)>
                                             Export task
                                         </button>
                                     </div>
