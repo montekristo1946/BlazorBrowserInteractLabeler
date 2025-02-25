@@ -19,38 +19,33 @@ public class SwipePanelModel : ComponentBase
     [Parameter] public int CurrentIdImg { get; set; } = 0;
 
     [Parameter] public EventCallback<int> ButtonEnterIdActiveIdImages { get; set; }
+    
+    [Parameter] public int AllCountImages { get; set; }
 
-    private readonly ILogger _logger = Log.ForContext<SwipePanelModel>();
 
-    internal int CurrentIdImgDraw;
+    private int _currentIdImgDraw;
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
-            CurrentIdImgDraw = CurrentIdImg;
-
-        //Остановился тут
-        // throw new Exception();
+            _currentIdImgDraw = CurrentIdImg;
     }
 
-    internal async Task EventOninput(ChangeEventArgs arg)
+    internal Task EventOninput(ChangeEventArgs arg)
     {
         var resultTryParse = Int32.TryParse((string?)arg.Value, out var indexImg);
         if (!resultTryParse)
-            return;
-
-        // _logger.Debug($"[EventOninput] {arg.Value} {CurrentIdImgDraw}");
-        CurrentIdImgDraw = indexImg;
+            return Task.CompletedTask;
+        
+        _currentIdImgDraw = indexImg;
+        return Task.CompletedTask;
     }
 
     protected async Task ButtonEnter(KeyboardEventArgs arg)
     {
         if (arg.Key == "Enter")
         {
-            // _logger.Debug("[ButtonEnter] {@Value}",IdActiveIdImages);
-            await ButtonEnterIdActiveIdImages.InvokeAsync(CurrentIdImgDraw);
-            // CurrentIdImgDraw = CurrentIdImg.ToString();
-            // StateHasChanged();
+            await ButtonEnterIdActiveIdImages.InvokeAsync(_currentIdImgDraw);
         }
     }
 

@@ -56,9 +56,9 @@ public class NavigationHandler
         cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
         cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
         _cacheModel.CurrentIdImg = 1;
+        
         UpdateSvg();
-        // if (ImagesPanelRef != null) 
-        //     ImagesPanelRef.LoadImageJSAsync().Wait();
+
     }
 
     public async Task GetDbName(string dbName)
@@ -105,6 +105,8 @@ public class NavigationHandler
             }
 
             await ImagesPanelRef.LoadImageJSAsync();
+            
+            _cacheModel.AllCountImages =  _repository.GetAllIndexImages().Length;
         }
         catch (Exception e)
         {
