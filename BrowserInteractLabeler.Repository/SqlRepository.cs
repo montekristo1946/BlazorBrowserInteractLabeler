@@ -80,7 +80,6 @@ public class SqlRepository : IRepository
         {
             var retArr = _db.Annotations
                 .Include(p => p.Points)
-                .AsNoTracking()
                 .ToArray();
             return retArr;
         }
@@ -121,7 +120,6 @@ public class SqlRepository : IRepository
             var annotations = _db.Annotations
                 .Include(point => point.Points)
                 .Where(p => p.ImageFrameId == imagesId)
-                .AsNoTracking()
                 .ToArray();
 
             return annotations;
@@ -227,7 +225,6 @@ public class SqlRepository : IRepository
         lock (_locker)
         {
             var annotations = _db.InformationState
-                .AsNoTracking()
                 .ToArray();
 
             return annotations;
