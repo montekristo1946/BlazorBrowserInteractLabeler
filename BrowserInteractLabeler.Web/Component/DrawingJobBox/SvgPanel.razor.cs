@@ -1,4 +1,5 @@
 using BrowserInteractLabeler.Common.DTO;
+using BrowserInteractLabeler.Web.Extension;
 using BrowserInteractLabeler.Web.Infrastructure.Constructors;
 using Microsoft.AspNetCore.Components;
 
@@ -14,7 +15,7 @@ public class SvgPanelModel : ComponentBase
     internal RenderFragment GetRenderFragnent(Annotation annotation) => (builder) =>
     {
         var thicknessLine = 1 / ScaleImg;
-        var figure = _svgConstructor.CreateFigure(annotation, thicknessLine);
+        var figure = _svgConstructor.CreateFigure(annotation.CloneDeep(), thicknessLine);
         builder.AddMarkupContent(0, figure);
     };
 

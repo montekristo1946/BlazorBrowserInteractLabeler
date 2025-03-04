@@ -33,5 +33,5 @@ public class CacheModel
     public int CurrentProgress { get; set; } = 0;
 
     public PointF PointCursor { get; set; } = new PointF() { X = 0, Y = 0 };
-
+    public int AllCountImages { get; set; } = 0;
 }

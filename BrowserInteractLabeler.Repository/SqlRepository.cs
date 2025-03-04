@@ -7,7 +7,7 @@ namespace BrowserInteractLabeler.Repository;
 
 public class SqlRepository : IRepository
 {
-    private ApplicationDbContext _db = null!;
+    private ApplicationDbContext _db = null;
     private readonly ILogger _logger = Log.ForContext<SqlRepository>();
     private readonly object _locker = new();
 
@@ -49,6 +49,9 @@ public class SqlRepository : IRepository
 
     public int[] GetAllIndexImages()
     {
+        if (_db is null)
+            return [];
+
         lock (_locker)
         {
             var retArr = _db.ImageFrames.Select(p => p.Id).ToArray();
@@ -58,11 +61,11 @@ public class SqlRepository : IRepository
 
     public ImageFrame[] GetAllImages()
     {
+        if (_db is null)
+            return [];
+
         lock (_locker)
         {
-            if (_db is null)
-                return Array.Empty<ImageFrame>();
-
             var retArr = _db.ImageFrames.ToArray();
             return retArr;
         }
@@ -70,24 +73,27 @@ public class SqlRepository : IRepository
 
     public Annotation[] GetAllAnnotations()
     {
+        if (_db is null)
+            return [];
+
         lock (_locker)
         {
-            if (_db is null)
-                return Array.Empty<Annotation>();
-
-            var retArr = _db.Annotations.Include(p => p.Points).ToArray();
+            var retArr = _db.Annotations
+                .Include(p => p.Points)
+                .ToArray();
             return retArr;
         }
     }
 
     public ImageFrame GetImagesByIndex(int imagesId)
     {
+        if (_db is null)
+            return new ImageFrame();
+
         lock (_locker)
         {
-            if (_db is null)
-                return new ImageFrame();
-
-            var res = _db.ImageFrames.Include(p => p.SizeImage)
+            var res = _db.ImageFrames
+                .Include(p => p.SizeImage)
                 .FirstOrDefault(i => i.Id == imagesId);
             return res ?? new ImageFrame();
         }
@@ -95,11 +101,11 @@ public class SqlRepository : IRepository
 
     public Label[] GetAllLabels()
     {
+        if (_db is null)
+            return [];
+
         lock (_locker)
         {
-            if (_db is null)
-                return Array.Empty<Label>();
-
             var labels = _db.Labels.ToArray();
             return labels;
         }
@@ -107,14 +113,14 @@ public class SqlRepository : IRepository
 
     public Annotation[] GetAnnotationsFromImgId(int imagesId)
     {
+        if (_db is null)
+            return [];
         lock (_locker)
         {
-            if (_db is null)
-                return Array.Empty<Annotation>();
-
             var annotations = _db.Annotations
                 .Include(point => point.Points)
-                .Where(p => p.ImageFrameId == imagesId).ToArray();
+                .Where(p => p.ImageFrameId == imagesId)
+                .ToArray();
 
             return annotations;
         }
@@ -123,9 +129,12 @@ public class SqlRepository : IRepository
 
     public bool DeleteAnnotations(Annotation[] removeAnnot)
     {
+        if (_db is null)
+            return false;
+
         lock (_locker)
         {
-            if (removeAnnot is null || !removeAnnot.Any() || _db is null)
+            if (removeAnnot is null || !removeAnnot.Any())
                 return false;
 
             _db.Annotations.RemoveRange(removeAnnot);
@@ -136,9 +145,12 @@ public class SqlRepository : IRepository
 
     public bool SaveAnnotations(Annotation[] annotations)
     {
+        if (_db is null)
+            return false;
+
         lock (_locker)
         {
-            if (annotations is null || !annotations.Any() || _db is null)
+            if (annotations is null || !annotations.Any())
                 return false;
 
             _db.Annotations.AddRangeAsync(annotations);
@@ -150,11 +162,11 @@ public class SqlRepository : IRepository
 
     public int GetLastIndexAnnotation()
     {
+        if (_db is null)
+            return -1;
+
         lock (_locker)
         {
-            if (_db is null)
-                return -1;
-
             var lastIdAnnot = _db.Annotations.OrderBy(a => a.Id).LastOrDefaultAsync();
 
             if (lastIdAnnot is null)
@@ -197,7 +209,7 @@ public class SqlRepository : IRepository
         {
             if (frame is null || _db is null)
                 return false;
-            
+
             _db.InformationState.AddAsync(frame);
             _db.SaveChangesAsync();
 
@@ -207,10 +219,13 @@ public class SqlRepository : IRepository
 
     public InformationDto[] GetInformationDto()
     {
+        if (_db is null)
+            return [];
 
         lock (_locker)
         {
-            var annotations = _db.InformationState.ToArray();
+            var annotations = _db.InformationState
+                .ToArray();
 
             return annotations;
         }

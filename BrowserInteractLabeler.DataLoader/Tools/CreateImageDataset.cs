@@ -149,12 +149,12 @@ public class CreateImageDataset : IHostedService
     private (int width, int height, byte[] img) ResizeImg(byte[] img, string pathImg)
     {
         const int optimalHeightOnInterface = 640;
-        const int optimalWidthOnInterface = 1280;
+        const int optimalWidthOnInterface = 640;
         try
         {
             using var image = new MagickImage(img);
             image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
-            image.Quality = 98;
+            image.Quality = 100;
             image.Format = MagickFormat.Jpg;
             var data = image.ToByteArray();
             var width = image.Width;
