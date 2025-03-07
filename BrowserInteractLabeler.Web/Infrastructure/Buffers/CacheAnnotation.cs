@@ -223,16 +223,19 @@ public class CacheAnnotation
             var allAnnots = _repository.GetAnnotationsFromImgId(imagesId);
             var cloneAnnots = allAnnots.CloneDeep().ToList();
             var annotations = cloneAnnots.Select(annot =>
-            {
-                if (annot.Points?.Any() == false)
+                {
+                    if (annot.Points?.Any() == false)
+                        return annot;
+
+                    var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
+                    if (checkRestore == annot.Points.Count()) //restoration position
+                        annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
+
                     return annot;
-
-                var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
-                if (checkRestore == annot.Points.Count()) //restoration position
-                    annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
-
-                return annot;
-            }).OrderBy(p => p.LabelId).ToList();
+                })
+                .OrderBy(p => p.LabelId)
+                .ThenByDescending(p => CalculateArea(p.Points))
+                .ToList();
 
             _annotations = annotations;
         }
@@ -244,6 +247,18 @@ public class CacheAnnotation
         {
             semaphoreSlim.Release();
         }
+    }
+
+    private float CalculateArea(List<PointF>? argPoints)
+    {
+        if (argPoints is null)
+            return 0;
+
+        var minX = argPoints.Min(p => p.X);
+        var maxX = argPoints.Max(p => p.X);
+        var minY = argPoints.Min(p => p.Y);
+        var maxY = argPoints.Max(p => p.Y);
+        return (maxX - minX) * (maxY - minY);
     }
 
     public void DeleteAnnotation()
@@ -404,7 +419,6 @@ public class CacheAnnotation
 
     public (bool checkRes, Annotation annotation) SetHiddenAnnot(int idAnnot)
     {
-
         semaphoreSlim.Wait();
         try
         {
