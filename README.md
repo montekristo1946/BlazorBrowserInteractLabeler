@@ -31,7 +31,11 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
 3. Object markup start and end [e] key
 4. Next image key 'F'
 5. Previous image key 'D'
-6. Key delete duplicate on key 'X'
+6. Key delete duplicate on key 'Z'
 
 ## Convert format  <br>
 Convert from BlazorBrowserInteractLabeler in yolo,  An example of conversion is located `pythonConverter/convert_BIL_to_yolo.py`
+
+## Black Theme in Chome <br>
+`chrome://flags/#enable-force-dark`<br>
+`Force Dark Mode for Web Contents = Enabled`<br>
