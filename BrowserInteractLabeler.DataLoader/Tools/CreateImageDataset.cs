@@ -149,7 +149,7 @@ public class CreateImageDataset : IHostedService
     private (int width, int height, byte[] img) ResizeImg(byte[] img, string pathImg)
     {
         const int optimalHeightOnInterface = 640;
-        const int optimalWidthOnInterface = 640;
+        const int optimalWidthOnInterface = 1280;
         try
         {
             using var image = new MagickImage(img);

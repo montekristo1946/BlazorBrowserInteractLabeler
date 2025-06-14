@@ -49,6 +49,8 @@ public class NavigationHandler
         cacheModel.Images = new ImageFrame()
         {
             // Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/error_1.png")),
+            // Images =File.ReadAllBytes(
+            //     "/mnt/Disk_C/git/BlazorBrowserInteractLabeler/BrowserInteractLabeler.Web/Resource/error_1.png"),
             Images = Resources.ImagesMoq,
             Id = -1
         };
@@ -100,7 +102,7 @@ public class NavigationHandler
 
             if (ImagesPanelRef is null)
             {
-                _logger.Error("[CreateStartImagesState] not init ImagesPanelRef");
+                _logger.Warning("[CreateStartImagesState] not init ImagesPanelRef");
                 return;
             }
 

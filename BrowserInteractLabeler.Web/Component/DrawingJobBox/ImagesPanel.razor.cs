@@ -8,7 +8,8 @@ using ILogger = Serilog.ILogger;
 
 namespace BrowserInteractLabeler.Web.Component.DrawingJobBox;
 
-public class ImagesPanelModel : ComponentBase
+public class 
+    ImagesPanelModel : ComponentBase
 {
     internal readonly string IdCanvas = "chartCanvas_1";
     internal string CssScale => _cacheModel.CssScale;// "transform: scale(1.0) translate(+0%, -0%);";

@@ -28,7 +28,11 @@ public class SqlRepository : IRepository
                 var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseSqlite(databaseConnectionString)
                     .Options;
+
                 _db = new ApplicationDbContext(contextOptions);
+
+                _db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
                 _logger.Debug("[LoadDatabaseAsync] Load ok {PathDb}", pathDb);
 
                 return true;
@@ -54,7 +58,7 @@ public class SqlRepository : IRepository
 
         lock (_locker)
         {
-            var retArr = _db.ImageFrames.Select(p => p.Id).ToArray();
+            var retArr = _db.ImageFrames.AsNoTracking().Select(p => p.Id).ToArray();
             return retArr;
         }
     }
@@ -66,7 +70,7 @@ public class SqlRepository : IRepository
 
         lock (_locker)
         {
-            var retArr = _db.ImageFrames.ToArray();
+            var retArr = _db.ImageFrames.AsNoTracking().ToArray();
             return retArr;
         }
     }
@@ -80,6 +84,7 @@ public class SqlRepository : IRepository
         {
             var retArr = _db.Annotations
                 .Include(p => p.Points)
+                .AsNoTracking()
                 .ToArray();
             return retArr;
         }
@@ -94,6 +99,7 @@ public class SqlRepository : IRepository
         {
             var res = _db.ImageFrames
                 .Include(p => p.SizeImage)
+                .AsNoTracking()
                 .FirstOrDefault(i => i.Id == imagesId);
             return res ?? new ImageFrame();
         }
@@ -106,7 +112,7 @@ public class SqlRepository : IRepository
 
         lock (_locker)
         {
-            var labels = _db.Labels.ToArray();
+            var labels = _db.Labels.AsNoTracking().ToArray();
             return labels;
         }
     }
@@ -120,6 +126,7 @@ public class SqlRepository : IRepository
             var annotations = _db.Annotations
                 .Include(point => point.Points)
                 .Where(p => p.ImageFrameId == imagesId)
+                .AsNoTracking()
                 .ToArray();
 
             return annotations;
@@ -127,7 +134,7 @@ public class SqlRepository : IRepository
     }
 
 
-    public bool DeleteAnnotations(Annotation[] removeAnnot)
+    public bool DeleteAnnotations(Annotation[]? removeAnnot)
     {
         if (_db is null)
             return false;
@@ -137,7 +144,12 @@ public class SqlRepository : IRepository
             if (removeAnnot is null || !removeAnnot.Any())
                 return false;
 
-            _db.Annotations.RemoveRange(removeAnnot);
+            var removeId = removeAnnot.Select(annot => annot.Id).ToArray();
+            _db.Annotations
+                .Where(p => removeId.Contains(p.Id))
+                .ExecuteDeleteAsync();
+
+
             _db.SaveChanges();
             return true;
         }
@@ -153,7 +165,8 @@ public class SqlRepository : IRepository
             if (annotations is null || !annotations.Any())
                 return false;
 
-            _db.Annotations.AddRangeAsync(annotations);
+            _db.Annotations
+                .AddRangeAsync(annotations);
             _db.SaveChangesAsync();
 
             return true;
@@ -167,7 +180,10 @@ public class SqlRepository : IRepository
 
         lock (_locker)
         {
-            var lastIdAnnot = _db.Annotations.OrderBy(a => a.Id).LastOrDefaultAsync();
+            var lastIdAnnot = _db.Annotations
+                .AsNoTracking()
+                .OrderBy(a => a.Id)
+                .LastOrDefaultAsync();
 
             if (lastIdAnnot is null)
                 return -1;
@@ -225,6 +241,7 @@ public class SqlRepository : IRepository
         lock (_locker)
         {
             var annotations = _db.InformationState
+                .AsNoTracking()
                 .ToArray();
 
             return annotations;
