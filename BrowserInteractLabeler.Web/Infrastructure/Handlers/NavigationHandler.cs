@@ -48,14 +48,11 @@ public class NavigationHandler
 
         cacheModel.Images = new ImageFrame()
         {
-            // Images = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource/error_1.png")),
-            // Images =File.ReadAllBytes(
-            //     "/mnt/Disk_C/git/BlazorBrowserInteractLabeler/BrowserInteractLabeler.Web/Resource/error_1.png"),
             Images = Resources.ImagesMoq,
             Id = -1
         };
 
-        cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
+        // cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
         cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
         _cacheModel.CurrentIdImg = 1;
         
@@ -89,10 +86,9 @@ public class NavigationHandler
                 return;
 
             _cacheModel.Images = imageFrame;
-            _cacheModel.SizeDrawImage =
-                _helper.CalculationOptimalSize(imageFrame.SizeImage, _cacheModel.ImageWindowsSize);
-            _cacheModel.OffsetDrawImage =
-                _helper.CalculationDefaultOffsetImg(_cacheModel.SizeDrawImage, _cacheModel.ImageWindowsSize);
+            // _cacheModel.SizeDrawImage = _helper.CalculationOptimalSize(imageFrame.SizeImage, _cacheModel.ImageWindowsSize);
+            // _cacheModel.OffsetDrawImage =
+            //     _helper.CalculationDefaultOffsetImg(_cacheModel.SizeDrawImage, _cacheModel.ImageWindowsSize);
 
 
             _cacheModel.ScaleCurrent = _defaultScale;
@@ -100,13 +96,13 @@ public class NavigationHandler
             _cacheModel.NameImages = imageFrame.NameImages;
             UpdateSvg();
 
-            if (ImagesPanelRef is null)
-            {
-                _logger.Warning("[CreateStartImagesState] not init ImagesPanelRef");
-                return;
-            }
+            // if (ImagesPanelRef is null)
+            // {
+            //     _logger.Warning("[CreateStartImagesState] not init ImagesPanelRef");
+            //     return;
+            // }
 
-            await ImagesPanelRef.LoadImageJSAsync();
+            // await ImagesPanelRef.LoadImageJsAsync();
             
             _cacheModel.AllCountImages =  _repository.GetAllIndexImages().Length;
         }
@@ -127,7 +123,7 @@ public class NavigationHandler
         }
 
         SetActiveIdAnnotation(-1);
-        await SaveAnnotation();
+        await SaveAnnotationAsync();
         _cacheModel.CurrentIdImg = index;
 
         _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
@@ -150,19 +146,20 @@ public class NavigationHandler
     }
 
 
-    public async Task ButtonDefaultPositionImg()
+    public void ButtonDefaultPositionImg()
     {
-        _cacheModel.OffsetDrawImage = _helper.CalculationDefaultOffsetImg(
-            _cacheModel.SizeDrawImage,
-            _cacheModel.ImageWindowsSize);
-        _cacheModel.ScaleCurrent = _defaultScale;
+        // _cacheModel.OffsetDrawImage = _helper.CalculationDefaultOffsetImg(
+        //     _cacheModel.SizeDrawImage,
+        //     _cacheModel.ImageWindowsSize);
+        // _cacheModel.ScaleCurrent = _defaultScale;
+        throw new NotImplementedException("отключил пока что");
     }
 
-    public void SetRootWindowsSize(SizeF sizeBrowse)
-    {
-        _cacheModel.ImageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
-        _cacheModel.RootWindowsSize = sizeBrowse;
-    }
+    // public void SetRootWindowsSize(SizeF sizeBrowse)
+    // {
+    //     _cacheModel.ImageWindowsSize = _helper.CalculationRootWindowsSize(sizeBrowse);
+    //     _cacheModel.RootWindowsSize = sizeBrowse;
+    // }
 
 
     private void UpdateSvg()
@@ -170,11 +167,11 @@ public class NavigationHandler
         _cacheModel.AnnotationsOnPanel = _cacheAnnotation.GetAllAnnotationsOnImg(_cacheModel.CurrentIdImg);
     }
 
-    public Task SaveAnnotation()
+    public async Task SaveAnnotationAsync()
     {
-        return Task.Run(() =>
+         await Task.Run(async () =>
         {
-            _cacheAnnotation.SaveAnnotationsOnSqlAsync(_cacheModel.CurrentIdImg).Wait();
+            await _cacheAnnotation.SaveAnnotationsOnSqlAsync(_cacheModel.CurrentIdImg);
             UpdateSvg();
         });
     }
@@ -318,14 +315,14 @@ public class NavigationHandler
     /// <param name="now"></param>
     public void WheelDrawingPanelMouseEventAsync(WheelEventArgs args, DateTime now)
     {
-        var (scale, offset) = _helper.CalculationScale(args,
-            _cacheModel.ScaleCurrent,
-            _cacheModel.SizeDrawImage,
-            _cacheModel.OffsetDrawImage,
-            _cacheModel.ImageWindowsSize);
-        _cacheModel.OffsetDrawImage = offset;
-        _cacheModel.ScaleCurrent = scale;
-        UpdateSvg();
+        // var (scale, offset) = _helper.CalculationScale(args,
+        //     _cacheModel.ScaleCurrent,
+        //     _cacheModel.SizeDrawImage,
+        //     _cacheModel.OffsetDrawImage,
+        //     _cacheModel.ImageWindowsSize);
+        // _cacheModel.OffsetDrawImage = offset;
+        // _cacheModel.ScaleCurrent = scale;
+        // UpdateSvg();
     }
 
     /// <summary>
@@ -471,10 +468,10 @@ public class NavigationHandler
         await HandlerClickNextAsync(indexImg);
     }
 
-    public Task CancelFocusRootPanelAsync()
+    public void CancelFocusRootPanelAsync()
     {
         SetMainFocusRootPanel = false;
-        return Task.CompletedTask;
+       
     }
 
 

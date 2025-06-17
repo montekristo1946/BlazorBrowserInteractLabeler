@@ -1,16 +1,14 @@
 @page "/marker"
-@using BrowserInteractLabeler.Common
-@using BrowserInteractLabeler.Common.DTO
 @inherits MarkerModel
 
-<div @onkeydown="HandleKeyDown" tabindex="0" class=""  
-     id="@IdImagesPamel" 
-     oncontextmenu = "return false;">
-    <div class="row border-bottom bg-light p-1" >
+<div @onkeydown="HandleKeyDown" tabindex="0" class=""
+     id="@IdImagesPamel"
+     oncontextmenu="return false;">
+    <div class="row border-bottom bg-light p-1">
         <NavigationPanel>
             <SavePanelTemplate>
                 <SavePanel
-                    ButtonSaveClick="() => _navigationHandler.SaveAnnotation()"
+                    ButtonSaveClick="() => _navigationHandler.SaveAnnotationAsync()"
                     ButtonUndoClick="() => _navigationHandler.UndoClick()"
                     ButtonRedoClick="() => _navigationHandler.RedoClick()">
                 </SavePanel>
@@ -32,60 +30,27 @@
                 <ProgressPanel
                     NameFileEdit="@_cacheModel.NameImages"
                     CurrentProgress="@_cacheModel.CurrentProgress"
-                    CurrentSqlDbName ="@_cacheModel.CurrentSqlDbNames">
-                    
+                    CurrentSqlDbName="@_cacheModel.CurrentSqlDbNames">
+
                 </ProgressPanel>
             </ProgressPanelTemplate>
         </NavigationPanel>
     </div>
-    
-    <div class="row m-0" id="drawing_main_panel">
-        <DrawingPanel
-            CancelFocusRootPanel="_navigationHandler.CancelFocusRootPanelAsync">
-            
-            <ToolsPanelTemplate>
-                <ToolsPanel
-                    ButtonDefaultMoveClick="() => _navigationHandler.ButtonDefaultPositionImg()"
-                    ButtonOnRectangleClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Box)"
-                    ButtonOnPolygonClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Polygon)"
-                    ButtonOnPolyLineClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.PolyLine)"
-                    ButtonOnPointsClick="() => _navigationHandler.EnableTypeLabel(TypeLabel.Point)">
-                </ToolsPanel>
-            </ToolsPanelTemplate>
-            
-            <ImagesPamelTemplate>
-                <ImagesPanel
-                    @ref="@_navigationHandler.ImagesPanelRef"
-                    HandleMouse="@_keyMapHandler.HandleImagePanelMouseAsync"
-                    HandleRightClick="@_keyMapHandler.HandleImagePanelMouseAsync"
-                    HandlerOnmousedown="@_keyMapHandler.HandlerImagesPanelOnmouseDownAsync"
-                    HandlerOnmouseUp="@_keyMapHandler.HandlerImagesPanelOnmouseUp"
-                    HandlerOnmousemove="@HandlerImagesPanelOnmouseupAsync"
-                    HandleMouseWheel="@_keyMapHandler.HandleWheelDrawingPanelMouseEventAsync">
 
-                    <SvgPanelTemplate>
-                        <SvgPanel
-                            AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel"
-                            ScaleImg="@_cacheModel.ScaleCurrent">
-                            <CrosshairsTemplate>
-                                <Crosshair
-                                    PointCursor="@_cacheModel.PointCursor"
-                                    ScaleCurrent="@_cacheModel.ScaleCurrent"
-                                    ActiveTypeLabel="@_cacheModel.ActiveTypeLabel"
-                                    ActiveLabelColor="@_cacheModel.ActiveLabelColor"
-                                    AnnotationsOnPanel="@_cacheModel.AnnotationsOnPanel">
-                                </Crosshair>
-                            </CrosshairsTemplate>
-                        </SvgPanel>
-                    </SvgPanelTemplate>
-                    
-                </ImagesPanel>
-            </ImagesPamelTemplate>
-            
-            <TabBoxPanelTemplate>
-                @_tabBoxPanelTemplate
-            </TabBoxPanelTemplate>
-        </DrawingPanel>
+
+    <div class="row  bg-light p-0 m-0" style="height: 99.5vh; width: 99.5vw;">
+        <div class="col-md-leftPanel  border-end p-1  " style="">
+            @ToolsPanelTemplate
+        </div>
+        <div class="col-md-imagePanel p-0" style="">
+            @ImagesPanelTemplate
+        </div>
+
+        <div class="col-md-rightPanel  border-start p-0 m-0" style="">
+            @TabBoxPanelTemplate
+        </div>
+
     </div>
+    
 
 </div>

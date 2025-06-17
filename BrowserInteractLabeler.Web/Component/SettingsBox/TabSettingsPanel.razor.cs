@@ -1,4 +1,5 @@
 using BrowserInteractLabeler.Common;
+using BrowserInteractLabeler.Common.DTO;
 using Microsoft.AspNetCore.Components;
 
 namespace BrowserInteractLabeler.Web.Component.SettingsBox;

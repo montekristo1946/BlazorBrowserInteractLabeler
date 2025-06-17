@@ -1,35 +1,33 @@
 @inherits ImagesPanelModel
 
 
-<div class="p-0 m-0 bg-light no-select "
-     style="width:@WidthMainWin; 
-            height: @HeightMainWin; 
-            overflow: hidden;"
-     @onmousewheel="@HandleMouseWheel"
-     @oncontextmenu="@HandleRightClick"
-     @onmousedown="@HandlerOnmousedown"
-     @onmouseup="@HandlerOnmouseUp"
-     id="drawing_panel_background">
+<div class="p-0 m-0" style="width: 100%; height: 100%"
+     id="@IdRootDiv">
 
-    <div style="width:@WidthImg; height: @HeightImg;
-            @CssScale;
-            background-position: center ;
-            transform-origin: center;"
-         @onclick="@HandleMouse"
-         @onmousemove="@HandlerOnmousemove">
+    <div class="p-0 m-0 bg-light no-select "
 
+         style="width: 100%; height: 100%; background-color: #0dcaf0;
+         overflow: hidden;"
+         @onmousewheel="@HandleMouseWheel"
+         @oncontextmenu="@HandleRightClick"
+         @onmousedown="@HandlerOnmousedown"
+         @onmouseup="@HandlerOnmouseUp"
+         >
 
-        @*          <img src=@ImagesBase64 alt="Red dot" style=" *@
-        @*              width: 100%; *@
-        @*              height: 100%; *@
-        @*              position: absolute; *@
-        @*               transition: all  0.000s; *@
-        @*                transition-timing-function: linear;"/> *@
+        <div id="@ScaleDiv"
+             style="width:@WidthImg; height: @HeightImg;
+             @CssScale;
+             background-position: center ;
+             transform-origin: center;"
+             @onclick="@HandleMouse"
+             @onmousemove="@HandlerOnmousemove">
 
-        <canvas id="@IdCanvas" width="@WidthImg" height="@HeightImg" style="position: absolute; background-position: center ;"></canvas>
-        @SvgPanelTemplate
+            <canvas id="@IdCanvas" width="@WidthImg" height="@HeightImg"
+                    style="position: absolute; background-position: center ;"></canvas>
+            @SvgPanelTemplate
+
+        </div>
 
     </div>
-
 
 </div>

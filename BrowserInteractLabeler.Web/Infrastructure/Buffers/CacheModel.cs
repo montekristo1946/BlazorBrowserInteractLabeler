@@ -20,11 +20,11 @@ public class CacheModel
     internal PointF OffsetDrawImage { get; set; } = new();
     internal SizeF SizeDrawImage { get; set; } = new();
     internal SizeF RootWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
-    internal SizeF ImageWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
+    // internal SizeF ImageWindowsSize_ { get; set; } = new() { Width = 1600, Height = 800 };
 
-    internal Annotation[] AnnotationsOnPanel { get; set; } = Array.Empty<Annotation>();
-    internal Label[] LabelAll { get; set; } = Array.Empty<Label>();
-    internal ColorModel[] ColorAll { get; set; } = Array.Empty<ColorModel>();
+    internal Annotation[] AnnotationsOnPanel { get; set; } = [];
+    internal Label[] LabelAll { get; set; } = [];
+    internal ColorModel[] ColorAll { get; set; } = [];
     public string ActiveTypeLabelText { get; set; } = "";
     public TypeLabel ActiveTypeLabel { get; set; } = TypeLabel.None;
     public string ActiveLabelColor { get; set; } = "#f8f9fa";

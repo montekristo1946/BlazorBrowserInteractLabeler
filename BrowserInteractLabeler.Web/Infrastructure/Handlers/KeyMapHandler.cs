@@ -97,7 +97,7 @@ public class KeyMapHandler
                 }
             case "Space": //Sapase
                 {
-                    await _navigationHandler.ButtonDefaultPositionImg();
+                     _navigationHandler.ButtonDefaultPositionImg();
                     break;
                 }
         }
@@ -108,7 +108,7 @@ public class KeyMapHandler
     ///     Click markup
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandleImagePanelMouseAsync(MouseEventArgs arg)
+    public void HandleImagePanelMouseAsync(MouseEventArgs arg)
     {
         if (arg.AltKey)
             return;
@@ -141,7 +141,7 @@ public class KeyMapHandler
     ///     Левую клавишу мыши нажали
     /// </summary>
     /// <param name="arg"></param>
-    public async Task HandlerImagesPanelOnmouseDownAsync(MouseEventArgs arg)
+    public void HandlerImagesPanelOnmouseDownAsync(MouseEventArgs arg)
     {
         if (arg.Button == rightButton)
             return;
@@ -160,7 +160,7 @@ public class KeyMapHandler
         // _logger.Debug("HandlerImagesPanelOnmouseupAsync {@MouseEventArgs}",arg);
         // _logger.Debug($"HandlerImagesPanelOnmouseupAsync OffsetX:{arg.OffsetX}; OffsetY:{arg.OffsetY}");
 
-        await _navigationHandler.CancelFocusRootPanelAsync();
+         _navigationHandler.CancelFocusRootPanelAsync();
     }
 
 
@@ -197,9 +197,12 @@ public class KeyMapHandler
     ///     Общая панель для отрисовки , колесо мыши
     /// </summary>
     /// <param name="arg"></param>
-    public Task HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
+    public void HandleWheelDrawingPanelMouseEventAsync(WheelEventArgs arg)
     {
-        return Task.Run(() => { _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now); });
+         Task.Run(() =>
+         {
+             _navigationHandler.WheelDrawingPanelMouseEventAsync(arg, DateTime.Now);
+         });
     }
 
 

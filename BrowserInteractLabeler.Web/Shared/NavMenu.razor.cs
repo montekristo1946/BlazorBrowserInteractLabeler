@@ -1,4 +1,5 @@
 using BrowserInteractLabeler.Common;
+using BrowserInteractLabeler.Common.DTO;
 using BrowserInteractLabeler.Web.Infrastructure.Handlers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -17,10 +18,10 @@ public class NavMenuModel : ComponentBase
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
-        var sizeBrowse = await JSRuntime.InvokeAsync<SizeF>("GetBrowseSize");
-        _navigationHandler.SetRootWindowsSize(sizeBrowse);
-        _projectsLocalHandler.SetRootWindowsSize(sizeBrowse);
-        _settingsHandler.SetRootWindowsSize(sizeBrowse);
+        // var sizeBrowse = await JSRuntime.InvokeAsync<SizeF>("GetBrowseSize");
+        // _navigationHandler.SetRootWindowsSize(sizeBrowse);
+        // _projectsLocalHandler.SetRootWindowsSize(sizeBrowse);
+        // _settingsHandler.SetRootWindowsSize(sizeBrowse);
 
 
     }

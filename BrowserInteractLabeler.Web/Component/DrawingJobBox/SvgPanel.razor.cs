@@ -9,7 +9,7 @@ public class SvgPanelModel : ComponentBase
 {
     [Parameter] public Annotation[] AnnotationsOnPanel { get; set; }
     [Parameter] public double ScaleImg { get; set; }
-    [Parameter] public RenderFragment CrosshairsTemplate { get; set; }
+    // [Parameter] public RenderFragment CrosshairsTemplate { get; set; }
     [Inject] internal SvgConstructor _svgConstructor { get; set; }
 
     internal RenderFragment GetRenderFragnent(Annotation annotation) => (builder) =>
@@ -19,4 +19,13 @@ public class SvgPanelModel : ComponentBase
         builder.AddMarkupContent(0, figure);
     };
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
 }
