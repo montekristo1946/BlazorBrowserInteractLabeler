@@ -315,11 +315,11 @@ public class NavigationHandler
     /// <param name="now"></param>
     public void WheelDrawingPanelMouseEventAsync(WheelEventArgs args, DateTime now)
     {
-        // var (scale, offset) = _helper.CalculationScale(args,
-        //     _cacheModel.ScaleCurrent,
-        //     _cacheModel.SizeDrawImage,
-        //     _cacheModel.OffsetDrawImage,
-        //     _cacheModel.ImageWindowsSize);
+        var (scale, offset) = _helper.CalculationScale(args,
+            _cacheModel.ScaleCurrent,
+            _cacheModel.SizeDrawImage,
+            _cacheModel.OffsetDrawImage,
+            _cacheModel.ImageWindowsSize);
         // _cacheModel.OffsetDrawImage = offset;
         // _cacheModel.ScaleCurrent = scale;
         // UpdateSvg();

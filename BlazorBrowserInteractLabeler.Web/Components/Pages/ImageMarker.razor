@@ -1,0 +1,22 @@
+@page "/ImageMarker"
+@using System.Reflection.Metadata
+@using BlazorBrowserInteractLabeler.Web.Common
+
+@rendermode InteractiveServer
+
+
+<div class="m-0 p-0" id="@ConstantsArm.ImageMarkerRoot" style="background-color: #ebf0ff;">
+    <div class="row m-0 p-0 border-enveloping-custom" style=" height: 5.0vh; width: 100vw;">
+        navigation menu
+    </div>
+    <div class="row m-0 p-0 border-enveloping-custom" style=" height: 95.0vh; width: 100vw;">
+     
+        <div class="col-md-imagePanel m-0 p-0 border-enveloping-custom">
+            @ImagesPanelTemplate
+        </div>
+        <div class="col-md-rightPanel m-0 p-0 border-enveloping-custom">
+            label panel
+        </div>
+        
+    </div>
+</div>

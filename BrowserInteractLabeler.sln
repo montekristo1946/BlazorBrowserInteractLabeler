@@ -42,6 +42,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImagesToDataset", "ImagesTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBrowserInteractLabeler.Web", "BlazorBrowserInteractLabeler.Web\BlazorBrowserInteractLabeler.Web.csproj", "{F5491D49-2423-4A9D-AE1D-DD5809D36B29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBrowserInteractLabeler.ARM", "BlazorBrowserInteractLabeler.ARM\BlazorBrowserInteractLabeler.ARM.csproj", "{3F72A982-C8A9-4E63-9243-91D6E7BB7719}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1E3807AE-A7F2-48BB-9D71-3C099F08AD4D} = {73A592E4-FA99-4141-910E-B0BE9E0DCBCD}

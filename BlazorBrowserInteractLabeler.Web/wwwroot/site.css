@@ -1,0 +1,20 @@
+
+
+
+
+.border-enveloping-custom {
+    border: 1px solid;
+    border-color: #ced4da;
+    border-radius: 5px 5px 5px 5px;
+}
+
+
+.col-md-imagePanel {
+    width: 91.0%;
+    height: 100%;
+}
+
+.col-md-rightPanel {
+    width: 9.0%;
+    height: 100%;
+}

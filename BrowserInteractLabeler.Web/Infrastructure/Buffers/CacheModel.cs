@@ -20,7 +20,7 @@ public class CacheModel
     internal PointF OffsetDrawImage { get; set; } = new();
     internal SizeF SizeDrawImage { get; set; } = new();
     internal SizeF RootWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
-    // internal SizeF ImageWindowsSize_ { get; set; } = new() { Width = 1600, Height = 800 };
+    internal SizeF ImageWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
 
     internal Annotation[] AnnotationsOnPanel { get; set; } = [];
     internal Label[] LabelAll { get; set; } = [];

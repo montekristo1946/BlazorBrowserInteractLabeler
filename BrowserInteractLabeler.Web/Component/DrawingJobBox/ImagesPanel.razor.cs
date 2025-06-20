@@ -29,10 +29,10 @@ public class
     [Parameter] public Action<MouseEventArgs> HandlerOnmouseUp { get; set; }
 
     [Parameter] public Action<MouseEventArgs> HandlerOnmousemove { get; set; }
-
-    [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
-
+    
     [Parameter] public Action<WheelEventArgs> HandleMouseWheel { get; set; }
+    
+    [Parameter] public RenderFragment SvgPanelTemplate { get; set; }
 
     [Inject] internal IJSRuntime JSRuntime { get; set; } = null!;
 
