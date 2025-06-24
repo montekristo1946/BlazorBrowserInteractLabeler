@@ -9,7 +9,7 @@ public record Annotation
 
     public int LabelId { get; set; } 
 
-    public List<PointF>? Points { get; set; } = new();
+    public List<PointF>? Points { get; set; } = [];
 
     public TypeLabel LabelPattern { get; set; } = TypeLabel.None;
 
@@ -17,8 +17,7 @@ public record Annotation
     public StateAnnot State { get; set; } = StateAnnot.Finalized;
     
     public int ImageFrameId { get; set; } = -1;
-    
-    [JsonIgnore]
-    public ImageFrame Images { get; set; } 
-    
+
+    [JsonIgnore] public ImageFrame Images { get; set; } = new ImageFrame();
+
 }

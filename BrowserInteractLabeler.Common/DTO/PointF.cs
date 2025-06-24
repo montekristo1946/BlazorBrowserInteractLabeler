@@ -1,21 +1,19 @@
-using BrowserInteractLabeler.Common.DTO;
 using Newtonsoft.Json;
 
-namespace BrowserInteractLabeler.Common;
+namespace BrowserInteractLabeler.Common.DTO;
 
 public record PointF
 {
     [JsonIgnore]
-    public int Id { get; set; }
-    public float Y { get; set; } = -1;
-    public float X { get; set; }= -1;
-
-    public int PositionInGroup { get; set; } = -1;
+    public int Id { get; init; }
+    public float Y { get; init; } = -1;
+    public float X { get; init; }= -1;
+    public int PositionInGroup { get; init; } = -1;
     
     [JsonIgnore]
-    public int AnnotationId { get; set; } = -1;
+    public int AnnotationId { get; init; } = -1;
     [JsonIgnore]
-    public Annotation Annot { get; set; }
+    public Annotation Annot { get; init; }
     
     
     

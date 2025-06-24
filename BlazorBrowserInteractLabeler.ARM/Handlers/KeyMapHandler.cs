@@ -87,7 +87,7 @@ public class KeyMapHandler
             _markupData.OffsetDrawImage,
             _markupData.SizeConvas);
         
-        _markupData.TestDrawPoint = points;
+        // _markupData.TestDrawPoint = points;
     }
     
     private void MovingImage(MouseEventArgs args)

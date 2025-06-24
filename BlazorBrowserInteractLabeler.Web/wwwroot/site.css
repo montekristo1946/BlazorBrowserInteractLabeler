@@ -1,7 +1,3 @@
-
-
-
-
 .border-enveloping-custom {
     border: 1px solid;
     border-color: #ced4da;
@@ -17,4 +13,49 @@
 .col-md-rightPanel {
     width: 9.0%;
     height: 100%;
+}
+
+.div-menu-center {
+    text-align: center;
+    display: table
+}
+.div-menu-start {
+    text-align: start ;
+    display: table
+}
+
+.div-menu-end {
+    text-align: end ;
+    display: table
+}
+
+.text-vertical-center {
+    vertical-align: middle;
+    display: table-cell;
+}
+.text-vertical-bottom {
+    vertical-align: bottom;
+    display: table-cell;
+}
+
+.text-vertical-top {
+    vertical-align: top;
+    display: table-cell;
+}
+
+.bottom-shadow {
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.00);
+    transition: all .1s;
+}
+
+.bottom-shadow:hover {
+    box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.25);
+}
+
+.settings-panel {
+    border:1px solid ;
+    border-radius: 5px;
+    border-color: #ced4da;
+
+    overflow: hidden;
 }

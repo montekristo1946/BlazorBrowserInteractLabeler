@@ -3,6 +3,8 @@ using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BlazorBrowserInteractLabeler.Web.AppWeb;
 using BlazorBrowserInteractLabeler.Web.Config;
 using BlazorBrowserInteractLabeler.Web.Extensions;
+using BrowserInteractLabeler.Common;
+using BrowserInteractLabeler.Repository;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +16,14 @@ builder.Host.InitCulture();
 
 builder.Services
     .AddSingleton<MarkupData>(MarkupDataBuilder.Build)
+    .AddSingleton<SettingsData>(SettingsDataBuilder.Build)
+    .AddSingleton<IRepository>(provider => new SqlRepository())
+    .AddSingleton<ProjectsLocalHandler>(ProjectsLocalHandlerBuilder.Build)
+    .AddSingleton<AnnotationHandler>()
     .AddScoped<KeyMapHandler>()
     .AddScoped<Helper>()
     .AddScoped<MoveImagesHandler>()
+    .AddScoped<SvgConstructor>()
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 

@@ -40,6 +40,7 @@
     <ItemGroup>
       <ProjectReference Include="..\BlazorBrowserInteractLabeler.ARM\BlazorBrowserInteractLabeler.ARM.csproj" />
       <ProjectReference Include="..\BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj" />
+      <ProjectReference Include="..\BrowserInteractLabeler.Repository\BrowserInteractLabeler.Repository.csproj" />
     </ItemGroup>
     
 </Project>

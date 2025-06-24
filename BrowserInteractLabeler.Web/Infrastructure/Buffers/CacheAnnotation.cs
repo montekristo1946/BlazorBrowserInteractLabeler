@@ -92,7 +92,7 @@ public class CacheAnnotation
             semaphoreSlim.Release();
         }
 
-        return Array.Empty<Annotation>();
+        return [];
     }
 
 

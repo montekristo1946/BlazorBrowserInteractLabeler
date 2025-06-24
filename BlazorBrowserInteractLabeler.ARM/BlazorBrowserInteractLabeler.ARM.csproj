@@ -8,10 +8,17 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj" />
+      <ProjectReference Include="..\BrowserInteractLabeler.Web\BrowserInteractLabeler.Web.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftAspNetCoreComponentsWebVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Serilog">
+        <HintPath>..\..\..\..\..\home\user\.nuget\packages\serilog\4.0.0\lib\net8.0\Serilog.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

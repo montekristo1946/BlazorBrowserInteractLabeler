@@ -2,7 +2,7 @@ using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using ImageMagick;
 using Serilog;
-using PointF = BrowserInteractLabeler.Common.PointF;
+using PointF = BrowserInteractLabeler.Common.DTO.PointF;
 using SizeF = BrowserInteractLabeler.Common.DTO.SizeF;
 
 namespace BrowserInteractLabeler.Repository;

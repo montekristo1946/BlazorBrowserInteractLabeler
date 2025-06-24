@@ -4,6 +4,7 @@ using BlazorBrowserInteractLabeler.ARM.Handlers;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BlazorBrowserInteractLabeler.Web.Common;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
+using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -15,13 +16,19 @@ public partial class ImageMarker : ComponentBase, IDisposable
     [Inject] private KeyMapHandler KeyMapHandler { get; set; } = null!;
     [Inject] private MarkupData MarkupData { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
+    
+    [Inject] private ProjectsLocalHandler _projectsLocalHandler { get; set; } = null!;
 
     private RenderFragment ImagesPanelTemplate { get; set; } = null!;
     private DrawingImagesPanel? _imagesPanelComponent = null;
 
+    private RenderFragment NavigationPanelTemplate { get; set; } = null!;
+    private NavigationPanel? _navigationPanel = null;
+    
     protected override void OnInitialized()
     {
         ImagesPanelTemplate = CreateImagesPanelTemplate();
+        NavigationPanelTemplate = CreateNavigationPanelTemplate();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -32,6 +39,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
                 DotNetObjectReference.Create(this));
             OnResize(-1,-1);
 
+            _projectsLocalHandler.NeedUpdateUi += UpdateUi;
 
         }
     }
@@ -54,6 +62,21 @@ public partial class ImageMarker : ComponentBase, IDisposable
             _imagesPanelComponent = value as DrawingImagesPanel
                                     ?? throw new InvalidOperationException(
                                         "Не смог сконвертитировать ImagesPanel в ImagesPanel");
+        });
+
+        builder.CloseComponent();
+    };
+    
+    private RenderFragment CreateNavigationPanelTemplate() => builder =>
+    {
+        builder.OpenComponent(0, typeof(NavigationPanel));
+        builder.AddAttribute(1,nameof(NavigationPanel.ClickNextImages),_projectsLocalHandler.LoadNextImage);
+        builder.AddAttribute(2,nameof(NavigationPanel.ClickBackImages),_projectsLocalHandler.LoadBackImage);
+        builder.AddComponentReferenceCapture(1, value =>
+        {
+            _navigationPanel = value as NavigationPanel
+                                    ?? throw new InvalidOperationException(
+                                        "Не смог сконвертитировать NavigationPanel в NavigationPanel");
         });
 
         builder.CloseComponent();

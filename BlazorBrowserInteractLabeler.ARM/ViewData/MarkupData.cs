@@ -7,19 +7,49 @@ namespace BlazorBrowserInteractLabeler.ARM.ViewData;
 public class MarkupData
 {
     private readonly Lock _lock = new Lock();
-
     private string _imagesUi = string.Empty;
     private SizeT _sizeConvas = new SizeT();
-    private double _scaleCurrent { get; set; } = 1.0F;
-    private PointT _offsetDrawImage { get; set; } = new();
-
+    private double _scaleCurrent  = 1.0F;
+    private PointT _offsetDrawImage  = new();
     private SizeWindows _imageMarkerPanelSize = new SizeWindows();
-    
-    [Obsolete("только для теста сделал")]
-    public PointT TestDrawPoint { get; set; }
-
     private CrosshairData _crosshairData = new CrosshairData();
-
+    private int _currentIdImg  = 0;
+    private int _currentProgress  = 0;
+    
+    public int CurrentProgress
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _currentProgress;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _currentProgress = value;
+            }
+        }
+    }
+    public int CurrentIdImg
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _currentIdImg;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _currentIdImg = value;
+            }
+        } 
+    }
     public CrosshairData CrosshairData
     {
         get
@@ -127,4 +157,5 @@ public class MarkupData
         }
     }
 
+  
 }

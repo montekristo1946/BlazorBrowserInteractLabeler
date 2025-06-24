@@ -8,6 +8,7 @@ using BrowserInteractLabeler.Common.DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using Serilog;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 
@@ -16,6 +17,7 @@ public partial class DrawingImagesPanel : ComponentBase
     [Inject] private MarkupData _markupData { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
     [Inject] private Helper  _helper { get; set; } = null!;
+    [Inject] private SvgConstructor  _svgConstructor { get; set; } = null!;
 
     private string WidthConvas => $"{(int)_markupData.SizeConvas.Width}px";
     private string HeightConvas => $"{(int)_markupData.SizeConvas.Height}px";
@@ -51,27 +53,7 @@ public partial class DrawingImagesPanel : ComponentBase
 
 
 
-    /// <summary>
-    /// TODO: заменить на нормальный компонент формирования svg
-    /// </summary>
-    /// <returns></returns>
-    private RenderFragment GetRenderPoints() => (builder) =>
-    {
-        var point = _markupData.TestDrawPoint;
-
-        var xf = point.X * 100;
-        var yf = point.Y * 100;
-
-
-        var cxString = xf.ToString(CultureInfo.InvariantCulture);
-        var cyString = yf.ToString(CultureInfo.InvariantCulture);
-        var strokeWidthString = 2.5 / _markupData.ScaleCurrent;
-        var color = "#ea0d0d";
-        var returnSvg =
-            $"<circle cx=\"{cxString}%\" cy=\"{cyString}%\" r=\"{strokeWidthString}\" fill=\"{color}\" />$";
-
-        builder.AddMarkupContent(0, returnSvg);
-    };
+   
 
 
     private void MouseWheelHandler(WheelEventArgs args)
@@ -145,4 +127,19 @@ public partial class DrawingImagesPanel : ComponentBase
 
         _crosshairComponent?.UpdateSvg(_markupData.CrosshairData);
     }
+
+    private RenderFragment GetRenderAnnotation()=>
+        async void (builder) =>
+        {
+            try
+            {
+                var figure = await _svgConstructor.CreateAnnotsFigure();
+       
+                builder.AddMarkupContent(0, figure);
+            }
+            catch (Exception e)
+            {
+                Log.Error("[GetRenderAnnotation] {@Exception}", e.Message);
+            }
+        };
 }
