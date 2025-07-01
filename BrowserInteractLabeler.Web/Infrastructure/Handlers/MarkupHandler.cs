@@ -290,6 +290,7 @@ public class MarkupHandler
     private (bool checkResult, Annotation annotation) ReshapePositionPointsPolygon(Annotation annotation,
         PointF activePoint, bool reverse)
     {
+        throw new NotImplementedException();
         var (oldPoints, arrIndex) = GetPointInPolygon(annotation, activePoint);
 
         arrIndex.Add(activePoint.PositionInGroup);
@@ -301,14 +302,14 @@ public class MarkupHandler
             return point with { PositionInGroup = index };
         }).ToList();
 
-        if (reverse)
-        {
-            sortPoints = annotation.Points.OrderByDescending(p => p.PositionInGroup).Select((point, index) =>
-            {
-                point.PositionInGroup = index;
-                return point;
-            }).ToList();
-        }
+        // if (reverse)
+        // {
+        //     sortPoints = annotation.Points.OrderByDescending(p => p.PositionInGroup).Select((point, index) =>
+        //     {
+        //         point.PositionInGroup = index;
+        //         return point;
+        //     }).ToList();
+        // }
 
         annotation.Points = sortPoints;
         return (true, annotation);
@@ -333,21 +334,22 @@ public class MarkupHandler
     private (bool checkResult, Annotation annotation) ReshapePositionPointsPolyLine(Annotation annotation,
         PointF activePoint)
     {
-        var firstPoint = annotation.Points?.MinBy(p => p.PositionInGroup);
-        if (firstPoint is null)
-            return (false, new Annotation());
-
-        if (activePoint.PositionInGroup != firstPoint.PositionInGroup)
-            return (false, new Annotation());
-
-        var sortPoints = annotation.Points.OrderByDescending(p => p.PositionInGroup).Select((point, index) =>
-        {
-            point.PositionInGroup = index;
-            return point;
-        }).ToList();
-
-        annotation.Points = sortPoints;
-        return (true, annotation);
+        throw new NotImplementedException();
+        // var firstPoint = annotation.Points?.MinBy(p => p.PositionInGroup);
+        // if (firstPoint is null)
+        //     return (false, new Annotation());
+        //
+        // if (activePoint.PositionInGroup != firstPoint.PositionInGroup)
+        //     return (false, new Annotation());
+        //
+        // var sortPoints = annotation.Points.OrderByDescending(p => p.PositionInGroup).Select((point, index) =>
+        // {
+        //     point.PositionInGroup = index;
+        //     return point;
+        // }).ToList();
+        //
+        // annotation.Points = sortPoints;
+        // return (true, annotation);
     }
 
     private (bool checkResult, Annotation annotation) RemovePositionPointPolyLine(Annotation annotation,
