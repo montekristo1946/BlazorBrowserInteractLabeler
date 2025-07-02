@@ -17,7 +17,7 @@ public class CacheModel
         $"transform: scale({ScaleCurrent}) translate({OffsetDrawImage.X}px, {OffsetDrawImage.Y}px)";
 
     internal double ScaleCurrent { get; set; } = 1.0F;
-    internal PointF OffsetDrawImage { get; set; } = new();
+    internal PointD OffsetDrawImage { get; set; } = new();
     internal SizeF SizeDrawImage { get; set; } = new();
     internal SizeF RootWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
     internal SizeF ImageWindowsSize { get; set; } = new() { Width = 1600, Height = 800 };
@@ -32,6 +32,6 @@ public class CacheModel
     public string NameImages { get; set; } = "";
     public int CurrentProgress { get; set; } = 0;
 
-    public PointF PointCursor { get; set; } = new PointF() { X = 0, Y = 0 };
+    public PointD PointCursor { get; set; } = new PointD() { X = 0, Y = 0 };
     public int AllCountImages { get; set; } = 0;
 }

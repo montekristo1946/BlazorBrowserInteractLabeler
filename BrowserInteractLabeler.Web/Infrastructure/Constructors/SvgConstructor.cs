@@ -73,7 +73,7 @@ public class SvgConstructor
         var thickness = _serviceConfigs.StrokeWidth * thicknessLine;
         var typeLine = CrateDottedLine(activeAnnot);
 
-        var drawPoints = new List<(PointF, PointF)>();
+        var drawPoints = new List<(PointD, PointD)>();
 
         if (activeAnnot && annotation.State == StateAnnot.Active)
         {
@@ -178,7 +178,7 @@ public class SvgConstructor
         var typeLine = CrateDottedLine(activeAnnot);
 
 
-        var drawPoints = new List<(PointF, PointF)>();
+        var drawPoints = new List<(PointD, PointD)>();
 
         for (var i = 0; i < srcPoints.Count - 1; i++)
         {
@@ -211,7 +211,7 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private string CreateLastPoint(List<PointF> annotationPoints, double strokeWidth)
+    private string CreateLastPoint(List<PointD> annotationPoints, double strokeWidth)
     {
         var lastPoint = annotationPoints.MaxBy(p => p.PositionInGroup);
         if (lastPoint is null)
@@ -222,7 +222,7 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private static List<string> CreateActivePoint(double strokeWidth, PointF lastPoint)
+    private static List<string> CreateActivePoint(double strokeWidth, PointD lastPoint)
     {
         var retPolygon = new List<string>();
         var cx = lastPoint.X;
@@ -302,7 +302,7 @@ public class SvgConstructor
         return typeLine;
     }
 
-    private string[] CreateAnchorPoints(List<PointF> points, double radius, string color, double strokeWidth)
+    private string[] CreateAnchorPoints(List<PointD> points, double radius, string color, double strokeWidth)
     {
         var retPoints = new List<string>();
         foreach (var annotationPoint in points)

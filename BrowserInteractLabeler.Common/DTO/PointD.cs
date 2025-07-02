@@ -2,12 +2,12 @@ using Newtonsoft.Json;
 
 namespace BrowserInteractLabeler.Common.DTO;
 
-public record PointF
+public record PointD
 {
     [JsonIgnore]
     public int Id { get; init; }
-    public float Y { get; init; } = -1;
-    public float X { get; init; }= -1;
+    public double Y { get; init; } = -1;
+    public double X { get; init; }= -1;
     public int PositionInGroup { get; init; } = -1;
     
     [JsonIgnore]

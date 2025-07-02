@@ -18,5 +18,7 @@
        
         <AutoFixtureVersion>[4.0.0,5.0.0)</AutoFixtureVersion>
         <MicrosoftAspNetCoreComponentsWebVersion>9.0.0</MicrosoftAspNetCoreComponentsWebVersion>
+
+        <MediatRVersion>12.5.0</MediatRVersion>
     </PropertyGroup>
 </Project>

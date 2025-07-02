@@ -14,7 +14,7 @@ public class MarkupHandler
     internal TypeLabel ActiveTypeLabel { get; set; } = TypeLabel.None;
     public int ActiveIdLabel { get; set; } = -1;
 
-    private (bool isMoved, PointF point, Annotation annot) _movedData = (isMoved: false, point: new PointF(),
+    private (bool isMoved, PointD point, Annotation annot) _movedData = (isMoved: false, point: new PointD(),
         annot: new Annotation());
 
     // private static readonly TimeSpan _minTimeMove = TimeSpan.FromMilliseconds(1500);
@@ -35,7 +35,7 @@ public class MarkupHandler
         var lastPoint = annotation.Points?.MaxBy(p => p.PositionInGroup);
         var lastIPosition = lastPoint == null ? 0 : lastPoint.PositionInGroup + 1;
 
-        var pointClick = new PointF()
+        var pointClick = new PointD()
         {
             X = (float)mouseEventArgs.OffsetX / sizeImg.Width,
             Y = (float)mouseEventArgs.OffsetY / sizeImg.Height,
@@ -84,7 +84,7 @@ public class MarkupHandler
     }
 
 
-    private Annotation ProcessingAddPointAnnotation(PointF pointClick,
+    private Annotation ProcessingAddPointAnnotation(PointD pointClick,
         int activeIdLabel,
         Annotation annotation,
         TypeLabel labelPattern)
@@ -97,7 +97,7 @@ public class MarkupHandler
     }
 
 
-    private Annotation ProcessingBoxAnnotation(PointF point, int activeIdLabel, Annotation annotation)
+    private Annotation ProcessingBoxAnnotation(PointD point, int activeIdLabel, Annotation annotation)
     {
         const int maxPoints = 2;
         if (annotation.Points.Count < maxPoints)
@@ -162,12 +162,12 @@ public class MarkupHandler
 
     public void ResetSelectPoint()
     {
-        _movedData = (isMoved: false, point: new PointF(), annot: new Annotation());
+        _movedData = (isMoved: false, point: new PointD(), annot: new Annotation());
     }
 
     private void ResetMovedCache()
     {
-        _movedData = (isMoved: false, point: new PointF(), annot: new Annotation());
+        _movedData = (isMoved: false, point: new PointD(), annot: new Annotation());
     }
 
     /// <summary>
@@ -288,7 +288,7 @@ public class MarkupHandler
     }
 
     private (bool checkResult, Annotation annotation) ReshapePositionPointsPolygon(Annotation annotation,
-        PointF activePoint, bool reverse)
+        PointD activePoint, bool reverse)
     {
         throw new NotImplementedException();
         var (oldPoints, arrIndex) = GetPointInPolygon(annotation, activePoint);
@@ -316,7 +316,7 @@ public class MarkupHandler
     }
 
     private (bool checkResult, Annotation annotation) RemovePositionPointPolygon(Annotation annotation,
-        PointF activePoint)
+        PointD activePoint)
     {
         var (oldPoints, arrIndex) = GetPointInPolygon(annotation, activePoint);
 
@@ -332,7 +332,7 @@ public class MarkupHandler
     }
 
     private (bool checkResult, Annotation annotation) ReshapePositionPointsPolyLine(Annotation annotation,
-        PointF activePoint)
+        PointD activePoint)
     {
         throw new NotImplementedException();
         // var firstPoint = annotation.Points?.MinBy(p => p.PositionInGroup);
@@ -353,7 +353,7 @@ public class MarkupHandler
     }
 
     private (bool checkResult, Annotation annotation) RemovePositionPointPolyLine(Annotation annotation,
-        PointF activePoint)
+        PointD activePoint)
     {
         var positionActive = activePoint.PositionInGroup;
         var oldPoints = annotation.Points;
@@ -375,14 +375,14 @@ public class MarkupHandler
     }
 
 
-    private (List<PointF>, List<int>) GetPointInPolygon(Annotation annotation,
-        PointF activePoint)
+    private (List<PointD>, List<int>) GetPointInPolygon(Annotation annotation,
+        PointD activePoint)
     {
         var positionActive = activePoint.PositionInGroup;
         var arrIndex = new List<int>();
         var oldPoints = annotation.Points;
         if (oldPoints?.Any() == false)
-            return (new List<PointF>(), new List<int>());
+            return (new List<PointD>(), new List<int>());
 
         var firstGroup = oldPoints.Where(p => p.PositionInGroup > positionActive)
             .Select(p => p.PositionInGroup).ToArray();

@@ -13,6 +13,7 @@ builder.WebHost.UseUrls(SystemConfigure.AppSetting["UseUrls"] ?? string.Empty);
 
 builder.Host.UseLogger();
 builder.Host.InitCulture();
+builder.Host.UseMediatRComponents();
 
 builder.Services
     .AddSingleton<MarkupData>(MarkupDataBuilder.Build)
@@ -24,6 +25,7 @@ builder.Services
     .AddScoped<Helper>()
     .AddScoped<MoveImagesHandler>()
     .AddScoped<SvgConstructor>()
+    
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 

@@ -1,40 +1,110 @@
+
 @rendermode InteractiveServer
 
 <div class="row p-0 m-0" style=" height: 5.0vh; width: 100vw;">
- 
+
     <div class="col-2 p-0 m-0 " style="height: 100%">
-        <div class="row m-0" style="height: 100%; padding: 2px">
+        <div class="row m-0 padding-menu" style="height: 100%; ">
             <div class="row p-0 m-0 bottom-shadow settings-panel">
                 navigation page
             </div>
         </div>
-        
+
     </div>
 
     <div class="col-10 p-0 m-0 " style="height: 100%">
         <div class="row p-0 m-0 text-center" style="height: 100%">
             <div class="col-4 p-0 m-0" style="height: 100%">
-                save, rect, poligon,line,point
+                <div class="row p-0 m-0" style="height: 100%">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickSave)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/001_save.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-1 padding-menu" @onclick="@(OnClickUndo)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/002_undo.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-1 padding-menu" @onclick="@(OnClickRedo)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/003_redo.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitRectangle)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/006_rectangle.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolygon)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/007_polygon.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolyline)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/008_poly_line.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPoints)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/009_points.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-1 p-0 m-0" style="height: 100%">
-                color laebel
+                <div class="row  p-0 m-0" style="height: 100%">
+                    <div class="col-4 padding-menu" @onclick="@(OnClickInitPolyline)" style="height: 100%; ">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%; background-color: @GetBacgroundLabel()">
+                        </div>
+                    </div>
+                </div>
+
+               
             </div>
 
             <div class="col-1 p-0 m-0  " style="height: 100%">
-                <div class="row p-0 m-0  " style="height: 98%;">
-                    <div class="col-6 m-0   " style="height: 100%; padding: 2px"
+                <div class="row p-0 m-0  " style="height: 100%;">
+                    <div class="col-6 m-0  padding-menu " style="height: 100%; "
                          @onclick="@(OnClickBackImg)">
-                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel" style="height: 100%; width: 100%">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
                                 <img src="icons/004_go_back.svg" width="25" height="25"/>
                             </span>
                         </div>
                     </div>
 
-                    <div class="col-6 m-0   " style="height: 100%; padding: 2px"
+                    <div class="col-6 m-0 padding-menu  " style="height: 100%; "
                          @onclick="@(OnClickNextImg)">
-                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel" style="height: 100%; width: 100%">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
                                 <img src="icons/005_go_next.svg" width="25" height="25"/>
                             </span>
@@ -45,12 +115,42 @@
                 </div>
             </div>
 
-            <div class="col-2 p-0 m-0">
-                indexImg
+            <div class="col-2 p-0 m-0 " style="height: 100%;">
+                <div class="row  m-0 padding-menu" style="height: 100%; ">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             style="height: 100%; width: 100%; background-color: #fdfdfe">
+                            
+                        </div>
+                    </div>
+                    <div class="col-2"></div>
+                
+                </div>
             </div>
 
-            <div class="col-4 p-0 m-0">
-                проегрусс бар с доп информацией.
+            <div class="col-4 p-0 m-0 " style="height: 100%;">
+                <div class="row m-0 padding-menu" style="height: 100%; ">
+                    <div class="row  m-0 p-0" style="height: 40%;">
+                        <div class="m-0 p-0 progress prevent-select" role="progressbar" aria-label="Example with label" aria-valuenow="25"
+                             aria-valuemin="0" aria-valuemax="100" style="height: 100%;">
+                            <div class="progress-bar" style="width: @GetCurrentProgress()%">@GetCurrentProgress()%</div>
+                        </div>
+                    </div>
+                 
+                    <div class="row p-0 m-0" style="height: 60%;">
+                        <div class="col-6 p-0 m-0" style=" overflow: hidden ; word-break: break-all;height: 100%; ">
+                            @GetCurrentSqlDbName()
+                        </div>
+                        <div class="col-1 p-0 m-0" style=" overflow: hidden ; word-break: break-all;height: 100%; ">
+                         |
+                        </div>
+                        <div class="col-5 p-0 m-0" style=" overflow: hidden ; word-break: break-all;height: 100%; ">
+                            @GetNameFileEdit()
+                        </div>
+                       
+                    </div>
+                </div>
             </div>
         </div>
     </div>

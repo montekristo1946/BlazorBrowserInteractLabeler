@@ -23,11 +23,10 @@ public class SvgConstructor
 
     public async Task<string> CreateAnnotsFigure()
     {
-        var idImage = _markupData.CurrentIdImg;
 
-        var annots = await _annotationHandler.GetAllAnnotationsOnImg(idImage);
+        var annots = await _annotationHandler.GetAllAnnotations();
 
-        if (annots is null || annots.Length == 0)
+        if (annots.Length == 0)
            return string.Empty;
 
         var thicknessLine = _settingsData.StrokeWidth / _markupData.ScaleCurrent; 
@@ -118,7 +117,7 @@ public class SvgConstructor
         return String.Join(" ", retSvg);
     }
     
-    private string[] CreateAnchorPoints(List<PointF> points, double radius, string color, double strokeWidth)
+    private string[] CreateAnchorPoints(List<PointD> points, double radius, string color, double strokeWidth)
     {
         var retPoints = new List<string>();
         foreach (var annotationPoint in points)
@@ -138,7 +137,7 @@ public class SvgConstructor
         return $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
     }
     
-    private string CreateLastPoint(List<PointF> annotationPoints, double strokeWidth)
+    private string CreateLastPoint(List<PointD> annotationPoints, double strokeWidth)
     {
         var lastPoint = annotationPoints.MaxBy(p => p.PositionInGroup);
         if (lastPoint is null)
@@ -148,7 +147,7 @@ public class SvgConstructor
 
         return String.Join(" ", retPolygon);
     }
-    private static List<string> CreateActivePoint(double strokeWidth, PointF lastPoint)
+    private static List<string> CreateActivePoint(double strokeWidth, PointD lastPoint)
     {
         var retPolygon = new List<string>();
         var cx = lastPoint.X;

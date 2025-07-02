@@ -59,3 +59,10 @@
 
     overflow: hidden;
 }
+
+.padding-menu{
+    padding-bottom: 3px;
+    padding-top: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+}

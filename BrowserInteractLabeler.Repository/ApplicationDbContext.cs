@@ -33,7 +33,7 @@ public  class ApplicationDbContext:DbContext
     
     public DbSet<Annotation> Annotations { get; set; }
     
-    public DbSet<PointF> Points { get; set; }
+    public DbSet<PointD> Points { get; set; }
     
     public DbSet<SizeF> Sizes { get; set; }
     public DbSet<Label> Labels { get; set; }

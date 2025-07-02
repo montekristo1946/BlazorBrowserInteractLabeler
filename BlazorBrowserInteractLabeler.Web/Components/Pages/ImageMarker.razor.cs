@@ -39,7 +39,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
                 DotNetObjectReference.Create(this));
             OnResize(-1,-1);
 
-            _projectsLocalHandler.NeedUpdateUi += UpdateUi;
+            // _projectsLocalHandler.NeedUpdateUi += UpdateUi;
 
         }
     }
@@ -70,9 +70,9 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment CreateNavigationPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(NavigationPanel));
-        builder.AddAttribute(1,nameof(NavigationPanel.ClickNextImages),_projectsLocalHandler.LoadNextImage);
-        builder.AddAttribute(2,nameof(NavigationPanel.ClickBackImages),_projectsLocalHandler.LoadBackImage);
-        builder.AddComponentReferenceCapture(1, value =>
+        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUi);
+        // builder.AddAttribute(2,nameof(NavigationPanel.ClickBackImages),_projectsLocalHandler.LoadBackImage);
+        builder.AddComponentReferenceCapture(2, value =>
         {
             _navigationPanel = value as NavigationPanel
                                     ?? throw new InvalidOperationException(

@@ -53,7 +53,7 @@ public class NavigationHandler
         };
 
         // cacheModel.SizeDrawImage = cacheModel.ImageWindowsSize;
-        cacheModel.OffsetDrawImage = new PointF() { X = 0.0F, Y = 0.0F };
+        cacheModel.OffsetDrawImage = new PointD() { X = 0.0F, Y = 0.0F };
         _cacheModel.CurrentIdImg = 1;
         
         UpdateSvg();
@@ -475,12 +475,12 @@ public class NavigationHandler
     }
 
 
-    public PointF CalculateCursor(double argOffsetX, double argOffsetY)
+    public PointD CalculateCursor(double argOffsetX, double argOffsetY)
     {
         var currentX = (argOffsetX / _cacheModel.SizeDrawImage.Width);
         var currentY = (argOffsetY / _cacheModel.SizeDrawImage.Height);
 
-        return new PointF() { X = (float)currentX, Y = (float)currentY };
+        return new PointD() { X = (float)currentX, Y = (float)currentY };
     }
 
 

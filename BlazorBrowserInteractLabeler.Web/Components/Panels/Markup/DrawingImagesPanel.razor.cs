@@ -22,7 +22,7 @@ public partial class DrawingImagesPanel : ComponentBase
     private string WidthConvas => $"{(int)_markupData.SizeConvas.Width}px";
     private string HeightConvas => $"{(int)_markupData.SizeConvas.Height}px";
 
-    [Parameter] public Action<MouseEventArgs> HandlerOnmouseDown { get; set; }
+    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseDown { get; set; }
 
     [Parameter] public Action<MouseEventArgs> HandlerOnMouseMove { get; set; }
 
@@ -142,4 +142,6 @@ public partial class DrawingImagesPanel : ComponentBase
                 Log.Error("[GetRenderAnnotation] {@Exception}", e.Message);
             }
         };
+
+
 }

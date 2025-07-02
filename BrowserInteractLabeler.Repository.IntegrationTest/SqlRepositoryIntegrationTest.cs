@@ -69,7 +69,7 @@ public class SqlRepositoryIntegrationTest
             ImageFrame images = null;
             for (int j = 0; j < countAnnot; j++)
             {
-                var points = _fixture.Build<PointF>()
+                var points = _fixture.Build<PointD>()
                     .With(p => p.Id, 0)
                     .With(p => p.AnnotationId, -1)
                     .With(p => p.Annot, new Annotation())
@@ -158,7 +158,7 @@ public class SqlRepositoryIntegrationTest
             LabelPattern = TypeLabel.Box,
             ImageFrameId = imageFrameId,
             LabelId = 2,
-            Points = new List<PointF>()
+            Points = new List<PointD>()
             {
                 new() { X = 0.5f, Y = 0.6f }, new() { X = 0.7f, Y = 0.8f },
                 new() { X = 0.9f, Y = 1.0f },
@@ -186,7 +186,7 @@ public class SqlRepositoryIntegrationTest
         var arrAnnotSrc = _operativeFramesStorage.GetAnnotationsFromImgId(imgId);
         var arrClone = arrAnnotSrc.CloneDeep();
 
-        arrClone[0].Points[0] = new PointF() { X = 1, Y = 2 };
+        arrClone[0].Points[0] = new PointD() { X = 1, Y = 2 };
 
         if (arrAnnotSrc[0].Points[0].X == arrClone[0].Points[0].X)
             throw new Exception("Fail CloneDeep");

@@ -249,7 +249,7 @@ public class CacheAnnotation
         }
     }
 
-    private float CalculateArea(List<PointF>? argPoints)
+    private double CalculateArea(List<PointD>? argPoints)
     {
         if (argPoints is null)
             return 0;
@@ -295,7 +295,7 @@ public class CacheAnnotation
             var annot = new Annotation()
             {
                 Id = currentDb,
-                Points = new List<PointF>(),
+                Points = new List<PointD>(),
                 ImageFrameId = imagesId,
                 State = StateAnnot.Edit,
                 LabelId = -1,

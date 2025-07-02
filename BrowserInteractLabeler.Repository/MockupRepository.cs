@@ -2,7 +2,7 @@ using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using ImageMagick;
 using Serilog;
-using PointF = BrowserInteractLabeler.Common.DTO.PointF;
+using PointD = BrowserInteractLabeler.Common.DTO.PointD;
 using SizeF = BrowserInteractLabeler.Common.DTO.SizeF;
 
 namespace BrowserInteractLabeler.Repository;
@@ -27,24 +27,24 @@ public class MockupRepository
             new Annotation()
             {
                 Id = 0, ImageFrameId = 0,
-                Points = new List<PointF>()
-                    { new PointF() { X = 0.5f, Y = 0.5f }, new PointF() { X = 0.6f, Y = 0.56f } },
+                Points = new List<PointD>()
+                    { new PointD() { X = 0.5f, Y = 0.5f }, new PointD() { X = 0.6f, Y = 0.56f } },
                 LabelId = 2, LabelPattern = TypeLabel.Box, State =  StateAnnot.Finalized
                 
             },
             new Annotation()
             {
                 Id = 1, ImageFrameId = 0,
-                Points = new List<PointF>()
-                    { new PointF() { X = 0.1f, Y = 0.1f }, new PointF() { X = 0.2f, Y = 0.2f } },
+                Points = new List<PointD>()
+                    { new PointD() { X = 0.1f, Y = 0.1f }, new PointD() { X = 0.2f, Y = 0.2f } },
                 LabelId = 7, LabelPattern = TypeLabel.Box, State =  StateAnnot.Finalized
                 
             },
             new Annotation()
             {
                 Id = 2, ImageFrameId = 7,
-                Points = new List<PointF>()
-                    { new PointF() { X = 0.1f, Y = 0.1f }, new PointF() { X = 0.6f, Y = 0.56f } },
+                Points = new List<PointD>()
+                    { new PointD() { X = 0.1f, Y = 0.1f }, new PointD() { X = 0.6f, Y = 0.56f } },
                 LabelId = 3, LabelPattern = TypeLabel.Box, State =  StateAnnot.Finalized
             }
         };

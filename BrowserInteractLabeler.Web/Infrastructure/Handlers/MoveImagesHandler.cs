@@ -9,14 +9,14 @@ public class MoveImagesHandler
 {
     private readonly Serilog.ILogger _logger = Log.ForContext<NavigationHandler>();
 
-    private PointF _firstPosition = new();
+    private PointD _firstPosition = new();
     // private DateTime _timeFirstPoint = DateTime.MinValue;
     // private static readonly TimeSpan _minTimeMove = TimeSpan.FromMilliseconds(1);
 
 
     public void HandlerOnmousedown(MouseEventArgs mouseEventArgs, DateTime timeClick)
     {
-        _firstPosition = new PointF() { X = (float)mouseEventArgs.ClientX, Y = (float)mouseEventArgs.ClientY };
+        _firstPosition = new PointD() { X = (float)mouseEventArgs.ClientX, Y = (float)mouseEventArgs.ClientY };
         // _timeFirstPoint = timeClick;
         // _logger.Debug($"[HandlerOnmousedownAsync] M:{mouseEventArgs.ClientX};{mouseEventArgs.ClientY } ");
 
@@ -44,7 +44,7 @@ public class MoveImagesHandler
             return (false, new SizeF());
 
 
-        _firstPosition = new PointF() { X = (float)mouseEventArgs.ClientX, Y = (float)mouseEventArgs.ClientY };
+        _firstPosition = new PointD() { X = (float)mouseEventArgs.ClientX, Y = (float)mouseEventArgs.ClientY };
         return (true, retMove);
     }
 

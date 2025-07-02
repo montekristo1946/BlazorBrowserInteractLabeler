@@ -12,9 +12,9 @@ public static class AnnotationExtension
 
     public static Annotation CloneDeep(this Annotation annotSrc)
     {
-        var pointsNew = new List<PointF>();
+        var pointsNew = new List<PointD>();
         if (annotSrc.Points is not null)
-            pointsNew = annotSrc.Points.Select(pointSrc => new PointF()
+            pointsNew = annotSrc.Points.Select(pointSrc => new PointD()
             {
                 X = pointSrc.X,
                 Y = pointSrc.Y,
@@ -30,8 +30,7 @@ public static class AnnotationExtension
             LabelPattern = annotSrc.LabelPattern,
             LabelId = annotSrc.LabelId,
             State = annotSrc.State,
-            Points = pointsNew,
-            Images = null
+            Points = pointsNew
         };
     }
 
@@ -40,7 +39,7 @@ public static class AnnotationExtension
         if (initialAnnots.Count() != comparable.Count())
             return false;
 
-        bool ComparePoints(List<PointF>? pointsA, List<PointF>? pointsB)
+        bool ComparePoints(List<PointD>? pointsA, List<PointD>? pointsB)
         {
             if (pointsA is null && pointsB is null)
                 return true;

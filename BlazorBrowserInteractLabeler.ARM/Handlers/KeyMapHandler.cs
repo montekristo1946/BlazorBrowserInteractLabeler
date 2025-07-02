@@ -1,6 +1,10 @@
 using BlazorBrowserInteractLabeler.ARM.Dto;
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
+using MediatR;
 using Microsoft.AspNetCore.Components.Web;
+using Serilog;
+
 namespace BlazorBrowserInteractLabeler.ARM.Handlers;
 
 public class KeyMapHandler
@@ -8,14 +12,18 @@ public class KeyMapHandler
     private readonly Helper _helper;
     private readonly MarkupData  _markupData;
     private readonly MoveImagesHandler  _moveImagesHandler;
+    private readonly IMediator _mediator;
     private const int LeftButton = 1;
     private const int RightButton = 2;
+    private SemaphoreSlim _semaphoreSlim = new(1, 1);
+    private readonly int _timeWaitSeamaphore = 10;
     
-    public KeyMapHandler(Helper helper, MarkupData markupData, MoveImagesHandler moveImagesHandler)
+    public KeyMapHandler(Helper helper, MarkupData markupData, MoveImagesHandler moveImagesHandler, IMediator mediator)
     {
         _helper = helper ?? throw new ArgumentNullException(nameof(helper));
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
+        _mediator = mediator;
     }
 
  
@@ -29,7 +37,7 @@ public class KeyMapHandler
         switch (args)
         {
             case { CtrlKey: false, AltKey: false , Buttons: LeftButton }:
-                CreatePoint(args);
+                _ = CreatePoint(args);
                 break;
             case { CtrlKey: false, AltKey: true , Buttons: LeftButton }:
                 StartMoveImage(args);
@@ -74,7 +82,7 @@ public class KeyMapHandler
         _moveImagesHandler.HandlerOnmousedown(correctPoint);
     }
 
-    private void CreatePoint(MouseEventArgs args)
+    private async Task CreatePoint(MouseEventArgs args)
     {
         var correctPoint = _helper.GetAbsoluteCoordinate(
             args.PageX,
@@ -86,8 +94,23 @@ public class KeyMapHandler
             _markupData.ScaleCurrent,
             _markupData.OffsetDrawImage,
             _markupData.SizeConvas);
+
         
-        // _markupData.TestDrawPoint = points;
+        await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore);
+        try
+        {
+            await _mediator.Send(new AddPointsQueries() { Point = points });
+
+        }
+        catch (Exception e)
+        {
+            Log.Error("[CreatePoint] {@Exception}", e);
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
+        
     }
     
     private void MovingImage(MouseEventArgs args)
