@@ -53,33 +53,35 @@ public class ProjectsLocalHandler
 
     internal async Task HandlerChoseActiveDataBaseAsync(string arg)
     {
-        if (arg is null && !arg.Any())
-            return;
-        LoadingDB = true;
-        CurrentSqlDbName = arg;
-
-        if (!File.Exists(arg))
-            return;
-
-        var res = _repository.LoadDatabase(arg);
-        if (!res)
-        {
-            _logger.Error("[HandlerChoseActiveDataBaseAsync] fail LoadDatabaseAsync {PathDb}", arg);
-            return;
-        }
-
-        await LoadInformationOnStateDb();
-        await _navigationHandler.GetDbName(CurrentSqlDbName);
-        await _navigationHandler.LoadFirstImg();
-        LoadingDB = false;
+        // if (arg is null && !arg.Any())
+        //     return;
+        // LoadingDB = true;
+        // CurrentSqlDbName = arg;
+        //
+        // if (!File.Exists(arg))
+        //     return;
+        //
+        // var res = _repository.LoadDatabase(arg);
+        // if (!res)
+        // {
+        //     _logger.Error("[HandlerChoseActiveDataBaseAsync] fail LoadDatabaseAsync {PathDb}", arg);
+        //     return;
+        // }
+        //
+        // await LoadInformationOnStateDb();
+        // await _navigationHandler.GetDbName(CurrentSqlDbName);
+        // await _navigationHandler.LoadFirstImg();
+        // LoadingDB = false;
+        throw new NotImplementedException();
     }
 
     private async Task LoadInformationOnStateDb()
     {
-        var allInformation = _repository.GetInformationDto();
-        var currentInfo = allInformation.Where(p => p.CategoryInformation == 1);
-        var lastInfo = currentInfo.MaxBy(p => p.Id);
-        CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "Being processed ...";
+        // var allInformation = _repository.GetInformationDto();
+        // var currentInfo = allInformation.Where(p => p.CategoryInformation == 1);
+        // var lastInfo = currentInfo.MaxBy(p => p.Id);
+        // CurrentInformationSqlDb = lastInfo is not null ? lastInfo.Information : "Being processed ...";
+        throw new NotImplementedException();
     }
 
     internal async Task HandlerChoseExportDataBaseAsync(string fullPathDb)
@@ -87,42 +89,43 @@ public class ProjectsLocalHandler
         if (string.IsNullOrEmpty(fullPathDb))
             return;
 
-        try
-        {
-            var labels = _repository.GetAllLabels();
-            var frames = _repository.GetAllImages();
-            var annots = _repository.GetAllAnnotations();
-            var saveJson = new ExportDTO()
-            {
-                Labels = labels,
-                Annotations = annots,
-                Images = frames
-            };
-
-            var jsonSerializerSettings = new JsonSerializerSettings();
-            jsonSerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-
-            var json = JsonConvert.SerializeObject(saveJson, jsonSerializerSettings);
-            var jsonPath = Path.Combine(_serviceConfigs.ExportCompletedTasks, $"{Path.GetFileName(fullPathDb)}.json");
-            await File.WriteAllTextAsync(jsonPath, json);
-
-            var newInformationDto = new InformationDto()
-            {
-                Information = "Completed",
-                CategoryInformation = 1,
-            };
-
-            var resSaveInformationDtoAsync = _repository.SaveInformationDto(newInformationDto);
-            if (!resSaveInformationDtoAsync)
-                _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}",
-                    fullPathDb);
-
-            await LoadInformationOnStateDb();
-        }
-        catch (Exception e)
-        {
-            _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail: {PathDb}", fullPathDb);
-        }
+        throw new NotImplementedException();
+        // try
+        // {
+        //     var labels = _repository.GetAllLabels();
+        //     var frames = _repository.GetAllImages();
+        //     var annots = _repository.GetAllAnnotations();
+        //     var saveJson = new ExportDTO()
+        //     {
+        //         Labels = labels,
+        //         Annotations = annots,
+        //         Images = frames
+        //     };
+        //
+        //     var jsonSerializerSettings = new JsonSerializerSettings();
+        //     jsonSerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+        //
+        //     var json = JsonConvert.SerializeObject(saveJson, jsonSerializerSettings);
+        //     var jsonPath = Path.Combine(_serviceConfigs.ExportCompletedTasks, $"{Path.GetFileName(fullPathDb)}.json");
+        //     await File.WriteAllTextAsync(jsonPath, json);
+        //
+        //     var newInformationDto = new InformationDto()
+        //     {
+        //         Information = "Completed",
+        //         CategoryInformation = 1,
+        //     };
+        //
+        //     var resSaveInformationDtoAsync = _repository.SaveInformationDto(newInformationDto);
+        //     if (!resSaveInformationDtoAsync)
+        //         _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}",
+        //             fullPathDb);
+        //
+        //     await LoadInformationOnStateDb();
+        // }
+        // catch (Exception e)
+        // {
+        //     _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail: {PathDb}", fullPathDb);
+        // }
     }
 
     internal void SetRootWindowsSize(SizeF sizeBrowse)

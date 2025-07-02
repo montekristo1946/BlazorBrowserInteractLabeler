@@ -68,33 +68,37 @@ public class NavigationHandler
 
     public async Task LoadFirstImg()
     {
-        _cacheModel.CurrentIdImg = 1;
-        _cacheModel.CurrentProgress = 0;
-        await CreateStartImagesState(_cacheModel.CurrentIdImg);
-        _cacheModel.LabelAll = _repository.GetAllLabels();
-        _cacheModel.ColorAll = _serviceConfigs.Colors;
-        SetMainFocusRootPanel = true;
+        throw new NotImplementedException();
+        // _cacheModel.CurrentIdImg = 1;
+        // _cacheModel.CurrentProgress = 0;
+        // await CreateStartImagesState(_cacheModel.CurrentIdImg);
+        // _cacheModel.LabelAll = _repository.GetAllLabels();
+        // _cacheModel.ColorAll = _serviceConfigs.Colors;
+        // SetMainFocusRootPanel = true;
     }
 
 
     private async Task CreateStartImagesState(int indexImg)
     {
+        throw new NotImplementedException();
         try
         {
-            var imageFrame = _repository.GetImagesByIndex(indexImg);
-            if (!imageFrame.Images.Any())
-                return;
+            
+            
+            // var imageFrame = _repository.GetImagesByIndex(indexImg);
+            // if (!imageFrame.Images.Any())
+            //     return;
 
-            _cacheModel.Images = imageFrame;
+            // _cacheModel.Images = imageFrame;
             // _cacheModel.SizeDrawImage = _helper.CalculationOptimalSize(imageFrame.SizeImage, _cacheModel.ImageWindowsSize);
             // _cacheModel.OffsetDrawImage =
             //     _helper.CalculationDefaultOffsetImg(_cacheModel.SizeDrawImage, _cacheModel.ImageWindowsSize);
 
 
-            _cacheModel.ScaleCurrent = _defaultScale;
-            await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
-            _cacheModel.NameImages = imageFrame.NameImages;
-            UpdateSvg();
+            // _cacheModel.ScaleCurrent = _defaultScale;
+            // await _cacheAnnotation.LoadAnnotationsSlowStorageAsync(_cacheModel.CurrentIdImg);
+            // _cacheModel.NameImages = imageFrame.NameImages;
+            // UpdateSvg();
 
             // if (ImagesPanelRef is null)
             // {
@@ -104,7 +108,7 @@ public class NavigationHandler
 
             // await ImagesPanelRef.LoadImageJsAsync();
             
-            _cacheModel.AllCountImages =  _repository.GetAllIndexImages().Length;
+            // _cacheModel.AllCountImages =  _repository.GetAllIndexImages().Length;
         }
         catch (Exception e)
         {
@@ -114,23 +118,24 @@ public class NavigationHandler
 
     private async Task HandlerClickNextAsync(int index)
     {
-        var allIndex = _repository.GetAllIndexImages();
-
-        if (index > allIndex.Length || index < 1)
-        {
-            _logger.Debug("[NavigationHandler:HandlerClickNextAsync] the list is over");
-            return;
-        }
-
-        SetActiveIdAnnotation(-1);
-        await SaveAnnotationAsync();
-        _cacheModel.CurrentIdImg = index;
-
-        _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
-        await CreateStartImagesState(index);
-        _cacheModel.StatePrecess = "";
-        
-        IsNewImageRendered?.Invoke();
+        // var allIndex = _repository.GetAllIndexImages();
+        //
+        // if (index > allIndex.Length || index < 1)
+        // {
+        //     _logger.Debug("[NavigationHandler:HandlerClickNextAsync] the list is over");
+        //     return;
+        // }
+        //
+        // SetActiveIdAnnotation(-1);
+        // await SaveAnnotationAsync();
+        // _cacheModel.CurrentIdImg = index;
+        //
+        // _cacheModel.CurrentProgress = _helper.CalculationCurrentProgress(index, allIndex.Length);
+        // await CreateStartImagesState(index);
+        // _cacheModel.StatePrecess = "";
+        //
+        // IsNewImageRendered?.Invoke();
+        throw new NotImplementedException();
     }
 
     public async Task ButtonGoNextClick()

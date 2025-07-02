@@ -5,17 +5,17 @@
 @rendermode InteractiveServer
 
 
-<div class="m-0 p-0" id="@ConstantsArm.ImageMarkerRoot" style="background-color: #ebf0ff;">
+<div class="m-0 p-0" id="@ConstantsArm.ImageMarkerRoot" style="background-color: #ebf0ff; overflow-x: hidden; overflow-y: hidden;">
     <div class="row m-0 p-0 border-enveloping-custom" style=" height: 5.0vh; width: 100vw;">
         @NavigationPanelTemplate
     </div>
     <div class="row m-0 p-0 border-enveloping-custom" style=" height: 95.0vh; width: 100vw;">
      
         <div class="col-md-imagePanel m-0 p-0 border-enveloping-custom">
-            @ImagesPanelTemplate
+            @DrawingImagesPanelTemplate
         </div>
-        <div class="col-md-rightPanel m-0 p-0 border-enveloping-custom">
-            label panel
+        <div class="col-md-rightPanel m-0 p-0 border-enveloping-custom" style="overflow-y: auto;">
+            @LabelingPanelTemplate
         </div>
         
     </div>

@@ -101,24 +101,25 @@ public class CacheAnnotation
         await semaphoreSlim.WaitAsync();
         try
         {
-            var removeAnnot = _repository.GetAnnotationsFromImgId(imagesId);
-            var annotations = _annotations.CloneDeep();
-            var equalAnnotation = removeAnnot.Equality(annotations);
-            if (equalAnnotation)
-                return;
-
-            _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
-                          "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
-                annotations.Count());
-
-
-            _repository.DeleteAnnotations(removeAnnot);
-            annotations = ClearFailAnnotation(annotations);
-            annotations = OrderPoints(annotations);
-            _repository.SaveAnnotations(annotations);
-
-            var allAnnot = _repository.GetAnnotationsFromImgId(imagesId);
-            _annotations = allAnnot.CloneDeep().ToList();
+            throw new NotImplementedException();
+            // var removeAnnot = _repository.GetAnnotationsFromImgId(imagesId);
+            // var annotations = _annotations.CloneDeep();
+            // var equalAnnotation = removeAnnot.Equality(annotations);
+            // if (equalAnnotation)
+            //     return;
+            //
+            // _logger.Debug("[SaveAnnotationsOnSqlAsync] " +
+            //               "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", imagesId,
+            //     annotations.Count());
+            //
+            //
+            // _repository.DeleteAnnotations(removeAnnot);
+            // annotations = ClearFailAnnotation(annotations);
+            // annotations = OrderPoints(annotations);
+            // _repository.SaveAnnotations(annotations);
+            //
+            // var allAnnot = _repository.GetAnnotationsFromImgId(imagesId);
+            // _annotations = allAnnot.CloneDeep().ToList();
         }
         catch (Exception e)
         {
@@ -218,35 +219,36 @@ public class CacheAnnotation
     public async Task LoadAnnotationsSlowStorageAsync(int imagesId)
     {
         await semaphoreSlim.WaitAsync();
-        try
-        {
-            var allAnnots = _repository.GetAnnotationsFromImgId(imagesId);
-            var cloneAnnots = allAnnots.CloneDeep().ToList();
-            var annotations = cloneAnnots.Select(annot =>
-                {
-                    if (annot.Points?.Any() == false)
-                        return annot;
-
-                    var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
-                    if (checkRestore == annot.Points.Count()) //restoration position
-                        annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
-
-                    return annot;
-                })
-                .OrderBy(p => p.LabelId)
-                .ThenByDescending(p => CalculateArea(p.Points))
-                .ToList();
-
-            _annotations = annotations;
-        }
-        catch (Exception e)
-        {
-            _logger.Error("[LoadAnnotationsSlowStorageAsync] {@Exception}", e);
-        }
-        finally
-        {
-            semaphoreSlim.Release();
-        }
+        throw new NotImplementedException();
+        // try
+        // {
+        //     var allAnnots = _repository.GetAnnotationsFromImgId(imagesId);
+        //     var cloneAnnots = allAnnots.CloneDeep().ToList();
+        //     var annotations = cloneAnnots.Select(annot =>
+        //         {
+        //             if (annot.Points?.Any() == false)
+        //                 return annot;
+        //
+        //             var checkRestore = annot.Points.Count(p => p.PositionInGroup == -1);
+        //             if (checkRestore == annot.Points.Count()) //restoration position
+        //                 annot.Points = annot.Points.Select((p, i) => p with { PositionInGroup = i }).ToList();
+        //
+        //             return annot;
+        //         })
+        //         .OrderBy(p => p.LabelId)
+        //         .ThenByDescending(p => CalculateArea(p.Points))
+        //         .ToList();
+        //
+        //     _annotations = annotations;
+        // }
+        // catch (Exception e)
+        // {
+        //     _logger.Error("[LoadAnnotationsSlowStorageAsync] {@Exception}", e);
+        // }
+        // finally
+        // {
+        //     semaphoreSlim.Release();
+        // }
     }
 
     private double CalculateArea(List<PointD>? argPoints)

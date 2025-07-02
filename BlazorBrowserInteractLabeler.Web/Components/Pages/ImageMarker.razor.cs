@@ -3,6 +3,7 @@ using BlazorBrowserInteractLabeler.ARM.Dto;
 using BlazorBrowserInteractLabeler.ARM.Handlers;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BlazorBrowserInteractLabeler.Web.Common;
+using BlazorBrowserInteractLabeler.Web.Components.Panels.Labeling;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
 using Microsoft.AspNetCore.Components;
@@ -19,18 +20,25 @@ public partial class ImageMarker : ComponentBase, IDisposable
     
     [Inject] private ProjectsLocalHandler _projectsLocalHandler { get; set; } = null!;
 
-    private RenderFragment ImagesPanelTemplate { get; set; } = null!;
-    private DrawingImagesPanel? _imagesPanelComponent = null;
+    private RenderFragment DrawingImagesPanelTemplate { get; set; } = null!;
+    private DrawingImagesPanel? _drawingImagesPanelComponent = null;
 
     private RenderFragment NavigationPanelTemplate { get; set; } = null!;
     private NavigationPanel? _navigationPanel = null;
     
+    
+    private RenderFragment LabelingPanelTemplate { get; set; } = null!;
+    private LabelingPanel? _labelingPanelComponent = null;
+    
     protected override void OnInitialized()
     {
-        ImagesPanelTemplate = CreateImagesPanelTemplate();
+        DrawingImagesPanelTemplate = CreateDrawingImagesPanelTemplate();
         NavigationPanelTemplate = CreateNavigationPanelTemplate();
+        LabelingPanelTemplate = CreateLabelingPanelTemplate();
     }
-    
+
+
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -38,19 +46,17 @@ public partial class ImageMarker : ComponentBase, IDisposable
             await JSRuntime.InvokeVoidAsync("window.registerViewportChangeCallback",
                 DotNetObjectReference.Create(this));
             OnResize(-1,-1);
-
-            // _projectsLocalHandler.NeedUpdateUi += UpdateUi;
-
+            
         }
     }
 
     private void UpdateUi()
     {
         InvokeAsync(StateHasChanged);
-        _imagesPanelComponent?.OnUpdateImage();
+        _drawingImagesPanelComponent?.OnUpdateImage();
     }
 
-    private RenderFragment CreateImagesPanelTemplate() => builder =>
+    private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(DrawingImagesPanel));
         builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseDown),KeyMapHandler.HandlerOnMouseDown);
@@ -59,7 +65,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         
         builder.AddComponentReferenceCapture(4, value =>
         {
-            _imagesPanelComponent = value as DrawingImagesPanel
+            _drawingImagesPanelComponent = value as DrawingImagesPanel
                                     ?? throw new InvalidOperationException(
                                         "Не смог сконвертитировать ImagesPanel в ImagesPanel");
         });
@@ -71,7 +77,6 @@ public partial class ImageMarker : ComponentBase, IDisposable
     {
         builder.OpenComponent(0, typeof(NavigationPanel));
         builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUi);
-        // builder.AddAttribute(2,nameof(NavigationPanel.ClickBackImages),_projectsLocalHandler.LoadBackImage);
         builder.AddComponentReferenceCapture(2, value =>
         {
             _navigationPanel = value as NavigationPanel
@@ -81,10 +86,21 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
+    
+    private RenderFragment CreateLabelingPanelTemplate() => builder =>
+    {
+        builder.OpenComponent(0, typeof(LabelingPanel));
+        builder.AddComponentReferenceCapture(1, value =>
+        {
+            _labelingPanelComponent = value as LabelingPanel
+                               ?? throw new InvalidOperationException(
+                                   "Не смог сконвертитировать NavigationPanel в LabelingPanel");
+        });
 
+        builder.CloseComponent();
+    };
     public void Dispose()
     {
-     
     }
     
     [JSInvokable]
@@ -96,7 +112,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
             MarkupData.ImageMarkerPanelSize = sizeBrowse;
             
-            await _imagesPanelComponent?.SetSizeConvas()!;
+            await _drawingImagesPanelComponent?.SetSizeConvas()!;
             UpdateUi();
         });
     }
