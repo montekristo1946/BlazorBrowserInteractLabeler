@@ -51,7 +51,7 @@
                 </div>
             </div>
             
-            <div class="col-3 padding-1px" @onclick="@(() => ClickDeleteEditionAnnot())" style="height: 100%;">
+            <div class="col-3 padding-1px" @onclick="@(ClickDeleteEditionAnnot)" style="height: 100%;">
                 <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
                     <span role="img" class="anticon  text-vertical-center">
                         <img src="icons/018_garbage.svg" width="25" height="25" alt=""/>
@@ -99,6 +99,39 @@
     </div>
 
     <div class="tab-pane fade " id="labels-tab-pane" role="tabpanel" aria-labelledby="object-tab">
-        Labels
+        <div class="list-group  m-0 p-0 no-select">
+            @{
+                foreach (var colorModel in _colorModels)
+                {
+                    <div class="row  m-0 button-panel padding-2px" style="height: 38px; width: 100%;" >
+
+                        <div class="col-9 m-0 p-0 bottom-shadow" style="height: 100%;"
+                             @onclick="@(() => ButtonClickSetActiveLabel(colorModel.IdLabel))">
+                            <div class="row p-0 m-0" style="height: 100%;">
+                                <div class="col-3   m-0  padding-2px" style="height: 100%;">
+                                    <div class="p-0 m-0 settings-panel"
+                                         style="height: 100%; width: 100%; background-color: @colorModel.Color">
+                                    </div>
+                                </div>
+                                <div class="col-9 padding-2px m-0  "
+                                     style="height: 100%; overflow: hidden ; word-break: break-all; ">
+                                    @GetLabelText(colorModel.IdLabel)
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-3 p-0  m-0 settings-panel div-menu-center " style="height: 100%;">
+                            <span role="img" class="anticon  text-vertical-center">
+                                @colorModel.KeyOnBoardName
+                            </span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+
     </div>
 </div>

@@ -5,6 +5,9 @@ using Serilog;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
+/// <summary>
+/// Удаляет annot который находится в состоянии редактируется.
+/// </summary>
 public class DeleteAdditionAnnotHandler : IRequestHandler<DeleteEditionAnnotQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<DeleteAdditionAnnotHandler>();

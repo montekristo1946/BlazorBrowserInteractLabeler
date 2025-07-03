@@ -22,16 +22,21 @@ public partial class LabelingPanel : ComponentBase
     
     private bool _isHiddenState = false;
     private LabelingPanelDto[] _labelingPanelDtos = [];
+    private ColorModel[] _colorModels = [];
+    private Label[] _labelsName = [];
 
     protected override async Task OnInitializedAsync()
     {
+        _colorModels = _settingsData.ColorModel;
+        _labelsName = _markupData.LabelsName;
         await LoadAnnots();
     }
+    
 
     private async Task LoadAnnots()
     {
         var annotations = await _annotationHandler.GetAllAnnotations();
-        _labelingPanelDtos = _mappers.MapToLabelingPanelDto(annotations,_settingsData.ColorModel,_markupData.LabelsName);
+        _labelingPanelDtos = _mappers.MapToLabelingPanelDto(annotations,_colorModels,_labelsName);
         _labelingPanelDtos = _labelingPanelDtos.OrderBy(p => p.IdAnnotation).ToArray();
 
     }
@@ -103,6 +108,17 @@ public partial class LabelingPanel : ComponentBase
     {
         await _mediator.Send(new DeleteEditionAnnotQueries());
         IsUpdateMenu?.Invoke();
+    }
 
+    private string GetLabelText(int idLabel)
+    {
+        var retValue = _labelsName.FirstOrDefault(p=>p.Id == idLabel)?.NameLabel ?? string.Empty;
+        return retValue;
+    }
+
+    private async Task ButtonClickSetActiveLabel(int colorModelIdLabel)
+    {
+        await _mediator.Send(new SetActiveLabelQueries(){IdLabel = colorModelIdLabel});
+        IsUpdateMenu?.Invoke();
     }
 }

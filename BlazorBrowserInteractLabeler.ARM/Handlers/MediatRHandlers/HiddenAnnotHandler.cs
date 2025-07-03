@@ -5,6 +5,9 @@ using Serilog;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
+/// <summary>
+/// Устанавливает состояние скрытый для конкретного annot
+/// </summary>
 public class HiddenAnnotHandler : IRequestHandler<HiddenAnnotQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<HiddenAllAnnotHandler>();

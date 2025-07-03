@@ -5,6 +5,9 @@ using Serilog;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
+/// <summary>
+/// Устанавливает состояние редактируется для конкретного annot
+/// </summary>
 public class EditionAnnotHandler : IRequestHandler<EditionAnnotQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<EditionAnnotHandler>();
