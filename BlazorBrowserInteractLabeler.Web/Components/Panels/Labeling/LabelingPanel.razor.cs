@@ -40,20 +40,11 @@ public partial class LabelingPanel : ComponentBase
         await _mediator.Send(new HiddenAllAnnotQueries(){IsHidden = isHidden});
         IsUpdateMenu?.Invoke();
     }
-    
-    private bool Switcher()
-    {
-        return _isHiddenState switch
-        {
-            true => _isHiddenState = false,
-            false => _isHiddenState = true};
-    }
 
     private int GetCountAnnots()
     {
         return _labelingPanelDtos.Length;
     }
-
     private string GetSvgPath(TypeLabel labelPattern)
     {
         switch (labelPattern)
@@ -72,7 +63,6 @@ public partial class LabelingPanel : ComponentBase
                 throw new ArgumentOutOfRangeException(nameof(labelPattern), labelPattern, null);
         }
     }
-
     private async Task ButtonClickObjectHiddenAsync(int idAnnotation)
     {
         await _mediator.Send(new HiddenAnnotQueries(){IdAnnotaion = idAnnotation});
@@ -106,13 +96,13 @@ public partial class LabelingPanel : ComponentBase
             await LoadAnnots();
             StateHasChanged();
         });
-        
-   
     
     }
-
-    private string GetPathSvgHidden()
+    
+    private async Task ClickDeleteEditionAnnot()
     {
-        return _isHiddenState ? "icons/015_open_eye_icon.svg" : "icons/016_close_eye_icon.svg";
+        await _mediator.Send(new DeleteEditionAnnotQueries());
+        IsUpdateMenu?.Invoke();
+
     }
 }

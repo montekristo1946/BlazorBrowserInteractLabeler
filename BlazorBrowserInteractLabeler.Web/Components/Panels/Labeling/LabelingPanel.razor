@@ -28,19 +28,34 @@
     <div class="tab-pane fade show active" id="object-tab-panel" role="tabpanel" aria-labelledby="object-tab">
 
         <div class="row p-0 m-0" style="height: 30px; width: 100%">
-            <div class="col-4 padding-1px" @onclick="@(() => ClickHiddenAll(Switcher()))" style="height: 100%;">
+            <div class="col-3 padding-1px" @onclick="@(() => ClickHiddenAll(true))" style="height: 100%;">
                 <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
                     <span role="img" class="anticon  text-vertical-center">
-                        <img src="@GetPathSvgHidden()" width="25" height="25" alt=""/>
+                        <img src="icons/016_close_eye_icon.svg" width="25" height="25" alt=""/>
+                    </span>
+                </div>
+            </div>
+            <div class="col-3 padding-1px" @onclick="@(() => ClickHiddenAll(false))" style="height: 100%;">
+                <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
+                    <span role="img" class="anticon  text-vertical-center">
+                        <img src="icons/015_open_eye_icon.svg" width="25" height="25" alt=""/>
                     </span>
                 </div>
             </div>
 
-            <div class="col-4 padding-1px" style="height: 100%;  ">
+            <div class="col-3 padding-1px" style="height: 100%;  ">
                 <div class=" p-0 m-0 div-menu-center settings-panel" style="height: 100%; width: 100%">
                     <div class="p-0 m-0 text-vertical-center">
                         @GetCountAnnots()
                     </div>
+                </div>
+            </div>
+            
+            <div class="col-3 padding-1px" @onclick="@(() => ClickDeleteEditionAnnot())" style="height: 100%;">
+                <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
+                    <span role="img" class="anticon  text-vertical-center">
+                        <img src="icons/018_garbage.svg" width="25" height="25" alt=""/>
+                    </span>
                 </div>
             </div>
         </div>
