@@ -1,3 +1,4 @@
+using System.Data;
 using BlazorBrowserInteractLabeler.ARM.Dto;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
@@ -32,15 +33,14 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
                 return false;
 
             var pathDb = request.PathDb;
-            
+
             if (!File.Exists(pathDb))
-                return false;
+                throw new InvalidOperationException("[ChoseActiveDataBaseHandler] Fail path DB");
      
             var res = await _repository.LoadDatabaseAsync(pathDb);
             if (!res)
             {
-                Log.Error("[HandlerChoseActiveDataBaseAsync] fail LoadDatabaseAsync {PathDb}", pathDb);
-                return false;
+                throw new InvalidOperationException($"[ChoseActiveDataBaseHandler] fail LoadDatabaseAsync {pathDb}");
             }
 
             var idImg = 1;
@@ -58,6 +58,13 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             };
         
             await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = idImg }, cancellationToken);
+
+            var labelsDb = await _repository.GetAllLabelsAsync();
+            if (labelsDb is null || labelsDb.Any() is false)
+            {
+                throw new InvalidOperationException($"[ChoseActiveDataBaseHandler]  fail load LabelsName");
+            }
+            _markupData.LabelsName = labelsDb;
             
             return true;
         }

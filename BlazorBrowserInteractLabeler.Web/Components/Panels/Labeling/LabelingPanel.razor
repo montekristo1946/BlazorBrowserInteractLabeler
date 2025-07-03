@@ -31,7 +31,7 @@
             <div class="col-4 padding-1px" @onclick="@(() => ClickHiddenAll(Switcher()))" style="height: 100%;">
                 <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
                     <span role="img" class="anticon  text-vertical-center">
-                        <img src="icons/016_close_eye_icon.svg" width="25" height="25" alt=""/>
+                        <img src="@GetPathSvgHidden()" width="25" height="25" alt=""/>
                     </span>
                 </div>
             </div>
@@ -46,9 +46,11 @@
         </div>
         <div class="list-group  m-0 p-0 no-select">
             @{
-                foreach (var labelingPanelDto in GetAnnots())
+                foreach (var labelingPanelDto in _labelingPanelDtos)
                 {
-                    <div class="row  m-0 button-panel padding-2px " style="height: 38px; width: 100%; ">
+                    var backGround = GetBackroundColor(labelingPanelDto.State);
+                    <div class="row  m-0 button-panel padding-2px "
+                         style="height: 38px; width: 100%; background-color: @backGround">
 
                         <div class="col-9 m-0 p-0 bottom-shadow" style="height: 100%;"
                              @onclick="@(() => ButtonClickObjectAsync(labelingPanelDto.IdAnnotation))">

@@ -176,6 +176,32 @@ public class SqlRepository : IRepository
 
         return false;
     }
+    
+    public async Task<Label[]> GetAllLabelsAsync()
+    {
+        if (_db is null )
+            return [];
+
+
+        await SemaphoreSlim.WaitAsync();
+        try
+        {
+            var labels = _db.Labels.ToArray();
+            return labels;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[DeleteAnnotationsAsync] {@Exception}", e);
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
+
+        return [];
+    }
+    
+
 
     public void Dispose()
     {

@@ -26,7 +26,6 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment NavigationPanelTemplate { get; set; } = null!;
     private NavigationPanel? _navigationPanel = null;
     
-    
     private RenderFragment LabelingPanelTemplate { get; set; } = null!;
     private LabelingPanel? _labelingPanelComponent = null;
     
@@ -54,6 +53,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     {
         InvokeAsync(StateHasChanged);
         _drawingImagesPanelComponent?.OnUpdateImage();
+        _labelingPanelComponent?.UpdateUi();
     }
 
     private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
@@ -90,6 +90,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment CreateLabelingPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(LabelingPanel));
+        builder.AddAttribute(1,nameof(LabelingPanel.IsUpdateMenu),UpdateUi);
         builder.AddComponentReferenceCapture(1, value =>
         {
             _labelingPanelComponent = value as LabelingPanel

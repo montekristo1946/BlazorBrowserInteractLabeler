@@ -16,7 +16,25 @@ public class MarkupData
     private int _currentIdImg  = 0;
     private int _currentProgress  = 0;
     private int _labelId = 1;
+    private Label[] _labelsName { get; set; }
     
+    public Label[] LabelsName
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _labelsName.ToArray();
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _labelsName = value.ToArray();
+            }
+        }
+    }
     public int CurrentLabelId
     {
         get

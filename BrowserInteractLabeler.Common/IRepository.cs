@@ -13,15 +13,15 @@ public interface IRepository : IDisposable
     // public Annotation[] GetAllAnnotationsAsync();
     //
     public Task<ImageFrame> GetImagesByIndexAsync(int imagesId);
-    //
-    // public Label[] GetAllLabelsAsync();
 
     public Task<Annotation[]> GetAnnotationsFromImgIdAsync(int imagesId);
 
     public Task<bool> DeleteAnnotationsAsync(Annotation[] removeAnnot);
     
     public Task<bool> SaveAnnotationsAsync(Annotation[] toArray);
-    
+
+    public Task<Label[]> GetAllLabelsAsync();
+
 //     public int GetLastIndexAnnotationAsync();
 //
 //     public bool InsertImageFramesAsync(ImageFrame[]? frame);

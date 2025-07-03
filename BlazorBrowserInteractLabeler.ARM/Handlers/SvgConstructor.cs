@@ -34,6 +34,9 @@ public class SvgConstructor
         
         foreach (var annotation in annots)
         {
+            if(annotation.State == StateAnnot.Hidden)
+                continue;
+            
             var activeAnnot = annotation.State != StateAnnot.Finalized;
             switch (annotation.LabelPattern)
             {

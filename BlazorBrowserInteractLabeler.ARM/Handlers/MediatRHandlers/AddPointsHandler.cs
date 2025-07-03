@@ -10,12 +10,12 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Добавить точку в Annot.
 /// </summary>
-public class AddPointsHandlers : IRequestHandler<AddPointsQueries, bool>
+public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
 {
-    private readonly ILogger _logger = Log.ForContext<AddPointsHandlers>();
+    private readonly ILogger _logger = Log.ForContext<AddPointsHandler>();
     private readonly AnnotationHandler _annotationHandler;
 
-    public AddPointsHandlers( AnnotationHandler annotationHandler)
+    public AddPointsHandler( AnnotationHandler annotationHandler)
     {
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
     }

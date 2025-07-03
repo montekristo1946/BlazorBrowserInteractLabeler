@@ -12,4 +12,6 @@ public class LabelingPanelDto
     public string Name { get; set; }
     
     public TypeLabel LabelPattern { get; set; }
+    
+    public StateAnnot State  { get; set; }
 }

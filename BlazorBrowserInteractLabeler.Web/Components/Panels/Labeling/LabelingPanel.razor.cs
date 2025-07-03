@@ -1,52 +1,59 @@
+using BlazorBrowserInteractLabeler.ARM.Extension;
+using BlazorBrowserInteractLabeler.ARM.Handlers;
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common.DTO;
+using MediatR;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Labeling;
 
 public partial class LabelingPanel : ComponentBase
 {
-    private bool _isHiddenState = false;
+    [Inject] private AnnotationHandler _annotationHandler { get; set; } = null!;
+    [Inject] private Mappers _mappers { get; set; } = null!;
+    [Inject] private SettingsData _settingsData { get; set; } = null!;
+    [Inject] private MarkupData _markupData { get; set; } = null!;
     
-    private void ClickHiddenAll(bool isHidden)
+    [Inject] private IMediator _mediator { get; set; } = null!;
+    
+    [Parameter] public  Action  IsUpdateMenu { get; set; }
+    
+    
+    private bool _isHiddenState = false;
+    private LabelingPanelDto[] _labelingPanelDtos = [];
+
+    protected override async Task OnInitializedAsync()
     {
-        
-        
-        
+        await LoadAnnots();
+    }
+
+    private async Task LoadAnnots()
+    {
+        var annotations = await _annotationHandler.GetAllAnnotations();
+        _labelingPanelDtos = _mappers.MapToLabelingPanelDto(annotations,_settingsData.ColorModel,_markupData.LabelsName);
+        _labelingPanelDtos = _labelingPanelDtos.OrderBy(p => p.IdAnnotation).ToArray();
+
+    }
+    private async Task ClickHiddenAll(bool isHidden)
+    {
+        await _mediator.Send(new HiddenAllAnnotQueries(){IsHidden = isHidden});
+        IsUpdateMenu?.Invoke();
     }
     
     private bool Switcher()
     {
-       
         return _isHiddenState switch
         {
             true => _isHiddenState = false,
             false => _isHiddenState = true};
-        
     }
 
     private int GetCountAnnots()
     {
-        return 999;
+        return _labelingPanelDtos.Length;
     }
 
-    private LabelingPanelDto[] GetAnnots()
-    {
-        var list = new List<LabelingPanelDto>();
-        for (int i = 0; i < 25; i++)
-        {
-            list.Add( new LabelingPanelDto()
-            {
-                Color = "red",
-                IdAnnotation = i,
-                Name = $"{i} heed long name",
-                LabelPattern = TypeLabel.Box
-            });
-        }
-
-        return list.ToArray();
-    }
-    
     private string GetSvgPath(TypeLabel labelPattern)
     {
         switch (labelPattern)
@@ -66,13 +73,46 @@ public partial class LabelingPanel : ComponentBase
         }
     }
 
-    private Task ButtonClickObjectHiddenAsync(int idAnnotation)
+    private async Task ButtonClickObjectHiddenAsync(int idAnnotation)
     {
-        return Task.CompletedTask;
+        await _mediator.Send(new HiddenAnnotQueries(){IdAnnotaion = idAnnotation});
+        IsUpdateMenu?.Invoke();
+        
     }
 
-    private Task ButtonClickObjectAsync(int idAnnotation)
+    private async Task ButtonClickObjectAsync(int idAnnotation)
     {
-        return Task.CompletedTask;
+        await _mediator.Send(new EditionAnnotQueries(){IdAnnotaion = idAnnotation});
+        IsUpdateMenu?.Invoke();
+    }
+
+    private string GetBackroundColor(StateAnnot state)
+    {
+        return state switch
+        {
+            StateAnnot.None => "#ebf0ff",
+            StateAnnot.Edit => "#fdfeff",
+            StateAnnot.Active => "#fdfeff",
+            StateAnnot.Finalized => "#ebf0ff",
+            StateAnnot.Hidden => "#d4d4d4",
+            _ => "#ebf0ff",
+        };
+    }
+
+    public void UpdateUi()
+    {
+        InvokeAsync(async () =>
+        {
+            await LoadAnnots();
+            StateHasChanged();
+        });
+        
+   
+    
+    }
+
+    private string GetPathSvgHidden()
+    {
+        return _isHiddenState ? "icons/015_open_eye_icon.svg" : "icons/016_close_eye_icon.svg";
     }
 }

@@ -1,3 +1,4 @@
+using BlazorBrowserInteractLabeler.ARM.Extension;
 using BlazorBrowserInteractLabeler.ARM.Handlers;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BlazorBrowserInteractLabeler.Web.AppWeb;
@@ -21,6 +22,7 @@ builder.Services
     .AddSingleton<IRepository>(provider => new SqlRepository())
     .AddSingleton<ProjectsLocalHandler>(ProjectsLocalHandlerBuilder.Build)
     .AddSingleton<AnnotationHandler>()
+    .AddScoped<Mappers>()
     .AddScoped<KeyMapHandler>()
     .AddScoped<Helper>()
     .AddScoped<MoveImagesHandler>()
