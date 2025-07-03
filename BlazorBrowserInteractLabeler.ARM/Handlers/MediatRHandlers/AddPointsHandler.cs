@@ -84,10 +84,13 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
             annotation.Points.Remove(annotation.Points.Last());
         }
 
+        var lastPosition = annotation.Points.FirstOrDefault()?.PositionInGroup ?? 0;
+
         annotation.Points.Add(new PointD()
         {
             X = point.X,
             Y = point.Y,
+            PositionInGroup = lastPosition+1
         });
         return annotation;
     }

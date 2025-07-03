@@ -85,6 +85,7 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
             return [];
 
         var retAnnots = annotations.Where(annot => annot.Points?.Any() != null)
+            .Where(annot => annot.Points != null && annot.Points.Any())
             .Where(annot =>
                 (annot.LabelPattern == TypeLabel.Box && annot.Points.Count == 2)
                 || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count >= 2)

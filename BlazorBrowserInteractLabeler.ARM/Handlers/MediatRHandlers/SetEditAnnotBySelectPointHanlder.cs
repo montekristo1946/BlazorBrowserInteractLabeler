@@ -34,7 +34,7 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
 
             var pointClick = request.Point;
 
-            var t = allAnnots
+            var findAnnotId = allAnnots
                 .Where(p => p.State == StateAnnot.Finalized)
                 .Select(p =>
                 {
@@ -43,13 +43,9 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
                     var checkPerimeter = CheckPerimeter(p.Points, pointClick);
                     var idAnnot = p.Id;
                     return (idAnnot, checkPerimeter, euclideanDistance, center);
-                }).ToArray();
-
-            var t3 = t
-                .Where(p => p.checkPerimeter).ToArray();
-
-            var t2 = t3.OrderBy(p => p.euclideanDistance).ToArray();
-            var findAnnotId = t2
+                })
+                .Where(p => p.checkPerimeter)
+                .OrderBy(p => p.euclideanDistance)
                 .FirstOrDefault().idAnnot;
 
             var annotIsEdit = allAnnots.FirstOrDefault(p => p.Id == findAnnotId);
