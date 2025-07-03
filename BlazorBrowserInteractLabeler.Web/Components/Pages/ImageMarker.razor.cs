@@ -7,6 +7,7 @@ using BlazorBrowserInteractLabeler.Web.Components.Panels.Labeling;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
@@ -59,7 +60,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(DrawingImagesPanel));
-        builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseDown),KeyMapHandler.HandlerOnMouseDown);
+        builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseDown),ClickMouse);
         builder.AddAttribute(2,nameof(DrawingImagesPanel.HandlerOnMouseMove),KeyMapHandler.HandlerOnMouseMove);
         builder.AddAttribute(3,nameof(DrawingImagesPanel.HandleMouseWheel),KeyMapHandler.HandleMouseWheel);
         
@@ -72,7 +73,16 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
-    
+
+    private void ClickMouse(MouseEventArgs args)
+    {
+        InvokeAsync(async () =>
+        {
+            await KeyMapHandler.HandlerOnMouseDown(args);
+            UpdateUi();
+        });
+    }
+
     private RenderFragment CreateNavigationPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(NavigationPanel));

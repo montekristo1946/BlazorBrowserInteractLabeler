@@ -32,16 +32,17 @@ public class KeyMapHandler
     /// Нажатие клавиш мыши.
     /// </summary>
     /// <param name="args"></param>
-    public void HandlerOnMouseDown(MouseEventArgs args)
+    public async Task HandlerOnMouseDown(MouseEventArgs args)
     {
         switch (args)
         {
             case { CtrlKey: false, AltKey: false , Buttons: LeftButton }:
-                _ = CreatePoint(args);
+                await CreatePoint(args);
                 break;
             case { CtrlKey: false, AltKey: true , Buttons: LeftButton }:
                 StartMoveImage(args);
                 break;
+            
         }
     }
     
@@ -99,7 +100,11 @@ public class KeyMapHandler
         await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore);
         try
         {
-            await _mediator.Send(new AddPointsQueries() { Point = points });
+            var res = await _mediator.Send(new AddPointsQueries() { Point = points });
+            if (!res)
+            {
+                await _mediator.Send(new SetEditAnnotBySelectPointQueries() { Point = points });
+            }
 
         }
         catch (Exception e)

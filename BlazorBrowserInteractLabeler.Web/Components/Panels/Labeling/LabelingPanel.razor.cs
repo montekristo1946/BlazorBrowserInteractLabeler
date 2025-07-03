@@ -37,7 +37,7 @@ public partial class LabelingPanel : ComponentBase
     {
         var annotations = await _annotationHandler.GetAllAnnotations();
         _labelingPanelDtos = _mappers.MapToLabelingPanelDto(annotations,_colorModels,_labelsName);
-        _labelingPanelDtos = _labelingPanelDtos.OrderBy(p => p.IdAnnotation).ToArray();
+        _labelingPanelDtos = _labelingPanelDtos.OrderByDescending(p => p.IdAnnotation).ToArray();
 
     }
     private async Task ClickHiddenAll(bool isHidden)
@@ -86,8 +86,8 @@ public partial class LabelingPanel : ComponentBase
         return state switch
         {
             StateAnnot.None => "#ebf0ff",
-            StateAnnot.Edit => "#fdfeff",
-            StateAnnot.Active => "#fdfeff",
+            StateAnnot.Edit => "#fdccd6",
+            StateAnnot.Active => "#fdccd6",
             StateAnnot.Finalized => "#ebf0ff",
             StateAnnot.Hidden => "#d4d4d4",
             _ => "#ebf0ff",
