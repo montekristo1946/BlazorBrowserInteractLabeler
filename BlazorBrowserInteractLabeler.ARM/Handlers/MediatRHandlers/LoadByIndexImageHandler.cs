@@ -50,6 +50,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
             await LoadImage(newIndex);
             await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = newIndex }, cancellationToken);
 
+           
             return true;
         }
         catch (Exception e)
@@ -75,6 +76,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
             Width = imageFrame.SizeImage.Width,
             Height = imageFrame.SizeImage.Height
         };
+        _markupData.NameImage= imageFrame.NameImages;
     }
 
     private void SetCurrentProgress()

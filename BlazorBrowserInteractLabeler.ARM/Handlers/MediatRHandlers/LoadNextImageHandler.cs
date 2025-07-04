@@ -85,6 +85,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
             Width = imageFrame.SizeImage.Width,
             Height = imageFrame.SizeImage.Height
         };
+        _markupData.NameImage= imageFrame.NameImages;
 
 
         await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = index });

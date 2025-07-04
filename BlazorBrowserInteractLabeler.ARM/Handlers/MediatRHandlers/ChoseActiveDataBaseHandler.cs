@@ -46,16 +46,12 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             var idImg = 1;
             _markupData.CurrentIdImg = idImg;
             _markupData.CurrentProgress = 0;
-            var imageFrame = await _repository.GetImagesByIndexAsync(idImg);
-            if (!imageFrame.Images.Any())
-                return false;
-
-            _markupData.ImagesUI = $"data:image/jpg;base64," + Convert.ToBase64String(imageFrame.Images);
-            _markupData.SizeConvas = new SizeT()
+            var resLoadImage =  await _mediator.Send(new LoadByIndexImageQueries() { IndexImage = idImg }, cancellationToken);
+            if (!resLoadImage)
             {
-                Width = imageFrame.SizeImage.Width,
-                Height = imageFrame.SizeImage.Height
-            };
+                throw new InvalidOperationException($"[ChoseActiveDataBaseHandler] fail GetImagesByIndexAsync {pathDb}");
+            }
+   
         
             await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = idImg }, cancellationToken);
 
@@ -67,6 +63,8 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             _markupData.LabelsName = labelsDb;
 
             await SetAllImagesCount();
+
+            InitNameDb(pathDb);
             return true;
         }
         catch (Exception e)
@@ -74,6 +72,12 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             _logger.Error("[ChoseActiveDataBaseHandler] {@Exception}", e);
         }
         return false;
+    }
+
+    private void InitNameDb(string pathDb)
+    {
+        var name = Path.GetFileName(pathDb);
+        _markupData.NameDb = name;
     }
 
     private async Task SetAllImagesCount()

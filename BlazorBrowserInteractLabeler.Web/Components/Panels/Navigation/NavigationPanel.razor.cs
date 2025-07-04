@@ -93,12 +93,12 @@ public partial class NavigationPanel : ComponentBase
 
     private string GetCurrentSqlDbName()
     {
-        return "000_2025-06-19_08-11-35-224402";
+        return _markupData.NameDb;
     }
 
     private string GetNameFileEdit()
     {
-        return "Looong_nane_12345678965432134654321354sdfsd54fsdf ";
+        return _markupData.NameImage;
     }
 
     private int GetIndexImage()

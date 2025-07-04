@@ -18,7 +18,43 @@ public class MarkupData
     private int _allImagesCount = 0;
     private int _labelId = 1;
     private Label[] _labelsName { get; set; }
+    private string _nameDb = string.Empty;
+    private string _nameImage = string.Empty;
     
+    public string NameImage
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _nameImage;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _nameImage = value;
+            }
+        }
+    }
+    public string NameDb
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _nameDb;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _nameDb = value;
+            }
+        }
+    }
     
     public int AllImagesCount
     {
