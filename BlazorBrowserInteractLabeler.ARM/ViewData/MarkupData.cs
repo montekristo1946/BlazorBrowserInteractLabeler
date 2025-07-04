@@ -15,9 +15,28 @@ public class MarkupData
     private CrosshairData _crosshairData = new CrosshairData();
     private int _currentIdImg  = 0;
     private int _currentProgress  = 0;
+    private int _allImagesCount = 0;
     private int _labelId = 1;
     private Label[] _labelsName { get; set; }
     
+    
+    public int AllImagesCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _allImagesCount;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _allImagesCount = value;
+            }
+        }
+    }
     public Label[] LabelsName
     {
         get

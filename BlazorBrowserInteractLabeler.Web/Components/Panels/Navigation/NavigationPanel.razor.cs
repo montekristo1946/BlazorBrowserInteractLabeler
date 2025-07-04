@@ -1,5 +1,7 @@
 using BlazorBrowserInteractLabeler.ARM.Handlers;
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
+using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -8,60 +10,81 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
 
 public partial class NavigationPanel : ComponentBase
 {
-  
     [Inject] private IMediator _mediator { get; set; } = null!;
-    [Parameter]  public Action IsNeedUpdateUI { get; set; }
-    
+    [Inject] private SettingsData _settingsData { get; set; } = null!;
+    [Inject] private MarkupData _markupData { get; set; } = null!;
 
-    private  async Task  OnClickBackImg()
+    [Parameter] public Action IsNeedUpdateUI { get; set; }
+
+
+    private async Task OnClickBackImg()
     {
-        await _mediator.Send(new LoadNextImageQueries(){IsForward = false});
+        await _mediator.Send(new LoadNextImageQueries() { IsForward = false });
         IsNeedUpdateUI?.Invoke();
     }
 
     private async Task OnClickNextImg()
     {
-        await _mediator.Send(new LoadNextImageQueries(){IsForward = true});
+        await _mediator.Send(new LoadNextImageQueries() { IsForward = true });
         IsNeedUpdateUI?.Invoke();
     }
 
     private void OnClickSave()
     {
+        IsNeedUpdateUI?.Invoke();
     }
 
     private void OnClickUndo()
     {
+        IsNeedUpdateUI?.Invoke();
     }
 
     private void OnClickRedo()
     {
+        IsNeedUpdateUI?.Invoke();
     }
 
-    private async Task  OnClickInitRectangle()
+    private async Task OnClickInitRectangle()
     {
-        await _mediator.Send(new InitNewAnnotQueries(){TypeLabel = TypeLabel.Box});
+        await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Box });
+        IsNeedUpdateUI?.Invoke();
     }
 
     private void OnClickInitPolygon()
     {
+        IsNeedUpdateUI?.Invoke();
     }
 
     private void OnClickInitPolyline()
     {
+        IsNeedUpdateUI?.Invoke();
     }
 
     private void OnClickInitPoints()
     {
+        IsNeedUpdateUI?.Invoke();
+    }
+    private async Task ClickSetupIndexImage(ChangeEventArgs changeEventArgs)
+    {
+        var resultTryParse = Int32.TryParse((string?)changeEventArgs.Value, out var indexImg);
+        if (!resultTryParse)
+            return;
+        
+        await _mediator.Send(new LoadByIndexImageQueries() { IndexImage = indexImg });
+        IsNeedUpdateUI?.Invoke();
     }
 
     private string GetBacgroundLabel()
     {
-        return "red";
+        var labelId = _markupData.CurrentLabelId;
+        var colorModels = _settingsData.ColorModel;
+        var color = colorModels.FirstOrDefault(p => p.IdLabel == labelId)?.Color ?? "white";
+        return color;
     }
 
     private int GetCurrentProgress()
     {
-        return 110;
+        return _markupData.CurrentProgress;
     }
 
     private string GetCurrentSqlDbName()
@@ -73,4 +96,11 @@ public partial class NavigationPanel : ComponentBase
     {
         return "Looong_nane_12345678965432134654321354sdfsd54fsdf ";
     }
+
+    private int GetIndexImage()
+    {
+        return _markupData.CurrentIdImg;
+    }
+
+
 }

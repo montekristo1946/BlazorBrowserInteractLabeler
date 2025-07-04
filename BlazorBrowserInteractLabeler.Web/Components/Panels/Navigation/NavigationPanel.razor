@@ -117,15 +117,18 @@
 
             <div class="col-2 p-0 m-0 " style="height: 100%;">
                 <div class="row  m-0 padding-menu" style="height: 100%; ">
-                    <div class="col-2"></div>
-                    <div class="col-8">
-                        <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
-                             style="height: 100%; width: 100%; background-color: #fdfdfe">
-                            
-                        </div>
+                    <div class="col-4 p-0 m-0"></div>
+                    <div class="col-4 p-0 m-0">
+                        <input type="text" class="form-control text-center color-text-main" data-mdb-toggle="tooltip"
+                               data-mdb-placement="right"
+                               title="Размер КМД" placeholder="" aria-describedby="button-addon1"
+                               style="height: 100%; width: 100%"
+                               value="@GetIndexImage()"
+                               @onchange="(ClickSetupIndexImage)">
                     </div>
-                    <div class="col-2"></div>
-                
+                    <div class="col-4 p-0 m-0"></div>
+
+
                 </div>
             </div>
 

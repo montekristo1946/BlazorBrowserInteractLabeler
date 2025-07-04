@@ -8,17 +8,17 @@ using Serilog;
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
 /// <summary>
-/// Загрузить изображение из базы данных.
+/// Загрузить по индексу изображение из базы данных.
 /// </summary>
-public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
+public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, bool>
 {
-    private readonly ILogger _logger = Log.ForContext<LoadNextImageHandler>();
+    private readonly ILogger _logger = Log.ForContext<LoadByIndexImageHandler>();
     private readonly MarkupData _markupData;
     private readonly IRepository _repository;
     private readonly AnnotationHandler _annotationHandler;
     private readonly IMediator _mediator;
 
-    public LoadNextImageHandler(MarkupData markupData, IRepository repository, AnnotationHandler annotationHandler,
+    public LoadByIndexImageHandler(MarkupData markupData, IRepository repository, AnnotationHandler annotationHandler,
         IMediator mediator)
     {
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
@@ -27,56 +27,46 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task<bool> Handle(LoadNextImageQueries? request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(LoadByIndexImageQueries? request, CancellationToken cancellationToken)
     {
         try
         {
-            if (request is null)
+            if (request is null )
                 return false;
 
-            var current = _markupData.CurrentIdImg;
-            if (request.IsForward)
+            var newIndex = request.IndexImage;
+            var allIndex = await _repository.GetAllIndexImagesAsync();
+
+            if (newIndex > allIndex.Length || newIndex < 1)
             {
-                current += 1;
-            }
-            else
-            {
-                current -= 1;
+                _logger.Error("[LoadByIndexImageHandler] the list is over {IndexImage} all:{AllCountImg}", newIndex, allIndex.Length);
+                return false;
             }
 
-            await HandlerLoadImage(current);
+            
+            await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() { ImageId = _markupData.CurrentIdImg }, cancellationToken);
+            _markupData.CurrentIdImg = newIndex;
+            SetCurrentProgress();
+            await LoadImage(newIndex);
+            await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = newIndex }, cancellationToken);
 
             return true;
         }
         catch (Exception e)
         {
-            _logger.Error("[LoadNextImageHandler] {@Exception}", e);
+            _logger.Error("[LoadByIndexImageHandler] {@Exception}", e);
         }
 
         return false;
     }
 
-    private async Task HandlerLoadImage(int index)
+
+    private async Task  LoadImage(int index)
     {
-        var allIndex = await _repository.GetAllIndexImagesAsync();
-
-        await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() { ImageId = _markupData.CurrentIdImg });
-
-        if (index > allIndex.Length || index < 1)
-        {
-            _logger.Error("[LoadNextImageHandler] the list is over {IndexImage} all:{AllCountImg}", index,
-                allIndex.Length);
-            return;
-        }
-
-        _markupData.CurrentIdImg = index;
-        SetCurrentProgress();
-
         var imageFrame = await _repository.GetImagesByIndexAsync(index);
         if (!imageFrame.Images.Any())
         {
-            _logger.Error("[LoadNextImageHandler] not Load Images from index {IndexImage}", index);
-            return;
+            throw new InvalidOperationException($"[LoadByIndexImageHandler] not Load Images from index {index}");
         }
 
         _markupData.ImagesUI = $"data:image/jpg;base64," + Convert.ToBase64String(imageFrame.Images);
@@ -85,9 +75,6 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
             Width = imageFrame.SizeImage.Width,
             Height = imageFrame.SizeImage.Height
         };
-
-
-        await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = index });
     }
 
     private void SetCurrentProgress()

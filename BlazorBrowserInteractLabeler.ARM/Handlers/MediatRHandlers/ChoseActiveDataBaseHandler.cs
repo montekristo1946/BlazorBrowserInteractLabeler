@@ -65,7 +65,8 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
                 throw new InvalidOperationException($"[ChoseActiveDataBaseHandler]  fail load LabelsName");
             }
             _markupData.LabelsName = labelsDb;
-            
+
+            await SetAllImagesCount();
             return true;
         }
         catch (Exception e)
@@ -73,5 +74,14 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             _logger.Error("[ChoseActiveDataBaseHandler] {@Exception}", e);
         }
         return false;
+    }
+
+    private async Task SetAllImagesCount()
+    {
+        var allIndex = await _repository.GetAllIndexImagesAsync();
+        if (!allIndex.Any())
+            return;
+
+        _markupData.AllImagesCount = allIndex.Length;
     }
 }
