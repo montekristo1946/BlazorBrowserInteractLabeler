@@ -29,8 +29,9 @@ public partial class NavigationPanel : ComponentBase
         IsNeedUpdateUI?.Invoke();
     }
 
-    private void OnClickSave()
+    private  async Task OnClickSave()
     {
+        await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries());
         IsNeedUpdateUI?.Invoke();
     }
 
@@ -50,18 +51,21 @@ public partial class NavigationPanel : ComponentBase
         IsNeedUpdateUI?.Invoke();
     }
 
-    private void OnClickInitPolygon()
+    private async Task OnClickInitPolygon()
     {
+        await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Polygon });
         IsNeedUpdateUI?.Invoke();
     }
 
-    private void OnClickInitPolyline()
+    private async Task  OnClickInitPolyline()
     {
+        await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.PolyLine });
         IsNeedUpdateUI?.Invoke();
     }
 
-    private void OnClickInitPoints()
+    private async Task OnClickInitPoints()
     {
+        await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Point });
         IsNeedUpdateUI?.Invoke();
     }
     private async Task ClickSetupIndexImage(ChangeEventArgs changeEventArgs)

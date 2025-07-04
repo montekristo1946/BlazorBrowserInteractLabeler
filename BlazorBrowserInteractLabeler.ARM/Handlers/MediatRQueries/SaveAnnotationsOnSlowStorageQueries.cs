@@ -4,5 +4,4 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 
 public class SaveAnnotationsOnSlowStorageQueries: IRequest<bool>
 {
-    public int ImageId { get; set; }
 }

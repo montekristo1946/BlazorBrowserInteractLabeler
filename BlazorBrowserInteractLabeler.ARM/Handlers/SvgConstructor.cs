@@ -7,7 +7,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers;
 
 public class SvgConstructor
 {
-    private readonly SettingsData  _settingsData;
+    private readonly SettingsData _settingsData;
     private readonly AnnotationHandler _annotationHandler;
     private readonly MarkupData _markupData;
     private const double LineCorrectionFactor = 0.8;
@@ -23,20 +23,19 @@ public class SvgConstructor
 
     public async Task<string> CreateAnnotsFigure()
     {
-
         var annots = await _annotationHandler.GetAllAnnotations();
 
         if (annots.Length == 0)
-           return string.Empty;
+            return string.Empty;
 
-        var thicknessLine = _settingsData.StrokeWidth / _markupData.ScaleCurrent; 
+        var thicknessLine = _settingsData.StrokeWidth / _markupData.ScaleCurrent;
         var retStringSvg = new StringBuilder();
-        
+
         foreach (var annotation in annots)
         {
-            if(annotation.State == StateAnnot.Hidden)
+            if (annotation.State == StateAnnot.Hidden)
                 continue;
-            
+
             var activeAnnot = annotation.State != StateAnnot.Finalized;
             switch (annotation.LabelPattern)
             {
@@ -47,20 +46,179 @@ public class SvgConstructor
                     retStringSvg.Append(box);
                     break;
                 case TypeLabel.Polygon:
+                    var polygon = CreateSVGPolygon(annotation, activeAnnot, thicknessLine);
+                    retStringSvg.Append(polygon);
                     break;
                 case TypeLabel.PolyLine:
+                    var polyline = CreateSvgPolyline(annotation, activeAnnot, thicknessLine);
+                    retStringSvg.Append(polyline);
                     break;
                 case TypeLabel.Point:
+                    var point = CreateSvgPoint(annotation, activeAnnot, thicknessLine);
+                    retStringSvg.Append(point);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
         }
 
         return retStringSvg.ToString();
-
     }
+
+    private string CreateSvgPoint(Annotation annotation, bool activeAnnot, double thicknessLine)
+    {
+        if (annotation?.Points is null || annotation.Points.Any() == false)
+            return string.Empty;
+
+        var srcPoints = annotation.Points;
+
+        var retPolygon = new List<string>();
+        var color = GetColor(annotation.LabelId);
+
+        var thickness = LineCorrectionFactor * thicknessLine;
+        var radius = thickness;
+
+        if (activeAnnot)
+        {
+            var lines = srcPoints
+                .Select(p => CreateActivePoint(thickness, p))
+                .SelectMany(p => p)
+                .ToArray();
+            retPolygon.AddRange(lines);
+        }
+        else
+        {
+            var anchorPoints = CreateAnchorPoints(srcPoints, radius, color, thickness);
+            retPolygon.AddRange(anchorPoints);
+        }
+
+
+        return String.Join(" ", retPolygon);
+    }
+
+    private string CreateSvgPolyline(Annotation annotation, bool activeAnnot, double thicknessLine)
+    {
+        if (annotation?.Points is null || annotation.Points.Any() == false)
+            return string.Empty;
+
+        var srcPoints = annotation.Points;
+
+        var retPolygon = new List<string>();
+        var color = GetColor(annotation.LabelId);
+
+        var thickness = LineCorrectionFactor * thicknessLine;
+        var typeLine = CrateDottedLine(activeAnnot);
+
+
+        var drawPoints = new List<(PointD, PointD)>();
+
+        for (var i = 0; i < srcPoints.Count - 1; i++)
+        {
+            var first = srcPoints[i];
+            var last = srcPoints[i + 1];
+            drawPoints.Add((first, last));
+        }
+
+        foreach (var drawPoint in drawPoints)
+        {
+            var x1 = drawPoint.Item1.X;
+            var y1 = drawPoint.Item1.Y;
+
+            var x2 = drawPoint.Item2.X;
+            var y2 = drawPoint.Item2.Y;
+            var line = CreateLine(x1, y1, x2, y2, color, thickness, typeLine);
+
+
+            retPolygon.Add(line);
+        }
+
+        if (activeAnnot)
+        {
+            var anchorPoints = CreateAnchorPoints(annotation.Points, thickness, color, thickness);
+            retPolygon.AddRange(anchorPoints);
+            var lastPoint = CreateLastPoint(annotation.Points, thickness);
+            retPolygon.Add(lastPoint);
+        }
+
+        return String.Join(" ", retPolygon);
+    }
+
+    private string CreateSVGPolygon(Annotation annotation, bool activeAnnot, double thicknessLine)
+    {
+        if (annotation?.Points is null || annotation.Points.Any() == false)
+            return string.Empty;
+
+        var srcPoints = annotation.Points;
+
+        var retPolygon = new List<string>();
+        var color = GetColor(annotation.LabelId);
+
+        var thickness = LineCorrectionFactor * thicknessLine;
+        var typeLine = CrateDottedLine(activeAnnot);
+
+        var drawPoints = new List<(PointD, PointD)>();
+
+        if (activeAnnot)
+        {
+            var first = srcPoints.Last();
+            var last = srcPoints.First();
+            var x1 = first.X;
+            var y1 = first.Y;
+            var x2 = last.X;
+            var y2 = last.Y;
+
+            var coefThicknessBlack = 1.2;
+            var coefThicknessWhite = 0.8;
+            var lineBlack = CreateLine(x1, y1, x2, y2, _black, thickness * coefThicknessBlack, typeLine);
+            retPolygon.Add(lineBlack);
+
+            var lineWhite = CreateLine(x1, y1, x2, y2, _white, thickness * coefThicknessWhite, typeLine);
+            retPolygon.Add(lineWhite);
+        }
+
+        for (int i = 0; i < srcPoints.Count - 1; i++)
+        {
+            var first = srcPoints[i];
+            var last = srcPoints[i + 1];
+            drawPoints.Add((first, last));
+        }
+
+        foreach (var drawPoint in drawPoints)
+        {
+            var x1 = drawPoint.Item1.X;
+            var y1 = drawPoint.Item1.Y;
+
+            var x2 = drawPoint.Item2.X;
+            var y2 = drawPoint.Item2.Y;
+
+            var line = CreateLine(x1, y1, x2, y2, color, thickness, typeLine);
+            retPolygon.Add(line);
+        }
+
+        if (activeAnnot)
+        {
+            var anchorPoints = CreateAnchorPoints(annotation.Points, thickness, color, thickness);
+            retPolygon.AddRange(anchorPoints);
+            var lastPoint = CreateLastPoint(annotation.Points, thickness);
+            retPolygon.Add(lastPoint);
+        }
+        else
+        {
+            var first = srcPoints.Last();
+            var last = srcPoints.First();
+            var x1 = first.X;
+            var y1 = first.Y;
+
+            var x2 = last.X;
+            var y2 = last.Y;
+            var line = CreateLine(x1, y1, x2, y2, color, thickness, typeLine);
+            retPolygon.Add(line);
+        }
+
+
+        return String.Join(" ", retPolygon);
+    }
+
     private static string CrateDottedLine(bool activeAnnot)
     {
         var typeLine = "stroke-dasharray=\"4 0\"";
@@ -71,18 +229,18 @@ public class SvgConstructor
 
         return typeLine;
     }
+
     private string CreateSVGBox(Annotation? annotation, bool activeAnnot, double thicknessLine)
     {
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-   
+
         var typeLine = CrateDottedLine(activeAnnot);
 
         var retSvg = new List<string>();
         var pointSrc = annotation.Points;
-        var colorModel = _settingsData.GetColor(annotation.LabelId);
-        var color = colorModel.Color;
+        var color = GetColor(annotation.LabelId);
 
         var points = annotation.Points;
         var leftPoint = points.OrderByDescending(p => p.X).First();
@@ -119,10 +277,21 @@ public class SvgConstructor
 
         return String.Join(" ", retSvg);
     }
-    
-    private string[] CreateAnchorPoints(List<PointD> points, double radius, string color, double strokeWidth)
+
+    private string GetColor(int labelId)
     {
+        var colorModel = _settingsData.GetColor(labelId);
+        var color = colorModel.Color;
+        return color;
+    }
+
+    private string[] CreateAnchorPoints(List<PointD>? points, double radius, string color, double strokeWidth)
+    {
+        if (points is null || points.Any() == false)
+            return [];
+
         var retPoints = new List<string>();
+
         foreach (var annotationPoint in points)
         {
             var cx = annotationPoint.X;
@@ -134,12 +303,12 @@ public class SvgConstructor
 
         return retPoints.ToArray();
     }
-    
+
     private string CreateCircle(double cx, double cy, double r, string color)
     {
         return $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
     }
-    
+
     private string CreateLastPoint(List<PointD> annotationPoints, double strokeWidth)
     {
         var lastPoint = annotationPoints.MaxBy(p => p.PositionInGroup);
@@ -150,6 +319,7 @@ public class SvgConstructor
 
         return String.Join(" ", retPolygon);
     }
+
     private static List<string> CreateActivePoint(double strokeWidth, PointD lastPoint)
     {
         var retPolygon = new List<string>();
@@ -161,7 +331,7 @@ public class SvgConstructor
         var blackPoint =
             $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{strokeWidth * coefBlack}\" fill=\"{_black}\" />$";
         const double coefWhite = 0.8;
-   
+
         var whitePoint =
             $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{strokeWidth * coefWhite}\" fill=\"{_white}\" />$";
         retPolygon.Add(blackPoint);
@@ -169,13 +339,13 @@ public class SvgConstructor
 
         return retPolygon;
     }
-    
+
     private string CreateLine(
-        double x1, 
-        double y1, 
-        double x2, 
-        double y2, 
-        string colorModelColor, 
+        double x1,
+        double y1,
+        double x2,
+        double y2,
+        string colorModelColor,
         double strokeWidth,
         string typeLine)
     {

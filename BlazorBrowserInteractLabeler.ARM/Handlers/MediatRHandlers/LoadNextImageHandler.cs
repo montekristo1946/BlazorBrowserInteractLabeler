@@ -60,7 +60,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
     {
         var allIndex = await _repository.GetAllIndexImagesAsync();
 
-        await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() { ImageId = _markupData.CurrentIdImg });
+        await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() );
 
         if (index > allIndex.Length || index < 1)
         {

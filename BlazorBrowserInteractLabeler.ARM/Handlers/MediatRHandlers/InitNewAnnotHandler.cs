@@ -21,12 +21,15 @@ public class InitNewAnnotHandler:IRequestHandler<InitNewAnnotQueries,bool>
         _markupData = markupData;
     }
 
-    public async Task<bool> Handle(InitNewAnnotQueries request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(InitNewAnnotQueries? request, CancellationToken cancellationToken)
     {
         try
         {
+            if (request is null)
+                return false;
+            
             var indexImg = _markupData.CurrentIdImg;
-            var typeLabel = TypeLabel.Box;
+            var typeLabel = request.TypeLabel;
             var labelId = _markupData.CurrentLabelId;
           
             var allAnnots = await _annotationHandler.GetAllAnnotations();

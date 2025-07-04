@@ -1,5 +1,6 @@
 using BlazorBrowserInteractLabeler.ARM.Extension;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
+using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
 using MediatR;
@@ -16,11 +17,12 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
     private readonly IRepository _repository;
 
     private readonly AnnotationHandler _annotationHandler;
-
-    public SaveAnnotationsOnSlowStorageHandler(IRepository repository, AnnotationHandler annotationHandler)
+    private readonly MarkupData _markupData;
+    public SaveAnnotationsOnSlowStorageHandler(IRepository repository, AnnotationHandler annotationHandler, MarkupData markupData)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
+        _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
     }
 
     public async Task<bool> Handle(SaveAnnotationsOnSlowStorageQueries? request, CancellationToken cancellationToken)
@@ -30,7 +32,14 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
             if (request is null)
                 return false;
 
-            var indexImg = request.ImageId;
+            var indexImg = _markupData.CurrentIdImg;
+            if (indexImg < 0)
+            {
+
+                _logger.Error("[SaveAnnotationsOnSlowStorageHandler] Fail save annotations in Img:{imagesId} ",
+                    indexImg);
+                return false;
+            }
             var removeAnnot =await _repository.GetAnnotationsFromImgIdAsync(indexImg);
             var annotationsFromCash = await _annotationHandler.GetAllAnnotations();
            

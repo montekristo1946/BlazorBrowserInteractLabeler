@@ -44,7 +44,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
             }
 
             
-            await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() { ImageId = _markupData.CurrentIdImg }, cancellationToken);
+            await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() , cancellationToken);
             _markupData.CurrentIdImg = newIndex;
             SetCurrentProgress();
             await LoadImage(newIndex);

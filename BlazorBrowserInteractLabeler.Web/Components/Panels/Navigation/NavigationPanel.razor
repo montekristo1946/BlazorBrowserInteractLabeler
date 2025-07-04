@@ -25,16 +25,18 @@
                         </div>
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickUndo)" style="height: 100%; ">
-                        <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
+                    <div class="col-1 padding-menu" @onclick="@(OnClickUndo)" style="height: 100%; " >
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel" 
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
                                 <img src="icons/002_undo.svg" width="25" height="25"/>
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickRedo)" style="height: 100%; ">
-                        <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
+                    <div class="col-1 padding-menu" @onclick="@(OnClickRedo)" style="height: 100%; "
+                         >
+                        <div class=" p-0 m-0 div-menu-center bottom-shadow settings-panel"
+                             
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
                                 <img src="icons/003_redo.svg" width="25" height="25"/>
@@ -121,10 +123,11 @@
                     <div class="col-4 p-0 m-0">
                         <input type="text" class="form-control text-center color-text-main" data-mdb-toggle="tooltip"
                                data-mdb-placement="right"
-                               title="Размер КМД" placeholder="" aria-describedby="button-addon1"
+                               title="" placeholder="" aria-describedby="button-addon1"
                                style="height: 100%; width: 100%"
                                value="@GetIndexImage()"
-                               @onchange="(ClickSetupIndexImage)">
+                               @onchange="(ClickSetupIndexImage)"
+                               >
                     </div>
                     <div class="col-4 p-0 m-0"></div>
 
