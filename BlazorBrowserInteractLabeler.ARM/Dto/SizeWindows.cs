@@ -8,4 +8,9 @@ public class SizeWindows
     public double Width { get; set; }
     
     public double Height { get; set; }
+
+    public bool IsEmpty()
+    {
+        return Width <= 0 || Height <= 0;
+    }
 }

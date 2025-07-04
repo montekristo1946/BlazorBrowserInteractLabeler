@@ -77,6 +77,12 @@ public partial class NavigationPanel : ComponentBase
         await _mediator.Send(new LoadByIndexImageQueries() { IndexImage = indexImg });
         IsNeedUpdateUI?.Invoke();
     }
+    
+    private async Task OnClickRestorePositionImage()
+    {
+        await _mediator.Send(new RestorePositionImageQueries() );
+        IsNeedUpdateUI?.Invoke();
+    }
 
     private string GetBacgroundLabel()
     {
@@ -107,4 +113,5 @@ public partial class NavigationPanel : ComponentBase
     }
 
 
+  
 }

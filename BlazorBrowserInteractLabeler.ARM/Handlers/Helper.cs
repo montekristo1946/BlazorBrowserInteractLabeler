@@ -9,9 +9,9 @@ public class Helper
 {
     internal double CalculationScale(double deltaY, double scaleInput)
     {
-        const double maxScale = 5F;
-        const double minScale = 0.25F;
-        const double stepScale = 0.16f;
+        const double maxScale = 6F;
+        const double minScale = 0.5F;
+        const double stepScale = 0.1f;
 
         var scale = scaleInput;
 

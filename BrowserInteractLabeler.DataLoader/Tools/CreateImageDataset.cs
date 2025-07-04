@@ -72,7 +72,7 @@ public class CreateImageDataset : IHostedService
 
             // using var sqlContext = new ApplicationDbContext(fullPathDb);
             using IRepository operativeFramesStorage = new SqlRepository();
-            operativeFramesStorage.LoadDatabase(fullPathDb);
+            await operativeFramesStorage.LoadDatabaseAsync(fullPathDb);
             await LoadImages(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadLabels(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadAnnotations(taskFolder, operativeFramesStorage).ConfigureAwait(false);

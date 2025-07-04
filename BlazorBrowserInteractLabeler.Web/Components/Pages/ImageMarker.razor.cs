@@ -1,11 +1,13 @@
 using BlazorBrowserInteractLabeler.ARM;
 using BlazorBrowserInteractLabeler.ARM.Dto;
 using BlazorBrowserInteractLabeler.ARM.Handlers;
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BlazorBrowserInteractLabeler.Web.Common;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Labeling;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
+using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -21,6 +23,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     
     [Inject] private ProjectsLocalHandler _projectsLocalHandler { get; set; } = null!;
 
+    [Inject] private IMediator _mediator { get; set; } = null!;
     private RenderFragment DrawingImagesPanelTemplate { get; set; } = null!;
     private DrawingImagesPanel? _drawingImagesPanelComponent = null;
 
@@ -47,6 +50,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
                 DotNetObjectReference.Create(this));
             OnResize(-1,-1);
             
+           
         }
     }
 
@@ -124,6 +128,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
             MarkupData.ImageMarkerPanelSize = sizeBrowse;
             
             await _drawingImagesPanelComponent?.SetSizeConvas()!;
+            await _mediator.Send(new RestorePositionImageQueries() );
             UpdateUi();
         });
     }
