@@ -31,6 +31,7 @@ public class InitNewAnnotHandler:IRequestHandler<InitNewAnnotQueries,bool>
             var indexImg = _markupData.CurrentIdImg;
             var typeLabel = request.TypeLabel;
             var labelId = _markupData.CurrentLabelId;
+            _markupData.CurrentTypeLabel = typeLabel;
           
             var allAnnots = await _annotationHandler.GetAllAnnotations();
            

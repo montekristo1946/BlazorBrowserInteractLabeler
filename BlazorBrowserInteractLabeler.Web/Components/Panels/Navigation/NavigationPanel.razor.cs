@@ -113,5 +113,16 @@ public partial class NavigationPanel : ComponentBase
     }
 
 
-  
+    private string GetActiveType()
+    {
+        return _markupData.CurrentTypeLabel switch
+        {
+            TypeLabel.None => "Non",
+            TypeLabel.Box => "Box",
+            TypeLabel.Polygon => "Poligon",
+            TypeLabel.PolyLine => "Line",
+            TypeLabel.Point => "Point",
+            _ => string.Empty
+        };
+    }
 }
