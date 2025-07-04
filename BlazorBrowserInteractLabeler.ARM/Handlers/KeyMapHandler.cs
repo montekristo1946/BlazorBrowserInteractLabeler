@@ -41,6 +41,28 @@ public class KeyMapHandler
             case { CtrlKey: false, AltKey: true, Buttons: LeftButton }:
                 StartMoveImage(args);
                 break;
+            case { CtrlKey: false, AltKey: false, Buttons: RightButton }:
+                await DeleteLastPoint(args);
+                break;
+        }
+    }
+
+    private async Task DeleteLastPoint(MouseEventArgs args)
+    {
+        
+        await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore);
+        try
+        {
+            await _mediator.Send(new DeleteLastPointsQueries() );
+         
+        }
+        catch (Exception e)
+        {
+            Log.Error("[DeleteLastPoint] {@Exception}", e);
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
         }
     }
 
