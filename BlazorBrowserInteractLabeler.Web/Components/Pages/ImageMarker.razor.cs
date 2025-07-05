@@ -7,6 +7,7 @@ using BlazorBrowserInteractLabeler.Web.Common;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Labeling;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
+using BlazorBrowserInteractLabeler.Web.Components.Panels.PagesSelector;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -33,11 +34,14 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment LabelingPanelTemplate { get; set; } = null!;
     private LabelingPanel? _labelingPanelComponent = null;
     
+    private RenderFragment PagesSelectorTemplate { get; set; } = null!;
+    private PagesSelectorComponent? _pagesSelector = null;
     protected override void OnInitialized()
     {
         DrawingImagesPanelTemplate = CreateDrawingImagesPanelTemplate();
         NavigationPanelTemplate = CreateNavigationPanelTemplate();
         LabelingPanelTemplate = CreateLabelingPanelTemplate();
+        PagesSelectorTemplate = CreatePagesSelectorTemplate();
     }
 
 
@@ -142,5 +146,19 @@ public partial class ImageMarker : ComponentBase, IDisposable
             UpdateUi();
         });
     }
+    
+    private RenderFragment CreatePagesSelectorTemplate() => builder =>
+    {
+        builder.OpenComponent(0, typeof(PagesSelectorComponent));
+        
+        builder.AddComponentReferenceCapture(1, value =>
+        {
+            _pagesSelector = value as PagesSelectorComponent
+                             ?? throw new InvalidOperationException(
+                                 "Не смог сконвертитировать PagesSelectorComponent в PagesSelectorComponent");
+        });
+
+        builder.CloseComponent();
+    };
     
 }

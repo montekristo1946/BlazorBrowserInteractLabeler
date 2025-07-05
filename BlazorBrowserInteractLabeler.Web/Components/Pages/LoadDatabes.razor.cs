@@ -1,9 +1,10 @@
+using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.PagesSelector;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
-public partial class SettingsPage : ComponentBase
+public partial class LoadDatabes : ComponentBase
 {
     
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;

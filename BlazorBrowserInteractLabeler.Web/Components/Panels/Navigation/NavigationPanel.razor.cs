@@ -2,6 +2,7 @@ using BlazorBrowserInteractLabeler.ARM.Handlers;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
+using BlazorBrowserInteractLabeler.Web.Components.Panels.PagesSelector;
 using BrowserInteractLabeler.Common.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -17,6 +18,9 @@ public partial class NavigationPanel : ComponentBase
     [Parameter] public Action IsNeedUpdateUI { get; set; }
 
 
+    
+   
+    
     private async Task OnClickBackImg()
     {
         await _mediator.Send(new LoadNextImageQueries() { IsForward = false });
@@ -125,4 +129,6 @@ public partial class NavigationPanel : ComponentBase
             _ => string.Empty
         };
     }
+    
+
 }
