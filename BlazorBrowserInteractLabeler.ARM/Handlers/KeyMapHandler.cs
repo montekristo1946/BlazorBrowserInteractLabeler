@@ -16,7 +16,7 @@ public class KeyMapHandler
     private const int LeftButton = 1;
     private const int RightButton = 2;
     private SemaphoreSlim _semaphoreSlim = new(1, 1);
-    private readonly int _timeWaitSeamaphore = 10;
+    private readonly int _timeWaitSeamaphore = 1;
 
     public KeyMapHandler(Helper helper, MarkupData markupData, MoveImagesHandler moveImagesHandler, IMediator mediator)
     {
@@ -33,7 +33,7 @@ public class KeyMapHandler
     /// <param name="args"></param>
     public async Task HandlerOnMouseDown(MouseEventArgs args)
     {
-        switch (args)
+       switch (args)
         {
             case { CtrlKey: false, AltKey: false, Buttons: LeftButton }:
                 await CreatePoint(args);
@@ -49,12 +49,10 @@ public class KeyMapHandler
 
     private async Task DeleteLastPoint(MouseEventArgs args)
     {
-        
         await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore);
         try
         {
-            await _mediator.Send(new DeleteLastPointsQueries() );
-         
+            await _mediator.Send(new DeleteLastPointsQueries());
         }
         catch (Exception e)
         {
@@ -71,14 +69,52 @@ public class KeyMapHandler
     ///  Отслеживания движение мыши. (тутже и перемещение изображения)
     /// </summary>
     /// <param name="args"></param>
-    public void HandlerOnMouseMove(MouseEventArgs args)
+    public async Task  HandlerOnMouseMove(MouseEventArgs args)
     {
+        
         switch (args)
         {
             case { AltKey: true, Buttons: 1 }:
                 MovingImage(args);
                 break;
+            case {AltKey: false, Buttons: 1}:
+                await MovingPoint(args);
+                break;
         }
+    }
+
+    private async Task MovingPoint(MouseEventArgs args)
+    {
+        if (!await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore))
+        {
+            Log.Warning("[MovingPoint] the handler is busy");
+            return;
+        }
+        
+        try
+        {
+            var correctPoint = _helper.GetAbsoluteCoordinate(
+                args.PageX,
+                args.PageY,
+                _markupData.ImageMarkerPanelSize);
+            
+            var newPoint = _helper.CorrectPoint(
+                correctPoint,
+                _markupData.ScaleCurrent,
+                _markupData.OffsetDrawImage,
+                _markupData.SizeConvas);
+            
+            await _mediator.Send(new MovingPointQueries() {Point = newPoint});
+        }
+        catch (Exception e)
+        {
+            Log.Error("[CreatePoint] {@Exception}", e);
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
+        
     }
 
     /// <summary>
@@ -124,11 +160,15 @@ public class KeyMapHandler
         await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore);
         try
         {
-            var res = await _mediator.Send(new AddPointsQueries() { Point = points });
-            if (!res)
-            {
-                await _mediator.Send(new SetEditAnnotBySelectPointQueries() { Point = points });
-            }
+            var resMovingPoint = await _mediator.Send(new MovingInitPointQueries() { Point = points });
+            if (resMovingPoint)
+                return;
+
+            var resAdd = await _mediator.Send(new AddPointsQueries() { Point = points });
+            if (resAdd)
+                return;
+
+            await _mediator.Send(new SetEditAnnotBySelectPointQueries() { Point = points });
         }
         catch (Exception e)
         {

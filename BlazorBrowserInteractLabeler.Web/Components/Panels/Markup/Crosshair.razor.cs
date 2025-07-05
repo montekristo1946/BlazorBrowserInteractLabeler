@@ -8,14 +8,14 @@ public partial class Crosshair : ComponentBase
 {
     private CrosshairData? _data;
 
-    private readonly string _typeLine = "stroke-dasharray=\"4 2\"";
+    private readonly string _typeLine = "stroke-dasharray=\"5 4\"";
 
     private double GetThicknessLine()
     {
         if (_data == null)
             return 1;
         
-        return 1 / _data.ScaleCurrent;
+        return 0.8 / _data.ScaleCurrent;
     }
 
     private string GetVerticalLine(CrosshairData? data)

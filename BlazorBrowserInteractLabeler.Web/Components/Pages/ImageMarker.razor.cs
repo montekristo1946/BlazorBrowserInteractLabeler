@@ -59,13 +59,14 @@ public partial class ImageMarker : ComponentBase, IDisposable
         InvokeAsync(StateHasChanged);
         _drawingImagesPanelComponent?.OnUpdateImage();
         _labelingPanelComponent?.UpdateUi();
+        
     }
 
     private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(DrawingImagesPanel));
         builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseDown),ClickMouse);
-        builder.AddAttribute(2,nameof(DrawingImagesPanel.HandlerOnMouseMove),KeyMapHandler.HandlerOnMouseMove);
+        builder.AddAttribute(2,nameof(DrawingImagesPanel.HandlerOnMouseMove),MouseMove);
         builder.AddAttribute(3,nameof(DrawingImagesPanel.HandleMouseWheel),KeyMapHandler.HandleMouseWheel);
         
         builder.AddComponentReferenceCapture(4, value =>
@@ -84,6 +85,15 @@ public partial class ImageMarker : ComponentBase, IDisposable
         {
             await KeyMapHandler.HandlerOnMouseDown(args);
             UpdateUi();
+        });
+    }
+    
+    private void MouseMove(MouseEventArgs args)
+    {
+        InvokeAsync(async () =>
+        {
+            await KeyMapHandler.HandlerOnMouseMove(args);
+            // UpdateUi();
         });
     }
 

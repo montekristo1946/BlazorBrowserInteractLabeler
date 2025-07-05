@@ -46,14 +46,13 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             var idImg = 1;
             _markupData.CurrentIdImg = idImg;
             _markupData.CurrentProgress = 0;
+            await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = idImg }, cancellationToken);
             var resLoadImage =  await _mediator.Send(new LoadByIndexImageQueries() { IndexImage = idImg }, cancellationToken);
             if (!resLoadImage)
             {
                 throw new InvalidOperationException($"[ChoseActiveDataBaseHandler] fail GetImagesByIndexAsync {pathDb}");
             }
-   
-        
-            await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = idImg }, cancellationToken);
+            
 
             var labelsDb = await _repository.GetAllLabelsAsync();
             if (labelsDb is null || labelsDb.Any() is false)

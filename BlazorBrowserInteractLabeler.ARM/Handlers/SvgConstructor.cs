@@ -10,7 +10,7 @@ public class SvgConstructor
     private readonly SettingsData _settingsData;
     private readonly AnnotationHandler _annotationHandler;
     private readonly MarkupData _markupData;
-    private const double LineCorrectionFactor = 0.8;
+    private const double LineCorrectionFactor = 1.0;
     const string _black = "#000000";
     const string _white = "#ffffff";
 
@@ -46,7 +46,7 @@ public class SvgConstructor
                     retStringSvg.Append(box);
                     break;
                 case TypeLabel.Polygon:
-                    var polygon = CreateSVGPolygon(annotation, activeAnnot, thicknessLine);
+                    var polygon = CreateSvgPolygon(annotation, activeAnnot, thicknessLine);
                     retStringSvg.Append(polygon);
                     break;
                 case TypeLabel.PolyLine:
@@ -70,7 +70,7 @@ public class SvgConstructor
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-        var srcPoints = annotation.Points;
+        var srcPoints = annotation.Points.OrderBy(p=>p.PositionInGroup).ToArray();
 
         var retPolygon = new List<string>();
         var color = GetColor(annotation.LabelId);
@@ -101,7 +101,7 @@ public class SvgConstructor
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-        var srcPoints = annotation.Points;
+        var srcPoints = annotation.Points.OrderBy(p=>p.PositionInGroup).ToArray();
 
         var retPolygon = new List<string>();
         var color = GetColor(annotation.LabelId);
@@ -112,7 +112,7 @@ public class SvgConstructor
 
         var drawPoints = new List<(PointD, PointD)>();
 
-        for (var i = 0; i < srcPoints.Count - 1; i++)
+        for (var i = 0; i < srcPoints.Length - 1; i++)
         {
             var first = srcPoints[i];
             var last = srcPoints[i + 1];
@@ -134,21 +134,21 @@ public class SvgConstructor
 
         if (activeAnnot)
         {
-            var anchorPoints = CreateAnchorPoints(annotation.Points, thickness, color, thickness);
+            var anchorPoints = CreateAnchorPoints(srcPoints, thickness, color, thickness);
             retPolygon.AddRange(anchorPoints);
-            var lastPoint = CreateLastPoint(annotation.Points, thickness);
+            var lastPoint = CreateLastPoint(srcPoints, thickness);
             retPolygon.Add(lastPoint);
         }
 
         return String.Join(" ", retPolygon);
     }
 
-    private string CreateSVGPolygon(Annotation annotation, bool activeAnnot, double thicknessLine)
+    private string CreateSvgPolygon(Annotation annotation, bool activeAnnot, double thicknessLine)
     {
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-        var srcPoints = annotation.Points;
+        var srcPoints = annotation.Points.OrderBy(p=>p.PositionInGroup).ToArray();
 
         var retPolygon = new List<string>();
         var color = GetColor(annotation.LabelId);
@@ -176,7 +176,7 @@ public class SvgConstructor
             retPolygon.Add(lineWhite);
         }
 
-        for (int i = 0; i < srcPoints.Count - 1; i++)
+        for (int i = 0; i < srcPoints.Length - 1; i++)
         {
             var first = srcPoints[i];
             var last = srcPoints[i + 1];
@@ -197,9 +197,9 @@ public class SvgConstructor
 
         if (activeAnnot)
         {
-            var anchorPoints = CreateAnchorPoints(annotation.Points, thickness, color, thickness);
+            var anchorPoints = CreateAnchorPoints(srcPoints, thickness, color, thickness);
             retPolygon.AddRange(anchorPoints);
-            var lastPoint = CreateLastPoint(annotation.Points, thickness);
+            var lastPoint = CreateLastPoint(srcPoints, thickness);
             retPolygon.Add(lastPoint);
         }
         else
@@ -224,7 +224,7 @@ public class SvgConstructor
         var typeLine = "stroke-dasharray=\"4 0\"";
         if (activeAnnot)
         {
-            typeLine = "stroke-dasharray=\"4 1\"";
+            typeLine = "stroke-dasharray=\"4 3\"";
         }
 
         return typeLine;
@@ -239,7 +239,7 @@ public class SvgConstructor
         var typeLine = CrateDottedLine(activeAnnot);
 
         var retSvg = new List<string>();
-        var pointSrc = annotation.Points;
+        var pointSrc = annotation.Points.ToArray();
         var color = GetColor(annotation.LabelId);
 
         var points = annotation.Points;
@@ -285,7 +285,7 @@ public class SvgConstructor
         return color;
     }
 
-    private string[] CreateAnchorPoints(List<PointD>? points, double radius, string color, double strokeWidth)
+    private string[] CreateAnchorPoints(PointD[]? points, double radius, string color, double strokeWidth)
     {
         if (points is null || points.Any() == false)
             return [];
@@ -309,7 +309,7 @@ public class SvgConstructor
         return $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
     }
 
-    private string CreateLastPoint(List<PointD> annotationPoints, double strokeWidth)
+    private string CreateLastPoint(PointD [] annotationPoints, double strokeWidth)
     {
         var lastPoint = annotationPoints.MaxBy(p => p.PositionInGroup);
         if (lastPoint is null)

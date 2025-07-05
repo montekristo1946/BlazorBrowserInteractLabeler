@@ -32,6 +32,7 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
             if (currentAnnot is null)
                 return false;
 
+            
             var tabelPattern = currentAnnot.LabelPattern;
             var point = request.Point;
             currentAnnot = AddPoint(point, tabelPattern, currentAnnot);

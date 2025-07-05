@@ -80,7 +80,7 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
         var retArr = annotations.Select(annot =>
         {
             var newPoints = annot.Points
-                ?.Select((point, index) => point with { Id = 0, PositionInGroup = index })
+                ?.Select((point, index) => point with { Id = 0 })
                 .ToList();
             return annot with { Points = newPoints };
         }).ToArray();
