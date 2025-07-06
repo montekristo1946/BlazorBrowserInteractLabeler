@@ -120,7 +120,7 @@ public class ProjectsLocalHandler
         //         _logger.Error("[HandlerChoseExportDataBaseAsync] Export fail SaveInformationDtoAsync {PathDb}",
         //             fullPathDb);
         //
-        //     await LoadInformationOnStateDb();
+        await LoadInformationOnStateDb();
         // }
         // catch (Exception e)
         // {

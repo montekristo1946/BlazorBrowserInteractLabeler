@@ -5,10 +5,27 @@ namespace BlazorBrowserInteractLabeler.ARM.ViewData;
 public class SettingsData
 {
     private readonly Lock _lock = new Lock();
-    private ColorModel[] _colors { get; set; } = [];
+    private ColorModel[] _colors = [];
     private double _strokeWidth = 2.5;
+    private string _pathFolderWorkers = String.Empty;
     
-
+    public string PathFolderWorkers
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _pathFolderWorkers;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _pathFolderWorkers = value ;
+            }
+        }
+    }
     public double StrokeWidth
     {
         get

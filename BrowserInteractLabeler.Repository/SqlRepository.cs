@@ -176,10 +176,10 @@ public class SqlRepository : IRepository
 
         return false;
     }
-    
+
     public async Task<Label[]> GetAllLabelsAsync()
     {
-        if (_db is null )
+        if (_db is null)
             return [];
 
 
@@ -200,8 +200,65 @@ public class SqlRepository : IRepository
 
         return [];
     }
-    
 
+    public async Task<ImageFrame[]> GetAllImagesAsync()
+    {
+        if (_db is null)
+            return [];
+
+
+        await SemaphoreSlim.WaitAsync();
+        try
+        {
+            var retArr = _db.ImageFrames.Select(s => new
+                {
+                    s.Id, s.NameImages
+                })
+                .Select(p => new ImageFrame()
+                {
+                    Id = p.Id,
+                    NameImages = p.NameImages
+                }).ToArray();
+
+            return retArr;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[GetAllImagesAsync] {@Exception}", e);
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
+
+        return [];
+    }
+
+    public async Task<Annotation[]> GetAllAnnotationsAsync()
+    {
+        if (_db is null)
+            return [];
+
+
+        await SemaphoreSlim.WaitAsync();
+        try
+        {
+            var retArr = _db.Annotations
+                .Include(p => p.Points)
+                .ToArray();
+            return retArr;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[GetAllAnnotations] {@Exception}", e);
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
+
+        return [];
+    }
 
     public void Dispose()
     {
@@ -220,32 +277,9 @@ public class SqlRepository : IRepository
     //     }
     // }
     //
-    // public ImageFrame[] GetAllImages()
-    // {
-    //     if (_db is null)
-    //         return [];
+
     //
-    //     lock (_locker)
-    //     {
-    //         var retArr = _db.ImageFrames.AsNoTracking().ToArray();
-    //         return retArr;
-    //     }
-    // }
-    //
-    // public Annotation[] GetAllAnnotations()
-    // {
-    //     if (_db is null)
-    //         return [];
-    //
-    //     lock (_locker)
-    //     {
-    //         var retArr = _db.Annotations
-    //             .Include(p => p.Points)
-    //             .AsNoTracking()
-    //             .ToArray();
-    //         return retArr;
-    //     }
-    // }
+
     //
     // public ImageFrame GetImagesByIndex(int imagesId)
     // {

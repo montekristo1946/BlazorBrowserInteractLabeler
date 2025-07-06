@@ -18,7 +18,7 @@ public partial class PagesSelectorComponent : ComponentBase
 
     private void ClickPageLoadDatabes()
     {
-        NavManager.NavigateTo("LoadDatabes");
+        NavManager.NavigateTo("SelectorWorks");
 
     }
 }

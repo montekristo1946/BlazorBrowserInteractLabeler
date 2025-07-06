@@ -1,0 +1,71 @@
+@rendermode InteractiveServer
+
+<div class="p-0 m-0" style="background-color: #f0f4fa">
+    <div class="row m-0 padding-1px" style="height: 2.0vh; width: 100vw;  "></div>
+
+    @{
+        UpdateActiveDb();
+        foreach (var worksShowerData in _worksShowerData)
+        {
+            var backgroundPanel = GetColorBackground(worksShowerData.NameDatabes);
+            var stileBorder = GetBorderStile(worksShowerData.NameDatabes);
+            var isEnableExportButton = GetEnableButton(worksShowerData.NameDatabes);
+
+            <div class="row m-0 padding-2px" style="height: 5.0vh; width: 100vw;">
+                <div class="col-2 p-0 m-0" style="height: 100%;"></div>
+                <div class="col-8 p-0 m-0 @stileBorder" style="height: 100%;  background-color:  @backgroundPanel">
+                    <div class="row p-0 m-0" style="height: 100%;">
+                        <div class="col-1 p-0 m-0 div-menu-center" style="height: 100%;">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="icons/011_database.svg" width="25" height="25"/>
+                            </span>
+                        </div>
+
+                        <div class="col-7 p-0 m-0 div-menu-start" style="height: 100%; ">
+                            <div class="text-vertical-center">
+                                <div style="height: 20px;">
+                                    <p class="" style=" overflow: hidden ; word-break: break-all;">
+                                        @worksShowerData.NameDatabes
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-2  m-0 div-menu-center padding-1px" style="height: 100%;">
+                            <div class="text-vertical-center button-panel bottom-shadow"
+                                 @onclick="@(() => ClickLoadTask(worksShowerData.PathDatabes))">
+                                <div style="height: 20px;">
+                                    <p class="" style=" overflow: hidden ; word-break: break-all;">
+                                        Load task
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (isEnableExportButton)
+                        {
+
+
+                            <div class="col-2  m-0 div-menu-center padding-1px"
+                                 style="height: 100%; ">
+                                <div class="text-vertical-center button-panel bottom-shadow"
+                                     @onclick="@(() => ClickExportTask(worksShowerData.NameDatabes))">
+                                    <div style="height: 20px;">
+                                        <p class="" style=" overflow: hidden ; word-break: break-all;">
+                                            Export task
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="col-2 p-0 m-0"></div>
+            </div>
+        }
+    }
+
+</div>
+

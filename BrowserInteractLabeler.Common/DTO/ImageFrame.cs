@@ -5,6 +5,7 @@ namespace BrowserInteractLabeler.Common.DTO;
 public record ImageFrame
 {
     public int Id { get; init; }
+    
     [JsonIgnore] 
     public SizeF SizeImage { get; init; } = new() { Height = -1, Width = -1 };
 

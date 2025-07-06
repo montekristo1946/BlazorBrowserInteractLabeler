@@ -9,7 +9,7 @@ public static class SettingsDataBuilder
     {
         var retData = new SettingsData();
         retData.Init();
-
+        retData.PathFolderWorkers = "/mnt/Disk_D/TMP/17.06.2025/";
         return retData;
     }
 }
