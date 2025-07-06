@@ -37,7 +37,7 @@ public partial class WorksShowerComponent : ComponentBase
     private string GetColorBackground(string nameDatabes)
     {
        
-        return _activeDb == nameDatabes ? "#fde5ea" : string.Empty;
+        return _activeDb == nameDatabes ? "#fdeaee" : string.Empty;
     }
 
     private string GetBorderStile(string nameDatabes)

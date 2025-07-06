@@ -1,6 +1,6 @@
 @rendermode InteractiveServer
 
-<div class="p-0 m-0" style="background-color: #f0f4fa">
+<div class="p-0 m-0" style="">
     <div class="row m-0 padding-1px" style="height: 2.0vh; width: 100vw;  "></div>
 
     @{
@@ -30,35 +30,35 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col-2  m-0 div-menu-center padding-1px" style="height: 100%;">
-                            <div class="text-vertical-center button-panel bottom-shadow"
-                                 @onclick="@(() => ClickLoadTask(worksShowerData.PathDatabes))">
-                                <div style="height: 20px;">
-                                    <p class="" style=" overflow: hidden ; word-break: break-all;">
-                                        Load task
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         @if (isEnableExportButton)
                         {
-
-
-                            <div class="col-2  m-0 div-menu-center padding-1px"
-                                 style="height: 100%; ">
+                            <div class="col-2  m-0 div-menu-center padding-3px" style="height: 100%; ">
                                 <div class="text-vertical-center button-panel bottom-shadow"
                                      @onclick="@(() => ClickExportTask(worksShowerData.NameDatabes))">
-                                    <div style="height: 20px;">
-                                        <p class="" style=" overflow: hidden ; word-break: break-all;">
+                                    <div class="m-0 p-0" style="height: 23px;">
+                                        <p class="m-0 p-0" style=" overflow: hidden ; word-break: break-all;">
                                             Export task
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         }
+                        else
+                        {
+                            <div class="col-2  m-0 div-menu-center padding-1px" style="height: 100%; "></div>
+                        }
+                        <div class="col-2  m-0 div-menu-center padding-3px" style="height: 100%;">
+                            <div class="text-vertical-center button-panel bottom-shadow"
+                                 @onclick="@(() => ClickLoadTask(worksShowerData.PathDatabes))">
+                                <div style="height: 23px;">
+                                    <p class="" style=" overflow: hidden ; word-break: break-all;">
+                                        Load task
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
