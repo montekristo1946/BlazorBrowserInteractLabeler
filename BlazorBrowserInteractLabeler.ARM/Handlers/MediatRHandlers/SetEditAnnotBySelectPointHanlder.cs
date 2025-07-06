@@ -36,17 +36,17 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
 
             var findAnnotId = allAnnots
                 .Where(p => p.State == StateAnnot.Finalized)
-                .Select(p =>
-                {
-                    var center = CalculationCenter(p.Points);
-                    var euclideanDistance = CalculationEuclideanDistance(center, pointClick);
-                    var checkPerimeter = CheckPerimeter(p.Points, pointClick);
-                    var idAnnot = p.Id;
-                    return (idAnnot, checkPerimeter, euclideanDistance, center);
-                })
-                .Where(p => p.checkPerimeter)
-                .OrderBy(p => p.euclideanDistance)
-                .FirstOrDefault().idAnnot;
+            .Select(p =>
+            {
+                var center = CalculationCenter(p.Points);
+                var euclideanDistance = CalculationEuclideanDistance(center, pointClick);
+                var checkPerimeter = CheckPerimeter(p.Points, pointClick);
+                var idAnnot = p.Id;
+                return (idAnnot, checkPerimeter, euclideanDistance);
+            })
+            .Where(p => p.checkPerimeter)
+            .OrderBy(p => p.euclideanDistance)
+            .FirstOrDefault().idAnnot;
 
             var annotIsEdit = allAnnots.FirstOrDefault(p => p.Id == findAnnotId);
             if (annotIsEdit is null)
@@ -68,7 +68,7 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
 
     private bool CheckPerimeter(List<PointD>? argPoints, PointT pointClick)
     {
-        if (argPoints is null)
+        if (argPoints is null || argPoints.Any() is false)
             return false;
 
         var minX = argPoints.Min(p => p.X);
@@ -89,7 +89,7 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
 
     private PointT CalculationCenter(List<PointD>? argPoints)
     {
-        if (argPoints is null)
+        if (argPoints is null || argPoints.Any() is false)
             return new PointT();
 
         var minX = argPoints.Min(p => p.X);
