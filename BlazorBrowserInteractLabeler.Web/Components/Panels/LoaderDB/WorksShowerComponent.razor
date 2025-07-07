@@ -16,9 +16,18 @@
                 <div class="col-8 p-0 m-0 @stileBorder" style="height: 100%;  background-color:  @backgroundPanel">
                     <div class="row p-0 m-0" style="height: 100%;">
                         <div class="col-1 p-0 m-0 div-menu-center" style="height: 100%;">
-                            <span role="img" class="anticon  text-vertical-center">
-                                <img src="icons/011_database.svg" width="25" height="25"/>
-                            </span>
+                           
+                            
+                            @if (_enableSpinner && isEnableExportButton)
+                            {
+                                <div class="spinner-border mt-1"  style=" width: 25px; height: 25px; "></div>
+                            }
+                            else
+                            {
+                                <span role="img" class="anticon  text-vertical-center">
+                                    <img src="icons/011_database.svg" width="25" height="25"/>
+                                </span>
+                            }
                         </div>
 
                         <div class="col-7 p-0 m-0 div-menu-start" style="height: 100%; ">
@@ -66,6 +75,6 @@
             </div>
         }
     }
-
+    
 </div>
 

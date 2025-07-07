@@ -8,8 +8,18 @@ public partial class Crosshair : ComponentBase
 {
     private CrosshairData? _data;
 
-    private readonly string _typeLine = "stroke-dasharray=\"5 4\"";
+    // private readonly string _typeLine = "stroke-dasharray=\"5 4\"";
 
+    private string GetTypeLine()
+    {
+        if (_data == null)
+            return  "stroke-dasharray=\"5 4\"";
+
+        var scale = 1/_data.ScaleCurrent;
+        var lien = 10*scale;
+        var spase = 4*scale;
+        return  $"stroke-dasharray=\"{lien} {spase}\"";
+    }
     private double GetThicknessLine()
     {
         if (_data == null)
@@ -29,7 +39,7 @@ public partial class Crosshair : ComponentBase
         var y2 = 100;
         var colorModelColor = data.Color;
         var strokeWidth =  GetThicknessLine();
-        var typeLine = _typeLine;
+        var typeLine = GetTypeLine();
         var retString =
             $"<line x1=\"{x1}%\" y1=\"{y1}%\" x2=\"{x2}%\"  y2=\"{y2 }%\" stroke=\"{colorModelColor}\" stroke-width=\"{strokeWidth}\" {typeLine}> </line>";
 
@@ -46,7 +56,7 @@ public partial class Crosshair : ComponentBase
         var y2 =data.PointCursor.Y*100;
         var colorModelColor = data.Color;
         var strokeWidth =  GetThicknessLine();
-        var typeLine = _typeLine;
+        var typeLine = GetTypeLine();
         var retString =
             $"<line x1=\"{x1}%\" y1=\"{y1}%\" x2=\"{x2}%\"  y2=\"{y2 }%\" stroke=\"{colorModelColor}\" stroke-width=\"{strokeWidth}\" {typeLine}> </line>";
 

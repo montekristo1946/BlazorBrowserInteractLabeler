@@ -13,7 +13,7 @@ public partial class WorksShowerComponent : ComponentBase
 
     private WorksShowerData[] _worksShowerData = [];
     private string _activeDb = string.Empty;
-
+    private bool _enableSpinner = false;
     protected override async Task OnInitializedAsync()
     {
         _worksShowerData =  await _mediator.Send(new GetAllNamesDatabaseQueries() {PathFolderWorkers =_settingsData.PathFolderWorkers});
@@ -23,7 +23,11 @@ public partial class WorksShowerComponent : ComponentBase
 
     private async Task ClickLoadTask(string path)
     {
+        _enableSpinner = true;
+        StateHasChanged();
         await _mediator.Send(new ChoseActiveDataBaseQueries() { PathDb = path});
+        _enableSpinner = false;
+        StateHasChanged();
     }
 
     private async Task ClickExportTask(string nameDatabes)
@@ -62,4 +66,5 @@ public partial class WorksShowerComponent : ComponentBase
         return _activeDb == nameDatabes ? "bottom-shadow" : string.Empty;
         
     }
+    
 }

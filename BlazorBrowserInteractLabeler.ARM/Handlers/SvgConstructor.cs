@@ -219,15 +219,25 @@ public class SvgConstructor
         return String.Join(" ", retPolygon);
     }
 
-    private static string CrateDottedLine(bool activeAnnot)
+    private string CrateDottedLine(bool activeAnnot)
     {
-        var typeLine = "stroke-dasharray=\"4 0\"";
-        if (activeAnnot)
-        {
-            typeLine = "stroke-dasharray=\"4 3\"";
-        }
+        var solidLine = "stroke-dasharray=\"4 0\"";
+        // if (activeAnnot)
+        // {
+        //     typeLine = "stroke-dasharray=\"4 3\"";
+        // }
 
-        return typeLine;
+        return activeAnnot? GetBrokenLine() :solidLine ;
+    }
+    private string GetBrokenLine()
+    {
+        if (_markupData?.ScaleCurrent == null)
+            return  "stroke-dasharray=\"5 4\"";
+
+        var scale = 1/_markupData.ScaleCurrent;
+        var lien =10*scale;
+        var spase = 5*scale;
+        return  $"stroke-dasharray=\"{lien} {spase}\"";
     }
 
     private string CreateSVGBox(Annotation? annotation, bool activeAnnot, double thicknessLine)

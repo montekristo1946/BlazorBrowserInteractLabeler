@@ -15,15 +15,6 @@ using Microsoft.JSInterop;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
-[EventHandler("oncustomkeydown", typeof(CustomKeyDownEventArgs), enableStopPropagation: true, enablePreventDefault: true)]
-public static class EventHandlers { }
-
-public class CustomKeyDownEventArgs : EventArgs
-{
-    public string Key { get; set; } = string.Empty;
-
-    public string Code { get; set; } = string.Empty;
-}
 public partial class ImageMarker : ComponentBase, IDisposable
 {
     
@@ -71,19 +62,23 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
     private void UpdateUi()
     {
-        InvokeAsync(StateHasChanged);
         _drawingImagesPanelComponent?.OnUpdateImage();
         _labelingPanelComponent?.UpdateUi();
-        
     }
 
+    private void UpdateUiNavigation ()
+    {
+        _drawingImagesPanelComponent?.OnUpdateImage();
+        _labelingPanelComponent?.UpdateUi();
+        StateHasChanged();
+    }
     private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(DrawingImagesPanel));
         builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseDown),ClickMouseDown);
         builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseUp),ClickMouseUp);
         builder.AddAttribute(2,nameof(DrawingImagesPanel.HandlerOnMouseMove),MouseMove);
-        builder.AddAttribute(3,nameof(DrawingImagesPanel.HandleMouseWheel),KeyMapHandler.HandleMouseWheel);
+        builder.AddAttribute(3,nameof(DrawingImagesPanel.HandleMouseWheel),HandleMouseWheel);
         
         builder.AddComponentReferenceCapture(4, value =>
         {
@@ -95,6 +90,18 @@ public partial class ImageMarker : ComponentBase, IDisposable
         builder.CloseComponent();
     };
 
+    private void HandleMouseWheel(WheelEventArgs args)
+    {
+        var isUpdate = KeyMapHandler.HandleMouseWheel(args);
+
+        if (isUpdate)
+        {
+            _drawingImagesPanelComponent?.ResetCrossHair();
+            UpdateUi();
+        }
+    }
+
+    
     private void ClickMouseUp(MouseEventArgs args)
     {
         InvokeAsync(async () =>
@@ -125,7 +132,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment CreateNavigationPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(NavigationPanel));
-        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUi);
+        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUiNavigation);
         builder.AddComponentReferenceCapture(2, value =>
         {
             _navigationPanel = value as NavigationPanel
@@ -135,7 +142,9 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
-    
+
+   
+
     private RenderFragment CreateLabelingPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(LabelingPanel));
@@ -190,13 +199,5 @@ public partial class ImageMarker : ComponentBase, IDisposable
         KeyMapHandler.IsNeedUpdateUi -= UpdateUi;
     }
 
-    private Task TestMessage(KeyboardEventArgs keyboardEventArgs)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RefreshText(CustomKeyDownEventArgs obj)
-    {
-        throw new NotImplementedException();
-    }
+  
 }

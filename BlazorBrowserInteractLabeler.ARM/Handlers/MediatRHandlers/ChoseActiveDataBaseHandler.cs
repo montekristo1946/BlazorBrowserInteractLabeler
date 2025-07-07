@@ -64,6 +64,7 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             await SetAllImagesCount();
 
             InitNameDb(pathDb);
+            
             return true;
         }
         catch (Exception e)

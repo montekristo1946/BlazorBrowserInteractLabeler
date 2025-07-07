@@ -165,15 +165,19 @@ public class KeyMapHandler
     /// Вращение колеса мыши для зумирования изображения.
     /// </summary>
     /// <param name="args"></param>
-    public void HandleMouseWheel(WheelEventArgs args)
+    public bool HandleMouseWheel(WheelEventArgs args)
     {
         switch (args)
         {
             case { AltKey: true, }:
                 var scale = _helper.CalculationScale(args.DeltaY, _markupData.ScaleCurrent);
                 _markupData.ScaleCurrent = scale;
+                
+                return true;
                 break;
         }
+
+        return false;
     }
 
 

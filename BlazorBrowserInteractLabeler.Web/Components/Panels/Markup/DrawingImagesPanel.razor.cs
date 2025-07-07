@@ -54,16 +54,23 @@ public partial class DrawingImagesPanel : ComponentBase
     }
 
 
-
-   
-
-
+    public void ResetCrossHair()
+    {
+        var emptyCrosshair = new CrosshairData()
+        {
+            Color = "",
+            PointCursor = new PointT(),
+            ScaleCurrent = 0,
+            IsShowCrosshair = false
+        };
+        _crosshairComponent?.UpdateSvg(emptyCrosshair);
+    }
+    
     private void MouseWheelHandler(WheelEventArgs args)
     {
         HandleMouseWheel?.Invoke(args);
     }
-
-
+    
     private RenderFragment CreateCrosshairTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(Crosshair));
