@@ -13,5 +13,6 @@ public record ImageFrame
     public byte[] Images { get; init; } = [];
     public string NameImages { get; init; } = String.Empty;
 
-    [JsonIgnore] public List<Annotation>? Annotations { get; init; } = new();
+    [JsonIgnore]
+    public List<Annotation>? Annotations { get; init; } = new();
 }

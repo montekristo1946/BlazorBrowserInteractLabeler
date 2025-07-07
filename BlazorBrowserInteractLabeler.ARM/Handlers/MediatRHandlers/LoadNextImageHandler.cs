@@ -46,6 +46,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
             }
 
             await HandlerLoadImage(current);
+            await _mediator.Send(new RestorePositionImageQueries(), cancellationToken);
 
             return true;
         }
@@ -65,7 +66,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
 
         if (index > allIndex.Length || index < 1)
         {
-            _logger.Error("[LoadNextImageHandler] the list is over {IndexImage} all:{AllCountImg}", index,
+            _logger.Warning("[LoadNextImageHandler] the list is over {IndexImage} all:{AllCountImg}", index,
                 allIndex.Length);
             return;
         }

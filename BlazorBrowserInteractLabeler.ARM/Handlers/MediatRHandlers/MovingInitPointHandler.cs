@@ -33,7 +33,6 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
         {
             if (request is null)
                 return false;
-            
           
             var allAnnots = await _annotationHandler.GetAllAnnotations();
             var currentAnnot = allAnnots.FirstOrDefault(p => p.State == StateAnnot.Edit);

@@ -27,6 +27,8 @@ public partial class DrawingImagesPanel : ComponentBase
     [Parameter] public Action<MouseEventArgs> HandlerOnMouseMove { get; set; }
 
     [Parameter] public Action<WheelEventArgs> HandleMouseWheel { get; set; }
+    
+    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseUp { get; set; }
 
     private RenderFragment CrosshairTemplate { get; set; } = null!;
     private Crosshair? _crosshairComponent = null;

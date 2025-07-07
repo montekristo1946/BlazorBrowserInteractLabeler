@@ -4,8 +4,9 @@
      style="width: 100%; height: 100%;  overflow: hidden; background-color: #f0f4fa"
      @onmousewheel="@(MouseWheelHandler)"
      @onmousemove="@(MouseMoveHandler)"
-     @onmousedown="@HandlerOnmouseDown"
-     >
+     @onmousedown="@HandlerOnmouseDown" 
+     @onmouseup="@HandlerOnmouseUp"
+>
          
     <div class="p-0 m-0" style="width:@WidthConvas; height: @HeightConvas; ;
         @CssScale();

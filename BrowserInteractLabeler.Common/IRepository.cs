@@ -26,7 +26,8 @@ public interface IRepository : IDisposable
 //
 //     public bool InsertImageFramesAsync(ImageFrame[]? frame);
 //
-//     public bool InsertLabelsAsync(Label?[]? frame);
+    public Task<bool> InsertLabelsAsync(Label[] labels);
+    public  Task<bool> InsertImageFramesAsync(ImageFrame[] frame);
 //
 //     public bool SaveInformationDtoAsync(InformationDto frame);
 //

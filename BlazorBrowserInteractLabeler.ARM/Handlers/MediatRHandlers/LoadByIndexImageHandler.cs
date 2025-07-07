@@ -50,7 +50,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
             await LoadImage(newIndex);
             await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = newIndex }, cancellationToken);
 
-           
+            await _mediator.Send(new RestorePositionImageQueries(), cancellationToken);
             return true;
         }
         catch (Exception e)

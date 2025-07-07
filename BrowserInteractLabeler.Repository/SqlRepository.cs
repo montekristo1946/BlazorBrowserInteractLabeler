@@ -260,6 +260,76 @@ public class SqlRepository : IRepository
         return [];
     }
 
+    public async Task<bool> InsertLabelsAsync(Label[]? labels)
+    {
+        if (_db is null)
+            return false;
+
+
+        await SemaphoreSlim.WaitAsync();
+        try
+        {
+            if (labels is null || !labels.Any())
+                return false;
+            
+            await _db.Labels.AddRangeAsync(labels!);
+            await _db.SaveChangesAsync();
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[InsertLabelsAsync] {@Exception}", e);
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
+
+        return false;
+    }
+    public  async Task<bool> InsertImageFramesAsync(ImageFrame[]? frame)
+    {
+        if (_db is null)
+            return false;
+
+        await SemaphoreSlim.WaitAsync();
+        try
+        {
+            if (frame is null || !frame.Any())
+                return false;
+            
+            await _db.ImageFrames.AddRangeAsync(frame);
+            await _db.SaveChangesAsync();
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[InsertImageFramesAsync] {@Exception}", e);
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
+
+        return false;
+    }
+    
+    
+    // public bool InsertLabels(Label?[]? labels)
+    // {
+    //     lock (_locker)
+    //     {
+    //         if (labels is null || !labels.Any() || _db is null)
+    //             return false;
+    //
+    //         _db.Labels.AddRangeAsync(labels!);
+    //         _db.SaveChangesAsync();
+    //
+    //         return true;
+    //     }
+    // }
     public void Dispose()
     {
         _db?.Dispose();
@@ -396,19 +466,7 @@ public class SqlRepository : IRepository
     //     }
     // }
     //
-    // public bool InsertLabels(Label?[]? labels)
-    // {
-    //     lock (_locker)
-    //     {
-    //         if (labels is null || !labels.Any() || _db is null)
-    //             return false;
-    //
-    //         _db.Labels.AddRangeAsync(labels!);
-    //         _db.SaveChangesAsync();
-    //
-    //         return true;
-    //     }
-    // }
+
     //
     // public bool SaveInformationDto(InformationDto frame)
     // {

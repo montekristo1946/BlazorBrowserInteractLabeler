@@ -24,11 +24,12 @@ public class KeyMapHandler
     public Action IsNeedUpdateUi;
 
     private readonly SettingsData _settingsData;
+
     public KeyMapHandler(
-        Helper helper, 
-        MarkupData markupData, 
-        MoveImagesHandler moveImagesHandler, 
-        IMediator mediator, 
+        Helper helper,
+        MarkupData markupData,
+        MoveImagesHandler moveImagesHandler,
+        IMediator mediator,
         SettingsData settingsData,
         Mappers mappers)
     {
@@ -47,7 +48,7 @@ public class KeyMapHandler
     /// <param name="args"></param>
     public async Task HandlerOnMouseDown(MouseEventArgs args)
     {
-       switch (args)
+        switch (args)
         {
             case { CtrlKey: false, AltKey: false, Buttons: LeftButton }:
                 await CreatePoint(args);
@@ -59,6 +60,36 @@ public class KeyMapHandler
                 await DeleteLastPoint(args);
                 break;
         }
+    }
+    
+    /// <summary>
+    /// Отпустили кнопку мыши
+    /// </summary>
+    /// <param name="args"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public Task HandlerOnMouseUp(MouseEventArgs args)
+    {
+        switch (args)
+        {
+            case { CtrlKey: false, AltKey: false, Buttons: LeftButton }:
+                 EndMoveImage(args);
+                break;
+        
+        }
+        return Task.CompletedTask;
+    }
+    private void EndMoveImage(MouseEventArgs args)
+    {
+        _moveImagesHandler.HandlerOnmouseUp();
+    }
+    private void StartMoveImage(MouseEventArgs args)
+    {
+        var correctPoint = _helper.GetAbsoluteCoordinate(
+            args.PageX,
+            args.PageY,
+            _markupData.ImageMarkerPanelSize);
+
+        _moveImagesHandler.HandlerOnmousedown(correctPoint);
     }
 
     private async Task DeleteLastPoint(MouseEventArgs args)
@@ -83,15 +114,14 @@ public class KeyMapHandler
     ///  Отслеживания движение мыши. (тутже и перемещение изображения)
     /// </summary>
     /// <param name="args"></param>
-    public async Task  HandlerOnMouseMove(MouseEventArgs args)
+    public async Task HandlerOnMouseMove(MouseEventArgs args)
     {
-        
         switch (args)
         {
             case { AltKey: true, Buttons: 1 }:
-                MovingImage(args);
+                await MovingImage(args);
                 break;
-            case {AltKey: false, Buttons: 1}:
+            case { AltKey: false, Buttons: 1 }:
                 await MovingPoint(args);
                 break;
         }
@@ -99,26 +129,27 @@ public class KeyMapHandler
 
     private async Task MovingPoint(MouseEventArgs args)
     {
+
         if (!await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore))
         {
             Log.Warning("[MovingPoint] the handler is busy");
             return;
         }
-        
+
         try
         {
             var correctPoint = _helper.GetAbsoluteCoordinate(
                 args.PageX,
                 args.PageY,
                 _markupData.ImageMarkerPanelSize);
-            
+
             var newPoint = _helper.CorrectPoint(
                 correctPoint,
                 _markupData.ScaleCurrent,
                 _markupData.OffsetDrawImage,
                 _markupData.SizeConvas);
-            
-            await _mediator.Send(new MovingPointQueries() {Point = newPoint});
+
+            await _mediator.Send(new MovingPointQueries() { Point = newPoint });
         }
         catch (Exception e)
         {
@@ -128,7 +159,6 @@ public class KeyMapHandler
         {
             _semaphoreSlim.Release();
         }
-        
     }
 
     /// <summary>
@@ -147,18 +177,11 @@ public class KeyMapHandler
     }
 
 
-    private void StartMoveImage(MouseEventArgs args)
-    {
-        var correctPoint = _helper.GetAbsoluteCoordinate(
-            args.PageX,
-            args.PageY,
-            _markupData.ImageMarkerPanelSize);
 
-        _moveImagesHandler.HandlerOnmousedown(correctPoint);
-    }
 
     private async Task CreatePoint(MouseEventArgs args)
     {
+
         var correctPoint = _helper.GetAbsoluteCoordinate(
             args.PageX,
             args.PageY,
@@ -194,61 +217,77 @@ public class KeyMapHandler
         }
     }
 
-    private void MovingImage(MouseEventArgs args)
+    private async Task MovingImage(MouseEventArgs args)
     {
-        var correctPoint = _helper.GetAbsoluteCoordinate(
-            args.PageX,
-            args.PageY,
-            _markupData.ImageMarkerPanelSize);
-
-        var stepCoeff = 1 / _markupData.ScaleCurrent;
-
-        var (res, offset) = _moveImagesHandler.HandlerOnMouseMove(correctPoint, stepCoeff);
-
-        if (!res)
-            return;
-
-        _markupData.OffsetDrawImage = new PointT()
+        if (!await _semaphoreSlim.WaitAsync(100))
         {
-            X = _markupData.OffsetDrawImage.X + offset.X,
-            Y = _markupData.OffsetDrawImage.Y + offset.Y
-        };
+            Log.Warning("[MovingImage] the handler is busy");
+            return;
+        }
+
+        try
+        {
+            var correctPoint = _helper.GetAbsoluteCoordinate(
+                args.PageX,
+                args.PageY,
+                _markupData.ImageMarkerPanelSize);
+
+            var stepCoeff = 1 / _markupData.ScaleCurrent;
+
+            var (res, offset) = _moveImagesHandler.HandlerOnMouseMove(correctPoint, stepCoeff);
+
+            if (!res)
+                return;
+
+            _markupData.OffsetDrawImage = new PointT()
+            {
+                X = _markupData.OffsetDrawImage.X + offset.X,
+                Y = _markupData.OffsetDrawImage.Y + offset.Y
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
     }
 
     public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
     {
         if (arg.Repeat)
             return;
-        
-        var codeKey = _settingsData.CodeKey.FirstOrDefault(p=>p.CodeFromKeyBoard == arg.Code);
-        if(codeKey == null)
+
+        var codeKey = _settingsData.CodeKey.FirstOrDefault(p => p.CodeFromKeyBoard == arg.Code);
+        if (codeKey == null)
             return;
 
         await SendQueries(codeKey.EventCode);
-
     }
 
     private async Task SendQueries(EventCode arg)
     {
         switch (arg)
         {
-      
             case EventCode.GoNext:
                 await _mediator.Send(new LoadNextImageQueries() { IsForward = true });
                 break;
             case EventCode.GoBack:
                 await _mediator.Send(new LoadNextImageQueries() { IsForward = false });
                 break;
-            
+
             case EventCode.SaveAnnotation:
                 await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries());
                 break;
-            
+
             case EventCode.UndoAction:
                 break;
             case EventCode.RedoAction:
                 break;
-            
+
             case EventCode.InitAnnotationBox:
                 await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Box });
                 break;
@@ -261,14 +300,14 @@ public class KeyMapHandler
             case EventCode.InitAnnotationPoint:
                 await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Point });
                 break;
-            
+
             case EventCode.MoveDefault:
-                await _mediator.Send(new RestorePositionImageQueries() );
+                await _mediator.Send(new RestorePositionImageQueries());
                 break;
             case EventCode.DeleteActiveAnnot:
                 await _mediator.Send(new DeleteEditionAnnotQueries());
                 break;
-            
+
             case EventCode.Label1:
                 await SendQueriesActiveLabel(EventCode.Label1);
                 break;
@@ -302,15 +341,16 @@ public class KeyMapHandler
             case EventCode.Label11:
                 await SendQueriesActiveLabel(EventCode.Label11);
                 break;
-                
         }
-        
+
         IsNeedUpdateUi?.Invoke();
     }
 
     private async Task SendQueriesActiveLabel(EventCode label)
     {
         var id = _mappers.MapEventCodeToIdLabel(label);
-        await _mediator.Send(new SetActiveLabelQueries(){IdLabel = id});
+        await _mediator.Send(new SetActiveLabelQueries() { IdLabel = id });
     }
+
+   
 }

@@ -7,12 +7,14 @@ public class MoveImagesHandler
 {
     private PointT _firstPosition = new();
     private readonly Lock _lock = new Lock();
+    private bool _isStartMove = false;
 
     public void HandlerOnmousedown(PointT point)
     {
         lock (_lock)
         {
             _firstPosition = new PointT() { X = point.X, Y = point.Y };
+            _isStartMove = true;
         }
     }
 
@@ -21,7 +23,7 @@ public class MoveImagesHandler
     {
         lock (_lock)
         {
-            if (_firstPosition.X < 0 || _firstPosition.Y < 0)
+            if (_firstPosition.X < 0 || _firstPosition.Y < 0 || !_isStartMove)
             {
                 return (false, new PointT());
             }
@@ -40,6 +42,15 @@ public class MoveImagesHandler
 
             _firstPosition = new PointT() { X = point.X, Y = point.Y };
             return (true, retMove);
+        }
+    }
+
+    public void HandlerOnmouseUp()
+    {
+        
+        lock (_lock)
+        {
+            _isStartMove = false;
         }
     }
 }
