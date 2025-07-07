@@ -8,7 +8,7 @@ public interface IRepository : IDisposable
     //
     public Task<int[]> GetAllIndexImagesAsync();
     //
-    public Task<ImageFrame[]> GetAllImagesAsync();
+    public Task<ImageFrame[]> GetInfoAllImagesAsync();
 
     public Task<Annotation[]> GetAllAnnotationsAsync();
     //

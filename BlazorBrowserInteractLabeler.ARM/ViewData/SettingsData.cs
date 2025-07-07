@@ -8,6 +8,25 @@ public class SettingsData
     private ColorModel[] _colors = [];
     private double _strokeWidth = 2.5;
     private string _pathFolderWorkers = String.Empty;
+    private CodeKey [] _codeKeys = [];
+
+    public CodeKey [] CodeKey
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _codeKeys;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _codeKeys = value ;
+            }
+        }
+    }
     
     public string PathFolderWorkers
     {
@@ -62,9 +81,48 @@ public class SettingsData
         }
     }
 
+  
+
     public void Init()
     {
         ColorModel = InitDefaultColorModel();
+        CodeKey = InitDefaultCodeKey();
+    }
+
+    private  CodeKey[] InitDefaultCodeKey()
+    {
+        return
+        [
+            new CodeKey(){KeyCode = "KeyF",KeyOnBoardName = "" , EventCode = EventCode.GoNext},
+             new CodeKey(){KeyCode = "ArrowRight",KeyOnBoardName = "" , EventCode = EventCode.GoNext},
+             
+             new CodeKey(){KeyCode = "KeyD",KeyOnBoardName = "" , EventCode = EventCode.GoBack},
+             new CodeKey(){KeyCode = "ArrowLeft",KeyOnBoardName = "" , EventCode = EventCode.GoBack},
+             
+             new CodeKey(){KeyCode = "Delete",KeyOnBoardName = "" , EventCode = EventCode.DeleteActiveAnnot},
+             new CodeKey(){KeyCode = "KeyZ",KeyOnBoardName = "" , EventCode = EventCode.DeleteActiveAnnot},
+             
+             new CodeKey(){KeyCode = "KeyE",KeyOnBoardName = "" , EventCode = EventCode.SaveAnnotation},
+             
+             new CodeKey(){KeyCode = "KeyQ",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationBox},
+             new CodeKey(){KeyCode = "KeyW",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationPolygon},
+             new CodeKey(){KeyCode = "KeyA",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationPolyline},
+             new CodeKey(){KeyCode = "KeyS",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationPoint},
+             
+             new CodeKey(){KeyCode = "Space",KeyOnBoardName = "" , EventCode = EventCode.MoveDefault},
+
+             new CodeKey(){KeyCode = "Digit1",KeyOnBoardName = "1" , EventCode = EventCode.Label1},
+             new CodeKey(){KeyCode = "Digit2",KeyOnBoardName = "2" , EventCode = EventCode.Label2},
+             new CodeKey(){KeyCode = "Digit3",KeyOnBoardName = "3" , EventCode = EventCode.Label3},
+             new CodeKey(){KeyCode = "Digit4",KeyOnBoardName = "4" , EventCode = EventCode.Label4},
+             new CodeKey(){KeyCode = "Digit5",KeyOnBoardName = "5" , EventCode = EventCode.Label5},
+             new CodeKey(){KeyCode = "Digit6",KeyOnBoardName = "6" , EventCode = EventCode.Label6},
+             new CodeKey(){KeyCode = "Digit7",KeyOnBoardName = "7" , EventCode = EventCode.Label7},
+             new CodeKey(){KeyCode = "KeyT",KeyOnBoardName = "t" , EventCode = EventCode.Label8},
+             new CodeKey(){KeyCode = "KeyY",KeyOnBoardName = "y" , EventCode = EventCode.Label9},
+             new CodeKey(){KeyCode = "KeyU",KeyOnBoardName = "u" , EventCode = EventCode.Label10},
+             new CodeKey(){KeyCode = "KeyJ",KeyOnBoardName = "j" , EventCode = EventCode.Label11}
+        ];
     }
 
     public ColorModel GetColor(int annotationLabelId)

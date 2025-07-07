@@ -65,7 +65,7 @@ public class KeyMapHandler
                     break;
                 }
             case "Delete":
-            case "KeyZ":
+            case "":
                 {
                     _navigationHandler.DeleteAnnotation();
                     break;

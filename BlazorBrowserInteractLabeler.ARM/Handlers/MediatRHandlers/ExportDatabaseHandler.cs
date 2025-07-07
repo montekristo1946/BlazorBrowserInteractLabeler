@@ -27,7 +27,7 @@ public class ExportDatabaseHandler: IRequestHandler<ExportDatabaseQueries, bool>
         try
         {
             var labels = await _repository.GetAllLabelsAsync();
-            var frames = await _repository.GetAllImagesAsync();
+            var frames = await _repository.GetInfoAllImagesAsync();
             var annots =await  _repository.GetAllAnnotationsAsync();
             var saveJson = new ExportDTO()
             {

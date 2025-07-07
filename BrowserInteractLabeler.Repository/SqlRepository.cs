@@ -201,7 +201,7 @@ public class SqlRepository : IRepository
         return [];
     }
 
-    public async Task<ImageFrame[]> GetAllImagesAsync()
+    public async Task<ImageFrame[]> GetInfoAllImagesAsync()
     {
         if (_db is null)
             return [];

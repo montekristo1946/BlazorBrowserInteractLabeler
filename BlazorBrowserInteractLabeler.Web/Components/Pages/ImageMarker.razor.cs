@@ -50,11 +50,8 @@ public partial class ImageMarker : ComponentBase, IDisposable
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("window.registerViewportChangeCallback",
-                DotNetObjectReference.Create(this));
+            await JSRuntime.InvokeVoidAsync("window.registerViewportChangeCallback", DotNetObjectReference.Create(this));
             OnResize(-1,-1);
-            
-           
         }
     }
 
