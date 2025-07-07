@@ -5,11 +5,27 @@ namespace BlazorBrowserInteractLabeler.ARM.ViewData;
 public class SettingsData
 {
     private readonly Lock _lock = new Lock();
+    
     private ColorModel[] _colors = [];
     private double _strokeWidth = 2.5;
     private string _pathFolderWorkers = String.Empty;
     private CodeKey [] _codeKeys = [];
 
+    private static string _pathDirConfigs = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Config");
+    private static string _pathConfig = Path.Join(_pathDirConfigs, $"{nameof(SettingsData)}.json");
+    
+
+    public string PathDirConfigs
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _pathConfig;
+            }
+        }
+    }
+    
     public CodeKey [] CodeKey
     {
         get

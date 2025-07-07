@@ -1,13 +1,15 @@
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.LoaderDB;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.Navigation;
 using BlazorBrowserInteractLabeler.Web.Components.Panels.PagesSelector;
+using MediatR;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
 public partial class SelectorWorks : ComponentBase
 {
-    
+    [Inject] private IMediator _mediator { get; set; } = null!;
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;
     private PagesSelectorComponent? _pagesSelector = null;
     
@@ -15,8 +17,9 @@ public partial class SelectorWorks : ComponentBase
     private WorksShowerComponent? _worksShowerComponent = null;
     
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await _mediator.Send(new LoadConfigurationQueries());
         PagesSelectorTemplate = CreatePagesSelectorTemplate();
         WorksShowerComponentTemplate = CreateWorksShowerComponentTemplate();
     }

@@ -36,8 +36,9 @@ public partial class ImageMarker : ComponentBase, IDisposable
     
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;
     private PagesSelectorComponent? _pagesSelector = null;
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await _mediator.Send(new LoadConfigurationQueries());
         DrawingImagesPanelTemplate = CreateDrawingImagesPanelTemplate();
         NavigationPanelTemplate = CreateNavigationPanelTemplate();
         LabelingPanelTemplate = CreateLabelingPanelTemplate();

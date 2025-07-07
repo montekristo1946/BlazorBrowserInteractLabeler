@@ -2,6 +2,7 @@ using BlazorBrowserInteractLabeler.ARM.Dto;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common;
+using BrowserInteractLabeler.Common.DTO;
 using MediatR;
 using Serilog;
 
@@ -86,6 +87,8 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
             Height = imageFrame.SizeImage.Height
         };
         _markupData.NameImage= imageFrame.NameImages;
+
+        _markupData.CurrentTypeLabel = TypeLabel.None;
 
 
         await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = index });

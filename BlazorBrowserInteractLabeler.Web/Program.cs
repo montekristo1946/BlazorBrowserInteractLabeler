@@ -19,7 +19,7 @@ builder.Host.UseMediatRComponents();
 builder.Services
     .AddSingleton<MarkupData>(MarkupDataBuilder.Build)
     .AddSingleton<MovingPointData>()
-    .AddSingleton<SettingsData>(SettingsDataBuilder.Build)
+    .AddSingleton<SettingsData>()
     .AddSingleton<IRepository>(provider => new SqlRepository())
     .AddSingleton<ProjectsLocalHandler>(ProjectsLocalHandlerBuilder.Build)
     .AddSingleton<AnnotationHandler>()
