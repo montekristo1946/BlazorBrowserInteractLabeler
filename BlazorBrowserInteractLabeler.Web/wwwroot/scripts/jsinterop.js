@@ -73,3 +73,11 @@ function SetBrowseSize(idElement,width,height) {
     // console.log("element.width  ",element.width);
 
 }
+
+
+function FocusElement (id){
+    const element = document.getElementById(id);
+    if (element == null)
+        return
+    element.focus({ preventScroll: true });
+}

@@ -41,11 +41,11 @@ public class KeyMapHandler
 
     private async Task MarkupFunctions(string codeKey, ColorModel[] serviceConfigsColors)
     {
-        var findKey = serviceConfigsColors.FirstOrDefault(p => p.KeyCode == codeKey);
-        if (findKey is null)
-            return;
-
-        _navigationHandler.HandlerSetLabelId(findKey.IdLabel);
+        // var findKey = serviceConfigsColors.FirstOrDefault(p => p.KeyCode == codeKey);
+        // if (findKey is null)
+        //     return;
+        //
+        // _navigationHandler.HandlerSetLabelId(findKey.IdLabel);
     }
 
     private async Task BasicFunctions(string codeKey)

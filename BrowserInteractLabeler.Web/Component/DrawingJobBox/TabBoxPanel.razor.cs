@@ -80,7 +80,9 @@ public partial class  TabBoxPanel : ComponentBase
             return _isHiddenState switch
             {
                 true => _isHiddenState = false,
-                false => _isHiddenState = true};
+                false => _isHiddenState = true
+                
+            };
         
     }
 

@@ -24,11 +24,13 @@ public partial class LabelingPanel : ComponentBase
     private LabelingPanelDto[] _labelingPanelDtos = [];
     private ColorModel[] _colorModels = [];
     private Label[] _labelsName = [];
+    private CodeKey [] _codeKeys = [];
 
     protected override async Task OnInitializedAsync()
     {
         _colorModels = _settingsData.ColorModel;
         _labelsName = _markupData.LabelsName;
+        _codeKeys = _settingsData.CodeKey;
         await LoadAnnots();
     }
     
@@ -120,5 +122,12 @@ public partial class LabelingPanel : ComponentBase
     {
         await _mediator.Send(new SetActiveLabelQueries(){IdLabel = colorModelIdLabel});
         IsUpdateMenu?.Invoke();
+    }
+
+    private string GetKeyName(int idLabel)
+    {
+        var eventCode = _mappers.MapIdLabelToEventCode(idLabel);
+        var name = _codeKeys.FirstOrDefault(p => p.EventCode == eventCode)?.KeyOnBoardName ?? String.Empty;
+        return name;
     }
 }

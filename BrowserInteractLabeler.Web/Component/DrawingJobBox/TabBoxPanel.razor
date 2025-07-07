@@ -111,7 +111,7 @@
                     var colorModel = ColorAll.FirstOrDefault(p => p.IdLabel == label.Id);
                     var alpha = "ff"; //ff*0.3=76
                     var color = colorModel?.Color + alpha;
-                    var textKey = $"[{colorModel?.KeyOnBoardName}]";
+                    // var textKey = $"[{colorModel?.KeyOnBoardName}]";
 
                     var name = label.NameLabel;
                     <button type="button" class="btn rounded-top-circle bottom-shadow color-text-main"
@@ -127,7 +127,7 @@
                             <div class="col-8" style="overflow: hidden;">
                                 @name
                             </div>
-                            <div class="col-2" style="overflow: hidden;">@textKey</div>
+                            @* <div class="col-2" style="overflow: hidden;">@textKey</div> *@
                         </div>
                     </button>
                 }

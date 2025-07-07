@@ -15,6 +15,15 @@ using Microsoft.JSInterop;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
+[EventHandler("oncustomkeydown", typeof(CustomKeyDownEventArgs), enableStopPropagation: true, enablePreventDefault: true)]
+public static class EventHandlers { }
+
+public class CustomKeyDownEventArgs : EventArgs
+{
+    public string Key { get; set; } = string.Empty;
+
+    public string Code { get; set; } = string.Empty;
+}
 public partial class ImageMarker : ComponentBase, IDisposable
 {
     
@@ -43,7 +52,10 @@ public partial class ImageMarker : ComponentBase, IDisposable
         NavigationPanelTemplate = CreateNavigationPanelTemplate();
         LabelingPanelTemplate = CreateLabelingPanelTemplate();
         PagesSelectorTemplate = CreatePagesSelectorTemplate();
+
+        KeyMapHandler.IsNeedUpdateUi += UpdateUi;
     }
+
 
 
 
@@ -53,6 +65,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         {
             await JSRuntime.InvokeVoidAsync("window.registerViewportChangeCallback", DotNetObjectReference.Create(this));
             OnResize(-1,-1);
+            await JSRuntime.InvokeVoidAsync("FocusElement", ConstantsArm.ImageMarkerRoot);
         }
     }
 
@@ -95,7 +108,6 @@ public partial class ImageMarker : ComponentBase, IDisposable
         InvokeAsync(async () =>
         {
             await KeyMapHandler.HandlerOnMouseMove(args);
-            // UpdateUi();
         });
     }
 
@@ -126,9 +138,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
-    public void Dispose()
-    {
-    }
+
     
     [JSInvokable]
     public void OnResize(int width, int height)
@@ -158,5 +168,24 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
-    
+
+    private async Task HandleKeyDown(KeyboardEventArgs arg)
+    {
+        await KeyMapHandler.HandleKeyDownAsync(arg);
+    }
+
+    public void Dispose()
+    {
+        KeyMapHandler.IsNeedUpdateUi -= UpdateUi;
+    }
+
+    private Task TestMessage(KeyboardEventArgs keyboardEventArgs)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void RefreshText(CustomKeyDownEventArgs obj)
+    {
+        throw new NotImplementedException();
+    }
 }

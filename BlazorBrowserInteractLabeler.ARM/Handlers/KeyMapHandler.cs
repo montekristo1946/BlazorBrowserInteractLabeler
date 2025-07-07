@@ -1,6 +1,8 @@
 using BlazorBrowserInteractLabeler.ARM.Dto;
+using BlazorBrowserInteractLabeler.ARM.Extension;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
+using BrowserInteractLabeler.Common.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Components.Web;
 using Serilog;
@@ -15,15 +17,27 @@ public class KeyMapHandler
     private readonly IMediator _mediator;
     private const int LeftButton = 1;
     private const int RightButton = 2;
-    private SemaphoreSlim _semaphoreSlim = new(1, 1);
+    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
     private readonly int _timeWaitSeamaphore = 1;
+    private readonly Mappers _mappers;
 
-    public KeyMapHandler(Helper helper, MarkupData markupData, MoveImagesHandler moveImagesHandler, IMediator mediator)
+    public Action IsNeedUpdateUi;
+
+    private readonly SettingsData _settingsData;
+    public KeyMapHandler(
+        Helper helper, 
+        MarkupData markupData, 
+        MoveImagesHandler moveImagesHandler, 
+        IMediator mediator, 
+        SettingsData settingsData,
+        Mappers mappers)
     {
         _helper = helper ?? throw new ArgumentNullException(nameof(helper));
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
         _moveImagesHandler = moveImagesHandler ?? throw new ArgumentNullException(nameof(moveImagesHandler));
         _mediator = mediator;
+        _settingsData = settingsData ?? throw new ArgumentNullException(nameof(settingsData));
+        _mappers = mappers ?? throw new ArgumentNullException(nameof(mappers));
     }
 
 
@@ -199,5 +213,104 @@ public class KeyMapHandler
             X = _markupData.OffsetDrawImage.X + offset.X,
             Y = _markupData.OffsetDrawImage.Y + offset.Y
         };
+    }
+
+    public async Task HandleKeyDownAsync(KeyboardEventArgs arg)
+    {
+        if (arg.Repeat)
+            return;
+        
+        var codeKey = _settingsData.CodeKey.FirstOrDefault(p=>p.CodeFromKeyBoard == arg.Code);
+        if(codeKey == null)
+            return;
+
+        await SendQueries(codeKey.EventCode);
+
+    }
+
+    private async Task SendQueries(EventCode arg)
+    {
+        switch (arg)
+        {
+      
+            case EventCode.GoNext:
+                await _mediator.Send(new LoadNextImageQueries() { IsForward = true });
+                break;
+            case EventCode.GoBack:
+                await _mediator.Send(new LoadNextImageQueries() { IsForward = false });
+                break;
+            
+            case EventCode.SaveAnnotation:
+                await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries());
+                break;
+            
+            case EventCode.UndoAction:
+                break;
+            case EventCode.RedoAction:
+                break;
+            
+            case EventCode.InitAnnotationBox:
+                await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Box });
+                break;
+            case EventCode.InitAnnotationPolygon:
+                await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Polygon });
+                break;
+            case EventCode.InitAnnotationPolyline:
+                await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.PolyLine });
+                break;
+            case EventCode.InitAnnotationPoint:
+                await _mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.Point });
+                break;
+            
+            case EventCode.MoveDefault:
+                await _mediator.Send(new RestorePositionImageQueries() );
+                break;
+            case EventCode.DeleteActiveAnnot:
+                await _mediator.Send(new DeleteEditionAnnotQueries());
+                break;
+            
+            case EventCode.Label1:
+                await SendQueriesActiveLabel(EventCode.Label1);
+                break;
+            case EventCode.Label2:
+                await SendQueriesActiveLabel(EventCode.Label2);
+                break;
+            case EventCode.Label3:
+                await SendQueriesActiveLabel(EventCode.Label3);
+                break;
+            case EventCode.Label4:
+                await SendQueriesActiveLabel(EventCode.Label4);
+                break;
+            case EventCode.Label5:
+                await SendQueriesActiveLabel(EventCode.Label5);
+                break;
+            case EventCode.Label6:
+                await SendQueriesActiveLabel(EventCode.Label6);
+                break;
+            case EventCode.Label7:
+                await SendQueriesActiveLabel(EventCode.Label7);
+                break;
+            case EventCode.Label8:
+                await SendQueriesActiveLabel(EventCode.Label8);
+                break;
+            case EventCode.Label9:
+                await SendQueriesActiveLabel(EventCode.Label9);
+                break;
+            case EventCode.Label10:
+                await SendQueriesActiveLabel(EventCode.Label10);
+                break;
+            case EventCode.Label11:
+                await SendQueriesActiveLabel(EventCode.Label11);
+                break;
+                
+        }
+        
+        IsNeedUpdateUi?.Invoke();
+    }
+
+    private async Task SendQueriesActiveLabel(EventCode label)
+    {
+        var id = _mappers.MapEventCodeToIdLabel(label);
+        await _mediator.Send(new SetActiveLabelQueries(){IdLabel = id});
     }
 }
