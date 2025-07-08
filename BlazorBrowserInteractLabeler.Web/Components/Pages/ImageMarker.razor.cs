@@ -72,6 +72,11 @@ public partial class ImageMarker : ComponentBase, IDisposable
         _labelingPanelComponent?.UpdateUi();
         StateHasChanged();
     }
+    
+    private void UpdateUiLabelingPanel ()
+    {
+        StateHasChanged();
+    }
     private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(DrawingImagesPanel));
@@ -85,6 +90,47 @@ public partial class ImageMarker : ComponentBase, IDisposable
             _drawingImagesPanelComponent = value as DrawingImagesPanel
                                     ?? throw new InvalidOperationException(
                                         "Не смог сконвертитировать ImagesPanel в ImagesPanel");
+        });
+
+        builder.CloseComponent();
+    };
+    
+    private RenderFragment CreateNavigationPanelTemplate() => builder =>
+    {
+        builder.OpenComponent(0, typeof(NavigationPanel));
+        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUiNavigation);
+        builder.AddComponentReferenceCapture(2, value =>
+        {
+            _navigationPanel = value as NavigationPanel
+                               ?? throw new InvalidOperationException(
+                                   "Не смог сконвертитировать NavigationPanel в NavigationPanel");
+        });
+
+        builder.CloseComponent();
+    };
+    private RenderFragment CreateLabelingPanelTemplate() => builder =>
+    {
+        builder.OpenComponent(0, typeof(LabelingPanel));
+        builder.AddAttribute(1,nameof(LabelingPanel.IsUpdateMenu),UpdateUiLabelingPanel);
+        builder.AddComponentReferenceCapture(1, value =>
+        {
+            _labelingPanelComponent = value as LabelingPanel
+                                      ?? throw new InvalidOperationException(
+                                          "Не смог сконвертитировать NavigationPanel в LabelingPanel");
+        });
+
+        builder.CloseComponent();
+    };
+    
+    private RenderFragment CreatePagesSelectorTemplate() => builder =>
+    {
+        builder.OpenComponent(0, typeof(PagesSelectorComponent));
+        
+        builder.AddComponentReferenceCapture(1, value =>
+        {
+            _pagesSelector = value as PagesSelectorComponent
+                             ?? throw new InvalidOperationException(
+                                 "Не смог сконвертитировать PagesSelectorComponent в PagesSelectorComponent");
         });
 
         builder.CloseComponent();
@@ -129,35 +175,11 @@ public partial class ImageMarker : ComponentBase, IDisposable
         });
     }
 
-    private RenderFragment CreateNavigationPanelTemplate() => builder =>
-    {
-        builder.OpenComponent(0, typeof(NavigationPanel));
-        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUiNavigation);
-        builder.AddComponentReferenceCapture(2, value =>
-        {
-            _navigationPanel = value as NavigationPanel
-                                    ?? throw new InvalidOperationException(
-                                        "Не смог сконвертитировать NavigationPanel в NavigationPanel");
-        });
 
-        builder.CloseComponent();
-    };
 
    
 
-    private RenderFragment CreateLabelingPanelTemplate() => builder =>
-    {
-        builder.OpenComponent(0, typeof(LabelingPanel));
-        builder.AddAttribute(1,nameof(LabelingPanel.IsUpdateMenu),UpdateUi);
-        builder.AddComponentReferenceCapture(1, value =>
-        {
-            _labelingPanelComponent = value as LabelingPanel
-                               ?? throw new InvalidOperationException(
-                                   "Не смог сконвертитировать NavigationPanel в LabelingPanel");
-        });
 
-        builder.CloseComponent();
-    };
 
     
     [JSInvokable]
@@ -175,19 +197,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         });
     }
     
-    private RenderFragment CreatePagesSelectorTemplate() => builder =>
-    {
-        builder.OpenComponent(0, typeof(PagesSelectorComponent));
-        
-        builder.AddComponentReferenceCapture(1, value =>
-        {
-            _pagesSelector = value as PagesSelectorComponent
-                             ?? throw new InvalidOperationException(
-                                 "Не смог сконвертитировать PagesSelectorComponent в PagesSelectorComponent");
-        });
 
-        builder.CloseComponent();
-    };
 
     private async Task HandleKeyDown(KeyboardEventArgs arg)
     {
