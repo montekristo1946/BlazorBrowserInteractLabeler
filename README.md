@@ -13,8 +13,8 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
 3. Build a server<br>
      `dotnet publish ./BlazorBrowserInteractLabeler.Web/BlazorBrowserInteractLabeler.Web.csproj -c Release -r linux-x64 -o ./Deploy/linux-x64 --self-contained true`<br>
      `dotnet publish ./BlazorBrowserInteractLabeler.Web/BlazorBrowserInteractLabeler.Web.csproj -c Release -r win-x64 -o ./Deploy/win-x64 --self-contained true`<br>
-     `7z a linux-64.7z ./Deploy/linux-x64/`<br>
-     `7z a win-64.7z ./Deploy/win-x64/`<br>
+     `7z a ./Deploy/linux-64.7z ./Deploy/linux-x64/`<br>
+     `7z a ./Deploy/win-64.7z ./Deploy/win-x64/`<br>
 4. Start server<br>
      `./linux-x64/webserver/BrowserInteractLabeler`
 5. Run Chrome browser http://localhost:5001<br>

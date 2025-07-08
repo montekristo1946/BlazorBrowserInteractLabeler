@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using Microsoft.AspNetCore.Components;
@@ -71,10 +72,14 @@ public partial class Crosshair : ComponentBase
         builder.AddMarkupContent(0, retStringSvg.ToString());
     };
     
-
+   
     public void UpdateSvg(CrosshairData data)
     {
+        
+     
         _data = data;
         StateHasChanged();
+       
+     
     }
 }
