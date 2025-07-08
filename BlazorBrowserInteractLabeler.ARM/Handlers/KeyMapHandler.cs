@@ -71,7 +71,7 @@ public class KeyMapHandler
     {
         switch (args)
         {
-            case { CtrlKey: false, AltKey: false, Buttons: LeftButton }:
+            case { CtrlKey: false,  Buttons: 0 }: //TODO: глюк возвращает всегда Buttons==0 
                  EndMoveImage(args);
                 break;
         
