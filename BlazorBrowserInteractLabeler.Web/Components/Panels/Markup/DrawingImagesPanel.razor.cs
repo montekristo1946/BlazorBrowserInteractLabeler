@@ -106,14 +106,15 @@ public partial class DrawingImagesPanel : ComponentBase
         var width = (int)sizeCash.Width;
         var height = (int)sizeCash.Height;
         await JsRuntime.InvokeVoidAsync("LoadImg", ConstantsArm.IdConvas, img, width, height);
+        
     }
 
     private void MouseMoveHandler(MouseEventArgs args)
     {
         HandlerOnMouseMove?.Invoke(args);
         
-        if(!MarkupData.CrosshairData.IsShowCrosshair)
-            return;
+        // if(!MarkupData.CrosshairData.IsShowCrosshair)
+        //     return;
 
         var correctPoint = Helper.GetAbsoluteCoordinate(
             args.PageX,
@@ -137,6 +138,7 @@ public partial class DrawingImagesPanel : ComponentBase
         };
 
         _crosshairComponent?.UpdateSvg(MarkupData.CrosshairData);
+       
     }
 
     private RenderFragment GetRenderAnnotation()=>

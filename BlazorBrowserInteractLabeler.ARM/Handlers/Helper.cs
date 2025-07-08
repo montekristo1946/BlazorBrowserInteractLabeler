@@ -11,7 +11,7 @@ public class Helper
     {
         const double maxScale = 6F;
         const double minScale = 0.5F;
-        const double stepScale = 0.1f;
+        const double stepScale = 0.2f;
 
         var scale = scaleInput;
 

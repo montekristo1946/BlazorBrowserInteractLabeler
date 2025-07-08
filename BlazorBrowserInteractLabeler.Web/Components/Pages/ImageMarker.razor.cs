@@ -70,7 +70,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     {
         _drawingImagesPanelComponent?.OnUpdateImage();
         _labelingPanelComponent?.UpdateUi();
-        StateHasChanged();
+        UpdateUiLabelingPanel();
     }
     
     private void UpdateUiLabelingPanel ()
@@ -143,7 +143,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         if (isUpdate)
         {
             _drawingImagesPanelComponent?.ResetCrossHair();
-            StateHasChanged();
+            UpdateUiLabelingPanel();
         }
     }
 
@@ -153,7 +153,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         InvokeAsync(async () =>
         {
             await KeyMapHandler.HandlerOnMouseUp(args);
-            StateHasChanged();
+            UpdateUiLabelingPanel();
         });
     }
 
@@ -163,7 +163,6 @@ public partial class ImageMarker : ComponentBase, IDisposable
         InvokeAsync(async () =>
         {
             await KeyMapHandler.HandlerOnMouseDown(args);
-            StateHasChanged();
             _labelingPanelComponent?.UpdateUi();
         });
     }

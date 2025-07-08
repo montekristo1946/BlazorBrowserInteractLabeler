@@ -167,17 +167,10 @@ public class KeyMapHandler
     /// <param name="args"></param>
     public bool HandleMouseWheel(WheelEventArgs args)
     {
-        switch (args)
-        {
-            case { AltKey: true, }:
-                var scale = _helper.CalculationScale(args.DeltaY, _markupData.ScaleCurrent);
-                _markupData.ScaleCurrent = scale;
-                
-                return true;
-                break;
-        }
+        var scale = _helper.CalculationScale(args.DeltaY, _markupData.ScaleCurrent);
+        _markupData.ScaleCurrent = scale;
 
-        return false;
+        return true;
     }
 
 
@@ -251,8 +244,7 @@ public class KeyMapHandler
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            Log.Error("[MovingImage] {@Exception}", e);
         }
         finally
         {
