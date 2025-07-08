@@ -56,7 +56,7 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
            var resDelete = await _repository.DeleteAnnotationsAsync(removeAnnot);
            if (!resDelete)
            {
-               _markupData.ErrorMessage = "Fail Database!";
+               _markupData.ErrorMessage = "Проблема с записью в Базу данных! Остановите работу.";
                throw new InvalidOperationException("[SaveAnnotationsOnSlowStorageHandler] fail delete in DB");
            }
            

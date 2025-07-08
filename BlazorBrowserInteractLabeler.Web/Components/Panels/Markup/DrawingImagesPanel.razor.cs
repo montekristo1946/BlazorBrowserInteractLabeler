@@ -19,8 +19,7 @@ public partial class DrawingImagesPanel : ComponentBase
     [Inject] private Helper  Helper { get; set; } = null!;
     [Inject] private SvgConstructor  SvgConstructor { get; set; } = null!;
 
-    private string WidthConvas => $"{(int)MarkupData.SizeConvas.Width}px";
-    private string HeightConvas => $"{(int)MarkupData.SizeConvas.Height}px";
+
 
     [Parameter] public  Action<MouseEventArgs> HandlerOnmouseDown { get; set; } = null!;
 
@@ -32,7 +31,10 @@ public partial class DrawingImagesPanel : ComponentBase
 
     private RenderFragment CrosshairTemplate { get; set; } = null!;
     private Crosshair? _crosshairComponent = null;
-    
+    private string WidthConvas => $"{(int)MarkupData.SizeConvas.Width}px";
+    private string HeightConvas => $"{(int)MarkupData.SizeConvas.Height}px";
+
+    private const string ColorError = "red";
     protected override void OnInitialized()
     {
         CrosshairTemplate = CreateCrosshairTemplate();
@@ -153,5 +155,12 @@ public partial class DrawingImagesPanel : ComponentBase
         };
 
 
-  
+    private RenderFragment GetRenderTextHelper() => (builder) =>
+    {
+        if(string.IsNullOrWhiteSpace(MarkupData.ErrorMessage))
+            return;
+        
+        var figure = SvgConstructor.CreateTextHelper(ColorError, [MarkupData.ErrorMessage]);
+        builder.AddMarkupContent(0, figure);
+    };
 }

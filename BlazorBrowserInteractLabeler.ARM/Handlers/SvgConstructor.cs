@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common.DTO;
@@ -360,5 +361,33 @@ public class SvgConstructor
     {
         return
             $"<line x1=\"{x1 * 100}%\" y1=\"{y1 * 100}%\" x2=\"{x2 * 100}%\"  y2=\"{y2 * 100}%\" stroke=\"{colorModelColor}\" stroke-width=\"{strokeWidth}\" {typeLine}> </line>";
+    }
+
+    public string CreateTextHelper(string colorTextHelper, string[]? textHelper)
+    {
+        var retStringSvg = new StringBuilder();
+
+        if (textHelper is null || textHelper.Length == 0)
+        {
+            return retStringSvg.ToString();
+        }
+
+        var xf = 10;
+        var yf = 10;
+        var fontSize = 32;
+
+        foreach (var text in textHelper)
+        {
+            yf += 4;
+            var cxString = xf.ToString(CultureInfo.InvariantCulture);
+            var cyString = yf.ToString(CultureInfo.InvariantCulture);
+
+            var returnSvg =
+                $"<text x=\"{cxString}%\" y=\"{cyString}%\" font-size=\"{fontSize}\" fill=\"{colorTextHelper}\">{text}</text>";
+
+            retStringSvg.Append(returnSvg);
+        }
+
+        return retStringSvg.ToString();
     }
 }

@@ -62,7 +62,6 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
     private void UpdateUi()
     {
-        Console.WriteLine("UpdateUi - metka1");
         _drawingImagesPanelComponent?.OnUpdateImage();
         _labelingPanelComponent?.UpdateUi();
     }
