@@ -5,13 +5,13 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Settings;
 
 public partial class SettingComponent : ComponentBase
 {
-    [Inject] private SettingsData _settingsData { get; set; } = null!;
+    [Inject] private SettingsData SettingsData { get; set; } = null!;
 
     private CodeKey[] _codeKeys = [];
 
     protected override void OnInitialized()
     {
-        _codeKeys = _settingsData.CodeKey;
+        _codeKeys = SettingsData.CodeKey;
     }
 
     private Task SetStokeWidth(ChangeEventArgs changeEventArgs)
@@ -21,7 +21,7 @@ public partial class SettingComponent : ComponentBase
             ? parsValue
             : 0;
 
-        _settingsData.StrokeWidth = newValue;
+        SettingsData.StrokeWidth = newValue;
         
        return Task.CompletedTask;
     }
@@ -30,18 +30,18 @@ public partial class SettingComponent : ComponentBase
     {
         var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
 
-        _settingsData.PathFolderWorkers = textToSave;
+        SettingsData.PathFolderWorkers = textToSave;
         
         return Task.CompletedTask;
     }
 
     private string GetPathFolderWorkers()
     {
-        return _settingsData.PathFolderWorkers;
+        return SettingsData.PathFolderWorkers;
     }
 
     private double GetSetStokeWidth()
     {
-        return _settingsData.StrokeWidth;
+        return SettingsData.StrokeWidth;
     }
 }

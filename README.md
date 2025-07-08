@@ -11,8 +11,8 @@ Concept, dataset is stored in sqlite database, sql files contain several thousan
 2. Run the dataset assembly utility.<br>
      `./linux-x64/DataLoader/BrowserInteractLabeler.DataLoader typeWork=loadImg pathImg=./Example`
 3. Build a server<br>
-     `dotnet publish ./BrowserInteractLabeler.Web/BrowserInteractLabeler.Web.csproj -c Release -r linux-x64 -o ./Deploy/linux-x64 --self-contained true`<br>
-     `dotnet publish ./BrowserInteractLabeler.Web/BrowserInteractLabeler.Web.csproj -c Release -r win-x64 -o ./Deploy/win-x64 --self-contained true`<br>
+     `dotnet publish ./BlazorBrowserInteractLabeler.Web/BlazorBrowserInteractLabeler.Web.csproj -c Release -r linux-x64 -o ./Deploy/linux-x64 --self-contained true`<br>
+     `dotnet publish ./BlazorBrowserInteractLabeler.Web/BlazorBrowserInteractLabeler.Web.csproj -c Release -r win-x64 -o ./Deploy/win-x64 --self-contained true`<br>
      `7z a linux-64.7z ./Deploy/linux-x64/`<br>
      `7z a win-64.7z ./Deploy/win-x64/`<br>
 4. Start server<br>

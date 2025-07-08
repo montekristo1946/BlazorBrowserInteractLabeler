@@ -38,7 +38,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[LoadDatabaseAsync] {@Exception}", e);
+            _logger.Error("[LoadDatabaseAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -62,7 +62,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[GetAllIndexImagesAsync] {@Exception}", e);
+            _logger.Error("[GetAllIndexImagesAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -87,7 +87,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[GetImagesByIndexAsync] {@Exception}", e);
+            _logger.Error("[GetImagesByIndexAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -114,7 +114,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[GetAnnotationsFromImgIdAsync] {@Exception}", e);
+            _logger.Error("[GetAnnotationsFromImgIdAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -142,7 +142,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[DeleteAnnotationsAsync] {@Exception}", e);
+            _logger.Error("[DeleteAnnotationsAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -167,7 +167,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[DeleteAnnotationsAsync] {@Exception}", e);
+            _logger.Error("[SaveAnnotationsAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -191,7 +191,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[DeleteAnnotationsAsync] {@Exception}", e);
+            _logger.Error("[GetAllLabelsAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -224,7 +224,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[GetAllImagesAsync] {@Exception}", e);
+            _logger.Error("[GetAllImagesAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -250,7 +250,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[GetAllAnnotations] {@Exception}", e);
+            _logger.Error("[GetAllAnnotations] {@Exception}", e.Message);
         }
         finally
         {
@@ -279,7 +279,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[InsertLabelsAsync] {@Exception}", e);
+            _logger.Error("[InsertLabelsAsync] {@Exception}", e.Message);
         }
         finally
         {
@@ -306,7 +306,7 @@ public class SqlRepository : IRepository
         }
         catch (Exception e)
         {
-            _logger.Error("[InsertImageFramesAsync] {@Exception}", e);
+            _logger.Error("[InsertImageFramesAsync] {@Exception}", e.Message);
         }
         finally
         {

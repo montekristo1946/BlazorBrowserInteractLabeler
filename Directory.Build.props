@@ -11,7 +11,7 @@
         <SerilogExtensionsHostingVersion>[8.0.0,9.0.0)</SerilogExtensionsHostingVersion>
         
         <MicrosoftEntityFrameworkCoreAbstractionsVersion>[8.0.0,9.0.0)</MicrosoftEntityFrameworkCoreAbstractionsVersion>
-        <NewtonsoftJsonVersion>[13,14)</NewtonsoftJsonVersion>
+        <NewtonsoftJsonVersion>13.0.3</NewtonsoftJsonVersion>
         <MicrosoftExtensionsHostingVersion>[8.0.0,9.0.0)</MicrosoftExtensionsHostingVersion>
         <MagickNET-Q8-x64Version>[13.0.0,14.0.0)</MagickNET-Q8-x64Version>
         <EntityFrameworkVersion>[8.0.0,9.0.0)</EntityFrameworkVersion>

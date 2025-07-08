@@ -1,3 +1,5 @@
+@using BlazorBrowserInteractLabeler.ARM.Extension
+@using BlazorBrowserInteractLabeler.ARM.ViewData
 
 @rendermode InteractiveServer
 
@@ -8,6 +10,7 @@
                 <div class="row p-0 m-0" style="height: 100%">
                     <div class="col-1 padding-menu" @onclick="@(OnClickSave)" style="height: 100%; ">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
+                             title="@EventCode.SaveAnnotation.ToDisplayName()"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
                                 <img src="icons/001_save.svg" width="25" height="25"/>
@@ -15,7 +18,8 @@
                         </div>
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickUndo)" style="height: 100%; " >
+                    <div class="col-1 padding-menu" @onclick="@(OnClickUndo)" style="height: 100%; " 
+                         title="@EventCode.UndoAction.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center  settings-panel" 
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -23,7 +27,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickRedo)" style="height: 100%; ">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickRedo)" style="height: 100%; "
+                         title="@EventCode.RedoAction.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center  settings-panel"
                              
                              style="height: 100%; width: 100%">
@@ -33,7 +38,8 @@
                         </div>
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitRectangle)" style="height: 100%; ">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitRectangle)" style="height: 100%; "
+                         title="@EventCode.InitAnnotationBox.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -41,7 +47,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolygon)" style="height: 100%; ">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolygon)" style="height: 100%; "
+                         title="@EventCode.InitAnnotationPolygon.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -49,7 +56,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolyline)" style="height: 100%; ">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolyline)" style="height: 100%; "
+                         title="@EventCode.InitAnnotationPolyline.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -57,7 +65,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPoints)" style="height: 100%; ">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPoints)" style="height: 100%; "
+                         title="@EventCode.InitAnnotationPoint.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -66,7 +75,8 @@
                         </div>
                     </div>
                     <div class="col-1 p-0 m-0"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickRestorePositionImage)" style="height: 100%; ">
+                    <div class="col-1 padding-menu" @onclick="@(OnClickRestorePositionImage)" style="height: 100%; "
+                         title="@EventCode.MoveDefault.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -101,7 +111,8 @@
             <div class="col-1 p-0 m-0  " style="height: 100%">
                 <div class="row p-0 m-0  " style="height: 100%;">
                     <div class="col-6 m-0  padding-menu " style="height: 100%; "
-                         @onclick="@(OnClickBackImg)">
+                         @onclick="@(OnClickBackImg)"
+                         title="@EventCode.GoBack.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -111,7 +122,8 @@
                     </div>
 
                     <div class="col-6 m-0 padding-menu  " style="height: 100%; "
-                         @onclick="@(OnClickNextImg)">
+                         @onclick="@(OnClickNextImg)"
+                         title="@EventCode.GoNext.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
                             <span role="img" class="anticon  text-vertical-center">
@@ -119,8 +131,6 @@
                             </span>
                         </div>
                     </div>
-
-
                 </div>
             </div>
 

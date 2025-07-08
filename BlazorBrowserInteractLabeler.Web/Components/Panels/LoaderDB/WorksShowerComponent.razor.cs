@@ -7,16 +7,16 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.LoaderDB;
 
 public partial class WorksShowerComponent : ComponentBase
 {
-    [Inject] private IMediator _mediator { get; set; } = null!;
-    [Inject] private SettingsData _settingsData { get; set; } = null!;
-    [Inject] private MarkupData _markupData { get; set; } = null!;
+    [Inject] private IMediator Mediator { get; set; } = null!;
+    [Inject] private SettingsData SettingsData { get; set; } = null!;
+    [Inject] private MarkupData MarkupData { get; set; } = null!;
 
     private WorksShowerData[] _worksShowerData = [];
     private string _activeDb = string.Empty;
     private bool _enableSpinner = false;
     protected override async Task OnInitializedAsync()
     {
-        _worksShowerData =  await _mediator.Send(new GetAllNamesDatabaseQueries() {PathFolderWorkers =_settingsData.PathFolderWorkers});
+        _worksShowerData =  await Mediator.Send(new GetAllNamesDatabaseQueries() {PathFolderWorkers =SettingsData.PathFolderWorkers});
     }
 
 
@@ -25,7 +25,7 @@ public partial class WorksShowerComponent : ComponentBase
     {
         _enableSpinner = true;
         StateHasChanged();
-        await _mediator.Send(new ChoseActiveDataBaseQueries() { PathDb = path});
+        await Mediator.Send(new ChoseActiveDataBaseQueries() { PathDb = path});
         _enableSpinner = false;
         StateHasChanged();
     }
@@ -35,7 +35,7 @@ public partial class WorksShowerComponent : ComponentBase
         if (_activeDb != nameDatabes)
             return;
         
-        await _mediator.Send(new ExportDatabaseQueries() );
+        await Mediator.Send(new ExportDatabaseQueries() );
     }
 
     private string GetColorBackground(string nameDatabes)
@@ -57,7 +57,7 @@ public partial class WorksShowerComponent : ComponentBase
 
     private void UpdateActiveDb()
     {
-       _activeDb = _markupData.NameDb;
+       _activeDb = MarkupData.NameDb;
         
     }
 

@@ -8,7 +8,7 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
 public partial class SettingsPage : ComponentBase
 {
-    [Inject] private IMediator _mediator { get; set; } = null!;
+    [Inject] private IMediator Mediator { get; set; } = null!;
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;
     private PagesSelectorComponent? _pagesSelector = null;
     
@@ -16,7 +16,7 @@ public partial class SettingsPage : ComponentBase
     private SettingComponent? _settingComponent = null;
     protected override async Task OnInitializedAsync()
     {
-        await _mediator.Send(new LoadConfigurationQueries());
+        await Mediator.Send(new LoadConfigurationQueries());
         PagesSelectorTemplate = CreatePagesSelectorTemplate();
         SettingComponentTemplate = SettingComponentTemplateTemplate();
     }
@@ -51,6 +51,6 @@ public partial class SettingsPage : ComponentBase
 
     private async Task OnClickSave()
     {
-        await _mediator.Send(new SaveConfigurationQueries());
+        await Mediator.Send(new SaveConfigurationQueries());
     }
 }

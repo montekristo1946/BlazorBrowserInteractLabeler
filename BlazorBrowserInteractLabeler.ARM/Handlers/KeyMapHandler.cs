@@ -21,7 +21,7 @@ public class KeyMapHandler
     private readonly int _timeWaitSeamaphore = 1;
     private readonly Mappers _mappers;
 
-    public Action IsNeedUpdateUi;
+    public Action IsNeedUpdateUi = null!;
 
     private readonly SettingsData _settingsData;
 

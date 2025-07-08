@@ -1,9 +1,6 @@
-using System.Diagnostics;
 using AutoFixture;
 using BrowserInteractLabeler.Common;
 using BrowserInteractLabeler.Common.DTO;
-using BrowserInteractLabeler.Web.Extension;
-using Microsoft.EntityFrameworkCore;
 
 namespace BrowserInteractLabeler.Repository.IntegrationTest;
 
@@ -15,7 +12,7 @@ public class SqlRepositoryIntegrationTest
     public SqlRepositoryIntegrationTest(string pathDb)
     {
         _operativeFramesStorage = new SqlRepository();
-        _operativeFramesStorage.LoadDatabase(pathDb);
+        _operativeFramesStorage.LoadDatabaseAsync(pathDb).Wait();
     }
 
     public SqlRepositoryIntegrationTest()
@@ -44,7 +41,7 @@ public class SqlRepositoryIntegrationTest
         }
 
 
-        var res = _operativeFramesStorage.InsertImageFrames(arrFrames.ToArray());
+        var res = _operativeFramesStorage.InsertImageFramesAsync(arrFrames.ToArray()).Result;
         if (!res)
             throw new Exception("Fail InsertImageFrames");
     }
@@ -55,7 +52,7 @@ public class SqlRepositoryIntegrationTest
             .With(p => p.Id, 0)
             .CreateMany(100).ToArray();
 
-        var res = _operativeFramesStorage.InsertLabels(frame);
+        var res = _operativeFramesStorage.InsertLabelsAsync(frame).Result;
         if (!res)
             throw new Exception("Fail InsertLabels");
     }
@@ -79,13 +76,13 @@ public class SqlRepositoryIntegrationTest
                     .With(p => p.LabelId, rnd.Next(1, 100))
                     .With(p => p.ImageFrameId, i)
                     .With(p => p.Points, points)
-                    .With(p => p.Images, images)
+                    
                     .Create();
                 arrAnnotations.Add(annotation);
             }
         }
 
-        var res = _operativeFramesStorage.SaveAnnotations(arrAnnotations.ToArray());
+        var res = _operativeFramesStorage.SaveAnnotationsAsync(arrAnnotations.ToArray()).Result;
         if (!res)
             throw new Exception("Fail SaveAnnotationsAsyncTest");
     }
@@ -94,7 +91,7 @@ public class SqlRepositoryIntegrationTest
     public void GetAnnotationsFromImgIdAsyncTest()
     {
         var imgId = 1;
-        var arrAnnot = _operativeFramesStorage.GetAnnotationsFromImgId(imgId);
+        var arrAnnot = _operativeFramesStorage.GetAnnotationsFromImgIdAsync(imgId).Result;
         if (!arrAnnot.Any())
             throw new Exception("Fail GetAnnotationsFromImgIdAsyncTest");
     }
@@ -103,12 +100,12 @@ public class SqlRepositoryIntegrationTest
     {
         var imgId = 100;
 
-        var arrAnnot = _operativeFramesStorage.GetAnnotationsFromImgId(imgId);
+        var arrAnnot = _operativeFramesStorage.GetAnnotationsFromImgIdAsync(imgId).Result;
 
         if (!arrAnnot.Any())
             throw new Exception("Fail GetAnnotationsFromImgIdAsync");
 
-        var res = _operativeFramesStorage.DeleteAnnotations(arrAnnot);
+        var res = _operativeFramesStorage.DeleteAnnotationsAsync(arrAnnot).Result;
 
         if (!res)
             throw new Exception("Fail DeleteAnnotationsAsync");
@@ -116,7 +113,7 @@ public class SqlRepositoryIntegrationTest
 
     public void GetAllIMagesIndexAsyncTest()
     {
-        var res = _operativeFramesStorage.GetAllIndexImages();
+        var res = _operativeFramesStorage.GetAllIndexImagesAsync().Result;
 
         if (!res.Any())
             throw new Exception("Fail GetAllIMagesIndexAsync");
@@ -125,7 +122,7 @@ public class SqlRepositoryIntegrationTest
     public void GetImagesByIndexAsyncTest()
     {
         var imgId = 100;
-        var res = _operativeFramesStorage.GetImagesByIndex(imgId);
+        var res = _operativeFramesStorage.GetImagesByIndexAsync(imgId).Result;
 
         if (!res.Images.Any())
             throw new Exception("Fail GetImagesByIndexAsync");
@@ -133,21 +130,13 @@ public class SqlRepositoryIntegrationTest
 
     public void GetAllLabelsAsyncTest()
     {
-        var res = _operativeFramesStorage.GetAllLabels();
+        var res = _operativeFramesStorage.GetAllLabelsAsync().Result;
 
         if (!res.Any())
             throw new Exception("Fail GetAllLabelsAsyncTest");
     }
 
-
-    public void GetLastIndexAnnotationTest()
-    {
-        var res = _operativeFramesStorage.GetLastIndexAnnotation();
-
-        var lastId = 1245;
-        if (res != lastId)
-            throw new Exception("Fail GetLastIndexAnnotation");
-    }
+    
 
 
     public void FailWriteSqlAnnotation()
@@ -166,7 +155,7 @@ public class SqlRepositoryIntegrationTest
             State = StateAnnot.Active
         };
 
-        var res = _operativeFramesStorage.SaveAnnotations(new[] { annot });
+        var res = _operativeFramesStorage.SaveAnnotationsAsync(new[] { annot }).Result;
         if (!res)
             throw new Exception("Fail SaveAnnotationsAsyncTest");
     }
@@ -174,41 +163,12 @@ public class SqlRepositoryIntegrationTest
     public void TestFailInitSql(string fullPathDb)
     {
         using IRepository operativeFramesStorage = new SqlRepository();
-        var resInit = operativeFramesStorage.LoadDatabase(fullPathDb);
+        var resInit = operativeFramesStorage.LoadDatabaseAsync(fullPathDb).Result;
         if (!resInit)
             throw new Exception("Fail TestInitSql");
     }
 
 
-    public void TestInheritanceOfData()
-    {
-        var imgId = 1;
-        var arrAnnotSrc = _operativeFramesStorage.GetAnnotationsFromImgId(imgId);
-        var arrClone = arrAnnotSrc.CloneDeep();
+ 
 
-        arrClone[0].Points[0] = new PointD() { X = 1, Y = 2 };
-
-        if (arrAnnotSrc[0].Points[0].X == arrClone[0].Points[0].X)
-            throw new Exception("Fail CloneDeep");
-    }
-
-    public void TestWriteReadInformationState()
-    {
-        var newInformationDto = new InformationDto()
-        {
-            Id = 0,
-            Information = "Completed",
-            CategoryInformation = 1,
-        };
-
-        var res = _operativeFramesStorage.SaveInformationDto(newInformationDto);
-        if (!res)
-            throw new Exception("Fail TestWriteReadInformationState");
-
-
-        var arrInformationDto = _operativeFramesStorage.GetInformationDto();
-        if (arrInformationDto.Any() is false)
-            throw new Exception("Fail GetInformationDtoAsync");
-
-    }
 }

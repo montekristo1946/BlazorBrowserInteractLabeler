@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj" />
-      <ProjectReference Include="..\BrowserInteractLabeler.Web\BrowserInteractLabeler.Web.csproj" />
     </ItemGroup>
 
     <ItemGroup>

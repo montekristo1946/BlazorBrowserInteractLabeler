@@ -10,17 +10,16 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Labeling;
 
 public partial class LabelingPanel : ComponentBase
 {
-    [Inject] private AnnotationHandler _annotationHandler { get; set; } = null!;
-    [Inject] private Mappers _mappers { get; set; } = null!;
-    [Inject] private SettingsData _settingsData { get; set; } = null!;
-    [Inject] private MarkupData _markupData { get; set; } = null!;
+    [Inject] private AnnotationHandler AnnotationHandler { get; set; } = null!;
+    [Inject] private Mappers Mappers { get; set; } = null!;
+    [Inject] private SettingsData SettingsData { get; set; } = null!;
+    [Inject] private MarkupData MarkupData { get; set; } = null!;
     
-    [Inject] private IMediator _mediator { get; set; } = null!;
+    [Inject] private IMediator Mediator { get; set; } = null!;
     
-    [Parameter] public  Action  IsUpdateMenu { get; set; }
+    [Parameter] public  Action  IsUpdateMenu { get; set; }= null!;
     
     
-    private bool _isHiddenState = false;
     private LabelingPanelDto[] _labelingPanelDtos = [];
     private ColorModel[] _colorModels = [];
     private Label[] _labelsName = [];
@@ -28,24 +27,27 @@ public partial class LabelingPanel : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        _colorModels = _settingsData.ColorModel;
-        _labelsName = _markupData.LabelsName;
-        _codeKeys = _settingsData.CodeKey;
+        _colorModels = SettingsData.ColorModel;
+        _labelsName = MarkupData.LabelsName;
+        _codeKeys = SettingsData.CodeKey;
         await LoadAnnots();
     }
     
 
     private async Task LoadAnnots()
     {
-        var annotations = await _annotationHandler.GetAllAnnotations();
-        _labelingPanelDtos = _mappers.MapToLabelingPanelDto(annotations,_colorModels,_labelsName);
+        var annotations = await AnnotationHandler.GetAllAnnotations();
+        _labelingPanelDtos = Mappers.MapToLabelingPanelDto(annotations,_colorModels,_labelsName);
         _labelingPanelDtos = _labelingPanelDtos.OrderByDescending(p => p.IdAnnotation).ToArray();
 
     }
     private async Task ClickHiddenAll(bool isHidden)
     {
-        await _mediator.Send(new HiddenAllAnnotQueries(){IsHidden = isHidden});
+        await Mediator.Send(new HiddenAllAnnotQueries(){IsHidden = isHidden});
         IsUpdateMenu?.Invoke();
+        await LoadAnnots();
+        StateHasChanged();
+        
     }
 
     private int GetCountAnnots()
@@ -72,15 +74,18 @@ public partial class LabelingPanel : ComponentBase
     }
     private async Task ButtonClickObjectHiddenAsync(int idAnnotation)
     {
-        await _mediator.Send(new HiddenAnnotQueries(){IdAnnotaion = idAnnotation});
+        await Mediator.Send(new HiddenAnnotQueries(){IdAnnotaion = idAnnotation});
         IsUpdateMenu?.Invoke();
-        
+        await LoadAnnots();
+        StateHasChanged();
     }
 
     private async Task ButtonClickObjectAsync(int idAnnotation)
     {
-        await _mediator.Send(new EditionAnnotQueries(){IdAnnotaion = idAnnotation});
+        await Mediator.Send(new EditionAnnotQueries(){IdAnnotaion = idAnnotation});
         IsUpdateMenu?.Invoke();
+        await LoadAnnots();
+        StateHasChanged();
     }
 
     private string GetBackroundColor(StateAnnot state)
@@ -108,7 +113,7 @@ public partial class LabelingPanel : ComponentBase
     
     private async Task ClickDeleteEditionAnnot()
     {
-        await _mediator.Send(new DeleteEditionAnnotQueries());
+        await Mediator.Send(new DeleteEditionAnnotQueries());
         IsUpdateMenu?.Invoke();
     }
 
@@ -120,13 +125,13 @@ public partial class LabelingPanel : ComponentBase
 
     private async Task ButtonClickSetActiveLabel(int colorModelIdLabel)
     {
-        await _mediator.Send(new SetActiveLabelQueries(){IdLabel = colorModelIdLabel});
+        await Mediator.Send(new SetActiveLabelQueries(){IdLabel = colorModelIdLabel});
         IsUpdateMenu?.Invoke();
     }
 
     private string GetKeyName(int idLabel)
     {
-        var eventCode = _mappers.MapIdLabelToEventCode(idLabel);
+        var eventCode = Mappers.MapIdLabelToEventCode(idLabel);
         var name = _codeKeys.FirstOrDefault(p => p.EventCode == eventCode)?.KeyOnBoardName ?? String.Empty;
         return name;
     }

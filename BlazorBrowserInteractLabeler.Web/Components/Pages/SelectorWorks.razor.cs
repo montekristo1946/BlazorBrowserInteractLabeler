@@ -9,7 +9,7 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
 public partial class SelectorWorks : ComponentBase
 {
-    [Inject] private IMediator _mediator { get; set; } = null!;
+    [Inject] private IMediator Mediator { get; set; } = null!;
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;
     private PagesSelectorComponent? _pagesSelector = null;
     
@@ -19,7 +19,7 @@ public partial class SelectorWorks : ComponentBase
     
     protected override async Task OnInitializedAsync()
     {
-        await _mediator.Send(new LoadConfigurationQueries());
+        await Mediator.Send(new LoadConfigurationQueries());
         PagesSelectorTemplate = CreatePagesSelectorTemplate();
         WorksShowerComponentTemplate = CreateWorksShowerComponentTemplate();
     }

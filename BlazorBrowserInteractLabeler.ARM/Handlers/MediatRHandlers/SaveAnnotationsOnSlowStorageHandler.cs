@@ -53,7 +53,13 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
                 annotationsFromCash.Count());
 
 
-            await _repository.DeleteAnnotationsAsync(removeAnnot);
+           var resDelete = await _repository.DeleteAnnotationsAsync(removeAnnot);
+           if (!resDelete)
+           {
+               _markupData.ErrorMessage = "Fail Database!";
+               throw new InvalidOperationException("[SaveAnnotationsOnSlowStorageHandler] fail delete in DB");
+           }
+           
             annotationsFromCash = ClearFailAnnotation(annotationsFromCash);
             annotationsFromCash = OrderPoints(annotationsFromCash);
             await _repository.SaveAnnotationsAsync(annotationsFromCash);

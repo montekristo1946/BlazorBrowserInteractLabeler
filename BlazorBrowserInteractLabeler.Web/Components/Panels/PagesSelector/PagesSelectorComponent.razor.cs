@@ -4,7 +4,7 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.PagesSelector;
 
 public partial class PagesSelectorComponent : ComponentBase
 {
-    [Inject] private NavigationManager NavManager { get; set; }
+    [Inject] private NavigationManager NavManager { get; set; } = null!;
     private void ClickPageSettings()
     {
         NavManager.NavigateTo("SettingsPage");

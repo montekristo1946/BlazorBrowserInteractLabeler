@@ -62,6 +62,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
     private void UpdateUi()
     {
+        Console.WriteLine("UpdateUi - metka1");
         _drawingImagesPanelComponent?.OnUpdateImage();
         _labelingPanelComponent?.UpdateUi();
     }
@@ -98,7 +99,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment CreateNavigationPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(NavigationPanel));
-        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUI),UpdateUiNavigation);
+        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUi),UpdateUiNavigation);
         builder.AddComponentReferenceCapture(2, value =>
         {
             _navigationPanel = value as NavigationPanel
@@ -143,7 +144,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         if (isUpdate)
         {
             _drawingImagesPanelComponent?.ResetCrossHair();
-            UpdateUi();
+            StateHasChanged();
         }
     }
 
@@ -153,7 +154,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         InvokeAsync(async () =>
         {
             await KeyMapHandler.HandlerOnMouseUp(args);
-            UpdateUi();
+            StateHasChanged();
         });
     }
 
@@ -163,7 +164,8 @@ public partial class ImageMarker : ComponentBase, IDisposable
         InvokeAsync(async () =>
         {
             await KeyMapHandler.HandlerOnMouseDown(args);
-            UpdateUi();
+            StateHasChanged();
+            _labelingPanelComponent?.UpdateUi();
         });
     }
     
@@ -206,6 +208,9 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
     public void Dispose()
     {
+        if(KeyMapHandler?.IsNeedUpdateUi is null)
+            return;
+        
         KeyMapHandler.IsNeedUpdateUi -= UpdateUi;
     }
 

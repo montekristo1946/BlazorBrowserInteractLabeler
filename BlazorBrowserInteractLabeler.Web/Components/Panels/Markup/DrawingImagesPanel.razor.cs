@@ -14,21 +14,21 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 
 public partial class DrawingImagesPanel : ComponentBase
 {
-    [Inject] private MarkupData _markupData { get; set; } = null!;
-    [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
-    [Inject] private Helper  _helper { get; set; } = null!;
-    [Inject] private SvgConstructor  _svgConstructor { get; set; } = null!;
+    [Inject] private MarkupData MarkupData { get; set; } = null!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private Helper  Helper { get; set; } = null!;
+    [Inject] private SvgConstructor  SvgConstructor { get; set; } = null!;
 
-    private string WidthConvas => $"{(int)_markupData.SizeConvas.Width}px";
-    private string HeightConvas => $"{(int)_markupData.SizeConvas.Height}px";
+    private string WidthConvas => $"{(int)MarkupData.SizeConvas.Width}px";
+    private string HeightConvas => $"{(int)MarkupData.SizeConvas.Height}px";
 
-    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseDown { get; set; }
+    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseDown { get; set; } = null!;
 
-    [Parameter] public Action<MouseEventArgs> HandlerOnMouseMove { get; set; }
+    [Parameter] public Action<MouseEventArgs> HandlerOnMouseMove { get; set; } = null!;
 
-    [Parameter] public Action<WheelEventArgs> HandleMouseWheel { get; set; }
+    [Parameter] public Action<WheelEventArgs> HandleMouseWheel { get; set; } = null!;
     
-    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseUp { get; set; }
+    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseUp { get; set; } = null!;
 
     private RenderFragment CrosshairTemplate { get; set; } = null!;
     private Crosshair? _crosshairComponent = null;
@@ -40,10 +40,10 @@ public partial class DrawingImagesPanel : ComponentBase
 
     public async Task SetSizeConvas()
     {
-        var width = _markupData.SizeConvas.Width;
-        var height = _markupData.SizeConvas.Height;
+        var width = MarkupData.SizeConvas.Width;
+        var height = MarkupData.SizeConvas.Height;
 
-        await JSRuntime.InvokeVoidAsync("SetBrowseSize", ConstantsArm.IdConvas,
+        await JsRuntime.InvokeVoidAsync("SetBrowseSize", ConstantsArm.IdConvas,
             width,
             height);
     }
@@ -87,54 +87,54 @@ public partial class DrawingImagesPanel : ComponentBase
     
     private string CssScale()
     {
-        var scaleCurrent = _markupData.ScaleCurrent;
-        var offsetX = _markupData.OffsetDrawImage.X;
-        var offsetY = _markupData.OffsetDrawImage.Y;
+        var scaleCurrent = MarkupData.ScaleCurrent;
+        var offsetX = MarkupData.OffsetDrawImage.X;
+        var offsetY = MarkupData.OffsetDrawImage.Y;
         return $"transform: scale({scaleCurrent}) translate({offsetX}px, {offsetY}px)";
     }
     
     private async Task OnUpdateUiAsync()
     {
-        var img = _markupData.ImagesUI;
+        var img = MarkupData.ImagesUI;
 
         if (string.IsNullOrWhiteSpace(img))
             return;
 
-        var sizeCash = _markupData.SizeConvas;
+        var sizeCash = MarkupData.SizeConvas;
         var width = (int)sizeCash.Width;
         var height = (int)sizeCash.Height;
-        await JSRuntime.InvokeVoidAsync("LoadImg", ConstantsArm.IdConvas, img, width, height);
+        await JsRuntime.InvokeVoidAsync("LoadImg", ConstantsArm.IdConvas, img, width, height);
     }
 
     private void MouseMoveHandler(MouseEventArgs args)
     {
         HandlerOnMouseMove?.Invoke(args);
         
-        if(!_markupData.CrosshairData.IsShowCrosshair)
+        if(!MarkupData.CrosshairData.IsShowCrosshair)
             return;
 
-        var correctPoint = _helper.GetAbsoluteCoordinate(
+        var correctPoint = Helper.GetAbsoluteCoordinate(
             args.PageX,
             args.PageY, 
-            _markupData.ImageMarkerPanelSize);
+            MarkupData.ImageMarkerPanelSize);
         
-        var point = _helper.CorrectPoint(
+        var point = Helper.CorrectPoint(
             correctPoint,
-            _markupData.ScaleCurrent,
-            _markupData.OffsetDrawImage,
-            _markupData.SizeConvas);
+            MarkupData.ScaleCurrent,
+            MarkupData.OffsetDrawImage,
+            MarkupData.SizeConvas);
 
-        _markupData.CrosshairData = _markupData.CrosshairData with
+        MarkupData.CrosshairData = MarkupData.CrosshairData with
         {
             PointCursor = new PointT()
             {
                 X = point.X,
                 Y = point.Y
             },
-            ScaleCurrent = _markupData.ScaleCurrent,
+            ScaleCurrent = MarkupData.ScaleCurrent,
         };
 
-        _crosshairComponent?.UpdateSvg(_markupData.CrosshairData);
+        _crosshairComponent?.UpdateSvg(MarkupData.CrosshairData);
     }
 
     private RenderFragment GetRenderAnnotation()=>
@@ -142,7 +142,7 @@ public partial class DrawingImagesPanel : ComponentBase
         {
             try
             {
-                var figure = await _svgConstructor.CreateAnnotsFigure();
+                var figure = await SvgConstructor.CreateAnnotsFigure();
        
                 builder.AddMarkupContent(0, figure);
             }

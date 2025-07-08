@@ -20,8 +20,26 @@ public class MarkupData
     private Label[] _labelsName = [];
     private string _nameDb = string.Empty;
     private string _nameImage = string.Empty;
-
     private TypeLabel _currentTypeLabel = TypeLabel.None;
+    private string _errorMessage = String.Empty;
+    
+    public string ErrorMessage
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _errorMessage;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _errorMessage = value;
+            }
+        }
+    }
     
     public TypeLabel CurrentTypeLabel
     {
@@ -267,5 +285,5 @@ public class MarkupData
         }
     }
 
-  
+   
 }

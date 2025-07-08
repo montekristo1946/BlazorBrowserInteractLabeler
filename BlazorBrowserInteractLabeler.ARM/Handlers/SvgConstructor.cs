@@ -1,7 +1,6 @@
 using System.Text;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common.DTO;
-using BrowserInteractLabeler.Web.Infrastructure.Buffers;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers;
 

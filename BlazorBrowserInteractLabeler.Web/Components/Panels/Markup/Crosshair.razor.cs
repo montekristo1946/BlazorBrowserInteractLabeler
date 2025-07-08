@@ -6,9 +6,7 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Markup;
 
 public partial class Crosshair : ComponentBase
 {
-    private CrosshairData? _data;
-
-    // private readonly string _typeLine = "stroke-dasharray=\"5 4\"";
+    private CrosshairData? _data = null;
 
     private string GetTypeLine()
     {

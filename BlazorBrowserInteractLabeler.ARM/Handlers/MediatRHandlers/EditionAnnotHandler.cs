@@ -1,4 +1,5 @@
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
+using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BrowserInteractLabeler.Common.DTO;
 using MediatR;
 using Serilog;
@@ -12,10 +13,12 @@ public class EditionAnnotHandler : IRequestHandler<EditionAnnotQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<EditionAnnotHandler>();
     private readonly AnnotationHandler _annotationHandler;
+    private readonly MarkupData _markupData;
 
-    public EditionAnnotHandler(AnnotationHandler annotationHandler)
+    public EditionAnnotHandler(AnnotationHandler annotationHandler, MarkupData markupData)
     {
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
+        _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
     }
 
     public async Task<bool> Handle(EditionAnnotQueries? request, CancellationToken cancellationToken)
@@ -48,7 +51,7 @@ public class EditionAnnotHandler : IRequestHandler<EditionAnnotQueries, bool>
             allAnnots = allAnnots.Append(annot).ToArray();
 
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
-
+            _markupData.CurrentTypeLabel = annot.LabelPattern;
             return true;
         }
         catch (Exception e)

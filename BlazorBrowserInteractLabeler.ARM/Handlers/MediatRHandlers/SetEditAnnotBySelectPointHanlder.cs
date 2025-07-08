@@ -14,10 +14,12 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
 {
     private readonly ILogger _logger = Log.ForContext<SetEditAnnotBySelectPointQueriesHandler>();
     private readonly AnnotationHandler _annotationHandler;
+    private readonly MarkupData _markupData;
 
-    public SetEditAnnotBySelectPointQueriesHandler(AnnotationHandler annotationHandler)
+    public SetEditAnnotBySelectPointQueriesHandler(AnnotationHandler annotationHandler, MarkupData markupData)
     {
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
+        _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
     }
 
     public async Task<bool> Handle(SetEditAnnotBySelectPointQueries? request, CancellationToken cancellationToken)
@@ -54,7 +56,7 @@ public class SetEditAnnotBySelectPointQueriesHandler : IRequestHandler<SetEditAn
 
             annotIsEdit.State = StateAnnot.Edit;
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
-
+            _markupData.CurrentTypeLabel = annotIsEdit.LabelPattern;
             return true;
         }
         catch (Exception e)
