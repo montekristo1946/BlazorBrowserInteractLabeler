@@ -19,7 +19,7 @@ public partial class DrawingImagesPanel : ComponentBase
     [Inject] private Helper  Helper { get; set; } = null!;
     [Inject] private SvgConstructor  SvgConstructor { get; set; } = null!;
 
-
+    [Inject] private SettingsData SettingsData { get; set; } = null!;
 
     [Parameter] public  Action<MouseEventArgs> HandlerOnmouseDown { get; set; } = null!;
 
@@ -135,10 +135,18 @@ public partial class DrawingImagesPanel : ComponentBase
                 Y = point.Y
             },
             ScaleCurrent = MarkupData.ScaleCurrent,
+            Color = GetBacgroundLabel(),
         };
 
         _crosshairComponent?.UpdateSvg(MarkupData.CrosshairData);
        
+    }
+    private string GetBacgroundLabel()
+    {
+        var labelId = MarkupData.CurrentLabelId;
+        var colorModels = SettingsData.ColorModel;
+        var color = colorModels.FirstOrDefault(p => p.IdLabel == labelId)?.Color ?? "white";
+        return color;
     }
 
     private RenderFragment GetRenderAnnotation()=>

@@ -372,9 +372,9 @@ public class SvgConstructor
             return retStringSvg.ToString();
         }
 
-        var xf = 10;
+        var xf = 5;
         var yf = 10;
-        var fontSize = 32;
+        var fontSize = 28;
 
         foreach (var text in textHelper)
         {

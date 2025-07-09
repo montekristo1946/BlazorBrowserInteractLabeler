@@ -52,13 +52,15 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
                           "Save annotations in Img:{imagesId} count annotations:{CountAnnotations}", indexImg,
                 annotationsFromCash.Count());
 
-
-           var resDelete = await _repository.DeleteAnnotationsAsync(removeAnnot);
-           if (!resDelete)
-           {
-               _markupData.ErrorMessage = "Проблема с записью в Базу данных! Остановите работу.";
-               throw new InvalidOperationException("[SaveAnnotationsOnSlowStorageHandler] fail delete in DB");
-           }
+            if (removeAnnot.Any())
+            {
+                var resDelete = await _repository.DeleteAnnotationsAsync(removeAnnot);
+                if (!resDelete)
+                {
+                    throw new InvalidOperationException("[SaveAnnotationsOnSlowStorageHandler] fail delete in DB");
+                }
+            }
+       
            
             annotationsFromCash = ClearFailAnnotation(annotationsFromCash);
             annotationsFromCash = OrderPoints(annotationsFromCash);
@@ -72,6 +74,7 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
         }
         catch (Exception e)
         {
+            _markupData.ErrorMessage = "[SaveAnnotationsOnSlow] Проблема с записью в Базу данных! Остановите работу.";
             _logger.Error("[LoadNextImageHandler] {@Exception}", e);
         }
 

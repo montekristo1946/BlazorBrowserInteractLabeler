@@ -75,11 +75,7 @@ public partial class Crosshair : ComponentBase
    
     public void UpdateSvg(CrosshairData data)
     {
-        
-     
         _data = data;
         StateHasChanged();
-       
-     
     }
 }
