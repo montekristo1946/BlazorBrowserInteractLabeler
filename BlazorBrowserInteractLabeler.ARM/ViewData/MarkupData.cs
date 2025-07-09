@@ -16,7 +16,7 @@ public class MarkupData
     private int _currentIdImg  = 0;
     private int _currentProgress  = 0;
     private int _allImagesCount = 0;
-    private int _labelId = 1;
+    private int _labelId = 0;
     private Label[] _labelsName = [];
     private string _nameDb = string.Empty;
     private string _nameImage = string.Empty;
