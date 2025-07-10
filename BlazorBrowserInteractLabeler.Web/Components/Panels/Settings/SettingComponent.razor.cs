@@ -7,11 +7,11 @@ public partial class SettingComponent : ComponentBase
 {
     [Inject] private SettingsData SettingsData { get; set; } = null!;
 
-    private CodeKey[] _codeKeys = [];
+    // private CodeKey[] _codeKeys = [];
 
     protected override void OnInitialized()
     {
-        _codeKeys = SettingsData.CodeKey;
+        // _codeKeys = SettingsData.CodeKey;
     }
 
     private Task SetStokeWidth(ChangeEventArgs changeEventArgs)
@@ -43,5 +43,26 @@ public partial class SettingComponent : ComponentBase
     private double GetSetStokeWidth()
     {
         return SettingsData.StrokeWidth;
+    }
+    
+    private RenderFragment GetMainKeyboardComponent(CodeKey codeKey) => (builder) =>
+    {
+        builder.OpenComponent(0, typeof(MainKeyboardComponent));
+        builder.AddAttribute(1,nameof(MainKeyboardComponent.CodeKey),codeKey);
+        builder.AddAttribute(2,nameof(MainKeyboardComponent.IsNeedUpdateUi),UpdateUiMainKeyboardComponent);
+        
+        builder.CloseComponent();
+    };
+    
+    private RenderFragment CreateKeyboardComponent() => (builder) =>
+    {
+        builder.OpenComponent(0, typeof(CreateKeyboardComponent));
+        builder.CloseComponent();
+    };
+    
+    private void UpdateUiMainKeyboardComponent ()
+    {
+    
+        StateHasChanged();
     }
 }

@@ -43,6 +43,8 @@ public static class ExtensionsEnum
     {
         return (T)Enum.ToObject(typeof(T), data);
     }
+    
+
 }
 
 

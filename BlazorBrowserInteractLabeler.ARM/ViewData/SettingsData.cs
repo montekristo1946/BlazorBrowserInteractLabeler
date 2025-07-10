@@ -212,7 +212,6 @@ public class SettingsData
             {
                 Color = "#FFCC80",
                 IdLabel = 11,
-     
             }
         ];
     }

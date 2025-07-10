@@ -1,4 +1,5 @@
 @using BlazorBrowserInteractLabeler.ARM.Extension
+@using BlazorBrowserInteractLabeler.ARM.ViewData
 <div class="m-0 p-0">
   
     <div class="row p-0" style="height: 3vh"> </div>
@@ -10,7 +11,7 @@
             </p>
         </div>
       
-        <div class="col-7 p-0 m-0">
+        <div class="col-8 p-0 m-0">
             <p class="m-0" style="">
                 <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
                        data-mdb-placement="right"
@@ -20,7 +21,7 @@
                        @onchange="(SetPathFolderWorkers)">
             </p>
         </div>
-        <div class="col-2  p-0 m-0"></div>
+        <div class="col-1  p-0 m-0"></div>
     </div>
     
     <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
@@ -31,7 +32,7 @@
             </p>
         </div>
       
-        <div class="col-7 p-0 m-0">
+        <div class="col-8 p-0 m-0">
             <p class="m-0" style="">
                 <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
                        data-mdb-placement="right"
@@ -41,29 +42,33 @@
                        @onchange="(SetStokeWidth)">
             </p>
         </div>
-        <div class="col-2  p-0 m-0"></div>
+        <div class="col-1  p-0 m-0"></div>
     </div>
     
+    <div class="row p-0" style="height: 3vh"> </div>
+    <div class="row padding-1px" style="">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-10 p-0 m-0">
+            @CreateKeyboardComponent() 
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+    <div class="row p-0" style="height: 3vh"> </div>
     @{
-        foreach (var codeKey  in _codeKeys)
+        foreach (var codeKey  in SettingsData.CodeKey)
         {
-            <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
+            <div class="row padding-1px" style="">
                 <div class="col-1  p-0 m-0"></div>
-                <div class="col-2 p-0 m-0">
-                    <p class="m-0" style="">
-                        @codeKey.EventCode.ToDisplayName()
-                    </p>
+                <div class="col-10 p-0 m-0">
+                    @GetMainKeyboardComponent( codeKey) 
                 </div>
-      
-                <div class="col-7 p-0 m-0">
-                    <p class="m-0" style="">
-                        @codeKey.CodeFromKeyBoard
-                    </p>
-                </div>
-                <div class="col-2  p-0 m-0"></div>
+                <div class="col-1  p-0 m-0"></div>
             </div>
-    
         }
     }
     
+    <div class="row p-0" style="height: 3vh"> </div>
+
+    
+    <div class="row p-0" style="height: 3vh"> </div>
 </div>

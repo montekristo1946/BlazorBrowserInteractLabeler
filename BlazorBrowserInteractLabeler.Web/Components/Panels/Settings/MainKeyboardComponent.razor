@@ -1,0 +1,74 @@
+@using BlazorBrowserInteractLabeler.ARM.Extension
+<div class="p-0 m-0" style="height: 5.0vh;" >
+    <div class="row m-0 settings-panel padding-1px" style="height: 100%">
+        
+        <div class="col-2 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center" style="padding-left: 1vw;">
+                <div style="height: 21px;">
+                    <p class="m-0" style=" overflow: hidden ; word-break: break-all;">
+                        Функция:
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-4 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center">
+                <div style="height: 21px; padding-right: 1vw;">
+                    <p class="m-0" style=" overflow: hidden ; word-break: break-all;">
+                        <i>
+                            @CodeKey?.EventCode.ToDisplayName()
+                        </i>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-2 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center">
+                <div style="height: 21px;">
+                    <p class="m-0" style=" overflow: hidden ; word-break: break-all;">
+                        Клавиша:
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-1 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center">
+                <div style="height: 20px;">
+                    <p class="m-0" style=" overflow: hidden ; word-break: break-all;">
+                        
+                        @if (!string.IsNullOrWhiteSpace(@CodeKey?.KeyOnBoardName))
+                        {
+                            @CodeKey?.KeyOnBoardName
+                        }
+                        else
+                        {
+                            @CodeKey?.CodeFromKeyBoard
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-1 p-0 m-0 div-menu-start"></div>
+        
+        <div class="col-1 m-0  padding-2px " style="height: 100%;"
+             title="">
+            <div class=" p-0 m-0 div-menu-center  settings-panel" style="height: 100%; width: 100%; background-color: @GetBackground()">
+            </div>
+        </div>
+        
+        <div class="col-1 m-0  padding-2px " style="height: 100%; "
+             @onclick="@((e)=>OnClickDeleteAnnot(CodeKey))"
+             title="Удаление функции">
+            <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
+                 style="height: 100%; width: 100%">
+                <span role="img" class="anticon  text-vertical-center">
+                    <img src="icons/014_fail_icon.svg" width="25" height="25"/>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

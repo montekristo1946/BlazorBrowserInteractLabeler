@@ -1,0 +1,85 @@
+@using BlazorBrowserInteractLabeler.ARM.Extension
+@using BlazorBrowserInteractLabeler.ARM.ViewData
+<div class="p-0 m-0" style="height: 5.0vh;" >
+    <div class="row m-0 settings-panel padding-1px" style="height: 100%">
+        
+        <div class="col-2 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center" style="padding-left: 1vw;">
+                <div style="height: 21px;">
+                    <p class="m-0" style=" overflow: hidden ; word-break: break-all;">
+                        Функция:
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-4 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center">
+                <div style="height: 21px; padding-right: 1vw;">
+                  
+                    <select
+                        class=" "
+                        size="1"
+                        style="width: 100%; 
+                        outline-color: #258cfb;  
+                        border-color: #ced4da;  
+                        border-radius: 5px 5px 5px 5px; 
+                        background: #fff; padding-left: 1vh;"
+                        @onchange="(SetCurrentEventCode)"
+                        value="@EventCode.None.ToDisplayName()">
+                        @{
+                            foreach (var eventCode in GetAllEnums())
+                            {
+                                <option value="@eventCode">@eventCode.ToDisplayName()</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-2 p-0 m-0 div-menu-start">
+            <div class="text-vertical-center">
+                <div style="height: 21px;">
+                    <p class="m-0" style=" overflow: hidden ; word-break: break-all;">
+                        Клавиша:
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-1 p-0 m-0 div-menu-start padding-1px">
+            <div class="text-vertical-top ">
+                <input type="text"
+                       class="form-control    "
+                       data-mdb-toggle="tooltip"
+                       data-mdb-placement="right"
+                       title="" placeholder=""
+                       aria-describedby="button-addon1"
+                       style="padding-left: 1vh; width: 100%;"
+                       value="test"
+                       @onchange="(e =>SetupKey(e))">
+            </div>
+        </div>
+        
+        <div class="col-1 p-0 m-0 div-menu-start"></div>
+        
+        <div class="col-1 m-0  padding-2px " style="height: 100%;"
+             title="">
+            <div class=" p-0 m-0 div-menu-center  settings-panel" style="height: 100%; width: 100%;">
+            </div>
+        </div>
+        
+        <div class="col-1 m-0  padding-2px " style="height: 100%; "
+             title="">
+            <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
+                 style="height: 100%; width: 100%">
+                <span role="img" class="anticon  text-vertical-center">
+                    <img src="icons/013_lable_add.svg" width="25" height="25"/>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
