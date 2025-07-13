@@ -27,7 +27,7 @@ public partial class LabelingPanel : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        _colorModels = SettingsData.ColorModel;
+        _colorModels = SettingsData.ColorModel.OrderBy(p=>p.IdLabel).ToArray();
         _labelsName = MarkupData.LabelsName;
         _codeKeys = SettingsData.CodeKey;
         await LoadAnnots();
@@ -132,7 +132,7 @@ public partial class LabelingPanel : ComponentBase
     private string GetKeyName(int idLabel)
     {
         var eventCode = Mappers.MapIdLabelToEventCode(idLabel);
-        var name = _codeKeys.FirstOrDefault(p => p.EventCode == eventCode)?.KeyOnBoardName ?? String.Empty;
+        var name = _codeKeys.FirstOrDefault(p => p.EventCode == eventCode)?.KeyFromUser ?? String.Empty;
         return name;
     }
 }

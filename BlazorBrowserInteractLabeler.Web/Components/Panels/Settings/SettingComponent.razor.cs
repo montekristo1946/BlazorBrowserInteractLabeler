@@ -6,13 +6,8 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Settings;
 public partial class SettingComponent : ComponentBase
 {
     [Inject] private SettingsData SettingsData { get; set; } = null!;
-
-    // private CodeKey[] _codeKeys = [];
-
-    protected override void OnInitialized()
-    {
-        // _codeKeys = SettingsData.CodeKey;
-    }
+ 
+    
 
     private Task SetStokeWidth(ChangeEventArgs changeEventArgs)
     {
@@ -45,7 +40,7 @@ public partial class SettingComponent : ComponentBase
         return SettingsData.StrokeWidth;
     }
     
-    private RenderFragment GetMainKeyboardComponent(CodeKey codeKey) => (builder) =>
+    private RenderFragment GetMainKeyboardComponentTemplate(CodeKey codeKey) => (builder) =>
     {
         builder.OpenComponent(0, typeof(MainKeyboardComponent));
         builder.AddAttribute(1,nameof(MainKeyboardComponent.CodeKey),codeKey);
@@ -54,9 +49,10 @@ public partial class SettingComponent : ComponentBase
         builder.CloseComponent();
     };
     
-    private RenderFragment CreateKeyboardComponent() => (builder) =>
+    private RenderFragment CreateKeyboardComponentTemplate() => (builder) =>
     {
         builder.OpenComponent(0, typeof(CreateKeyboardComponent));
+        builder.AddAttribute(2,nameof(CreateKeyboardComponent.IsNeedUpdateUi),UpdateUiMainKeyboardComponent);
         builder.CloseComponent();
     };
     
@@ -64,5 +60,12 @@ public partial class SettingComponent : ComponentBase
     {
     
         StateHasChanged();
+    }
+
+    private IEnumerable<CodeKey> GetKeyCode()
+    {
+
+        var keys = SettingsData.CodeKey.OrderBy(p => p.EventCode).ToArray();
+        return keys;
     }
 }

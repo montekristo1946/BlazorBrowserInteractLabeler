@@ -20,6 +20,7 @@
       <None Update="Resource\error_1.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    
     </ItemGroup>
 
     <ItemGroup>

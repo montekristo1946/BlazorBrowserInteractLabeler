@@ -6,6 +6,9 @@ using Serilog;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
+/// <summary>
+/// Восстанавливает позицию изображения.
+/// </summary>
 public class RestorePositionImageHandler: IRequestHandler<RestorePositionImageQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<RestorePositionImageHandler>();

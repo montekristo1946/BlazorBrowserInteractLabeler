@@ -109,35 +109,35 @@ public class SettingsData
     {
         return
         [
-            new CodeKey(){CodeFromKeyBoard = "KeyF",KeyOnBoardName = "" , EventCode = EventCode.GoNext},
-             new CodeKey(){CodeFromKeyBoard = "ArrowRight",KeyOnBoardName = "" , EventCode = EventCode.GoNext},
+            new CodeKey(){CodeFromKeyBoard = "KeyF",KeyFromUser = "f" , EventCode = EventCode.GoNext},
+             new CodeKey(){CodeFromKeyBoard = "ArrowRight",KeyFromUser = "ArrowRight" , EventCode = EventCode.GoNext},
              
-             new CodeKey(){CodeFromKeyBoard = "KeyD",KeyOnBoardName = "" , EventCode = EventCode.GoBack},
-             new CodeKey(){CodeFromKeyBoard = "ArrowLeft",KeyOnBoardName = "" , EventCode = EventCode.GoBack},
+             new CodeKey(){CodeFromKeyBoard = "KeyD",KeyFromUser = "d" , EventCode = EventCode.GoBack},
+             new CodeKey(){CodeFromKeyBoard = "ArrowLeft",KeyFromUser = "ArrowLeft" , EventCode = EventCode.GoBack},
              
-             new CodeKey(){CodeFromKeyBoard = "Delete",KeyOnBoardName = "" , EventCode = EventCode.DeleteActiveAnnot},
-             new CodeKey(){CodeFromKeyBoard = "KeyZ",KeyOnBoardName = "" , EventCode = EventCode.DeleteActiveAnnot},
+             new CodeKey(){CodeFromKeyBoard = "Delete",KeyFromUser = "del" , EventCode = EventCode.DeleteActiveAnnot},
+             new CodeKey(){CodeFromKeyBoard = "KeyZ",KeyFromUser = "z" , EventCode = EventCode.DeleteActiveAnnot},
              
-             new CodeKey(){CodeFromKeyBoard = "KeyE",KeyOnBoardName = "" , EventCode = EventCode.SaveAnnotation},
+             new CodeKey(){CodeFromKeyBoard = "KeyE",KeyFromUser = "e" , EventCode = EventCode.SaveAnnotation},
              
-             new CodeKey(){CodeFromKeyBoard = "KeyQ",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationBox},
-             new CodeKey(){CodeFromKeyBoard = "KeyW",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationPolygon},
-             new CodeKey(){CodeFromKeyBoard = "KeyA",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationPolyline},
-             new CodeKey(){CodeFromKeyBoard = "KeyS",KeyOnBoardName = "" , EventCode = EventCode.InitAnnotationPoint},
+             new CodeKey(){CodeFromKeyBoard = "KeyQ",KeyFromUser = "q" , EventCode = EventCode.InitAnnotationBox},
+             new CodeKey(){CodeFromKeyBoard = "KeyW",KeyFromUser = "w" , EventCode = EventCode.InitAnnotationPolygon},
+             new CodeKey(){CodeFromKeyBoard = "KeyA",KeyFromUser = "a" , EventCode = EventCode.InitAnnotationPolyline},
+             new CodeKey(){CodeFromKeyBoard = "KeyS",KeyFromUser = "s" , EventCode = EventCode.InitAnnotationPoint},
              
-             new CodeKey(){CodeFromKeyBoard = "Space",KeyOnBoardName = "" , EventCode = EventCode.MoveDefault},
+             new CodeKey(){CodeFromKeyBoard = "Space",KeyFromUser = "Space" , EventCode = EventCode.MoveDefault},
 
-             new CodeKey(){CodeFromKeyBoard = "Digit1",KeyOnBoardName = "1" , EventCode = EventCode.Label1},
-             new CodeKey(){CodeFromKeyBoard = "Digit2",KeyOnBoardName = "2" , EventCode = EventCode.Label2},
-             new CodeKey(){CodeFromKeyBoard = "Digit3",KeyOnBoardName = "3" , EventCode = EventCode.Label3},
-             new CodeKey(){CodeFromKeyBoard = "Digit4",KeyOnBoardName = "4" , EventCode = EventCode.Label4},
-             new CodeKey(){CodeFromKeyBoard = "Digit5",KeyOnBoardName = "5" , EventCode = EventCode.Label5},
-             new CodeKey(){CodeFromKeyBoard = "Digit6",KeyOnBoardName = "6" , EventCode = EventCode.Label6},
-             new CodeKey(){CodeFromKeyBoard = "Digit7",KeyOnBoardName = "7" , EventCode = EventCode.Label7},
-             new CodeKey(){CodeFromKeyBoard = "KeyT",KeyOnBoardName = "t" , EventCode = EventCode.Label8},
-             new CodeKey(){CodeFromKeyBoard = "KeyY",KeyOnBoardName = "y" , EventCode = EventCode.Label9},
-             new CodeKey(){CodeFromKeyBoard = "KeyU",KeyOnBoardName = "u" , EventCode = EventCode.Label10},
-             new CodeKey(){CodeFromKeyBoard = "KeyJ",KeyOnBoardName = "j" , EventCode = EventCode.Label11}
+             new CodeKey(){CodeFromKeyBoard = "Digit1",KeyFromUser = "1" , EventCode = EventCode.Label1},
+             new CodeKey(){CodeFromKeyBoard = "Digit2",KeyFromUser = "2" , EventCode = EventCode.Label2},
+             new CodeKey(){CodeFromKeyBoard = "Digit3",KeyFromUser = "3" , EventCode = EventCode.Label3},
+             new CodeKey(){CodeFromKeyBoard = "Digit4",KeyFromUser = "4" , EventCode = EventCode.Label4},
+             new CodeKey(){CodeFromKeyBoard = "Digit5",KeyFromUser = "5" , EventCode = EventCode.Label5},
+             new CodeKey(){CodeFromKeyBoard = "Digit6",KeyFromUser = "6" , EventCode = EventCode.Label6},
+             new CodeKey(){CodeFromKeyBoard = "Digit7",KeyFromUser = "7" , EventCode = EventCode.Label7},
+             new CodeKey(){CodeFromKeyBoard = "KeyT",KeyFromUser = "t" , EventCode = EventCode.Label8},
+             new CodeKey(){CodeFromKeyBoard = "KeyY",KeyFromUser = "y" , EventCode = EventCode.Label9},
+             new CodeKey(){CodeFromKeyBoard = "KeyU",KeyFromUser = "u" , EventCode = EventCode.Label10},
+             new CodeKey(){CodeFromKeyBoard = "KeyJ",KeyFromUser = "j" , EventCode = EventCode.Label11}
         ];
     }
 

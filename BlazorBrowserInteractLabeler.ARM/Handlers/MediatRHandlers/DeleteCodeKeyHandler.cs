@@ -5,6 +5,9 @@ using Serilog;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
+/// <summary>
+/// Удаляет горячую клавишу из конфига.
+/// </summary>
 public class DeleteCodeKeyHandler: IRequestHandler<DeleteCodeKeyQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<DeleteCodeKeyHandler>();
