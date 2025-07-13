@@ -1,10 +1,7 @@
-using System.Globalization;
-using System.Reflection.Metadata;
 using BlazorBrowserInteractLabeler.ARM.Dto;
 using BlazorBrowserInteractLabeler.ARM.Handlers;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
 using BlazorBrowserInteractLabeler.Web.Common;
-using BrowserInteractLabeler.Common.DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -52,7 +49,7 @@ public partial class DrawingImagesPanel : ComponentBase
 
     public void OnUpdateImage()
     {
-        InvokeAsync(async () => { await OnUpdateUiAsync(); });
+        OnUpdateUiAsync();
     }
 
 
@@ -95,7 +92,7 @@ public partial class DrawingImagesPanel : ComponentBase
         return $"transform: scale({scaleCurrent}) translate({offsetX}px, {offsetY}px)";
     }
     
-    private async Task OnUpdateUiAsync()
+    private void OnUpdateUiAsync()
     {
         var img = MarkupData.ImagesUI;
 
@@ -105,28 +102,31 @@ public partial class DrawingImagesPanel : ComponentBase
         var sizeCash = MarkupData.SizeConvas;
         var width = (int)sizeCash.Width;
         var height = (int)sizeCash.Height;
-        await JsRuntime.InvokeVoidAsync("LoadImg", ConstantsArm.IdConvas, img, width, height);
+       
+        InvokeAsync(async () =>
+        {
+            await JsRuntime.InvokeVoidAsync("LoadImg", ConstantsArm.IdConvas, img, width, height);
+        });
+      
         
     }
 
     private void MouseMoveHandler(MouseEventArgs args)
     {
         HandlerOnMouseMove?.Invoke(args);
-        
-        // if(!MarkupData.CrosshairData.IsShowCrosshair)
-        //     return;
-
+     
         var correctPoint = Helper.GetAbsoluteCoordinate(
             args.PageX,
             args.PageY, 
             MarkupData.ImageMarkerPanelSize);
+        
         
         var point = Helper.CorrectPoint(
             correctPoint,
             MarkupData.ScaleCurrent,
             MarkupData.OffsetDrawImage,
             MarkupData.SizeConvas);
-
+      
         MarkupData.CrosshairData = MarkupData.CrosshairData with
         {
             PointCursor = new PointT()
@@ -138,6 +138,8 @@ public partial class DrawingImagesPanel : ComponentBase
             Color = GetBacgroundLabel(),
         };
 
+       
+       
         _crosshairComponent?.UpdateSvg(MarkupData.CrosshairData);
        
     }

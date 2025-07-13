@@ -1,4 +1,3 @@
-using BlazorBrowserInteractLabeler.ARM;
 using BlazorBrowserInteractLabeler.ARM.Dto;
 using BlazorBrowserInteractLabeler.ARM.Handlers;
 using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
@@ -57,6 +56,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
             await JSRuntime.InvokeVoidAsync("window.registerViewportChangeCallback", DotNetObjectReference.Create(this));
             OnResize(-1,-1);
             await JSRuntime.InvokeVoidAsync("FocusElement", ConstantsArm.ImageMarkerRoot);
+            
         }
     }
 
