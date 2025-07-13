@@ -9,12 +9,13 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Восстанавливает позицию изображения.
 /// </summary>
-public class RestorePositionImageHandler: IRequestHandler<RestorePositionImageQueries, bool>
+public class RestorePositionImageHandler : IRequestHandler<RestorePositionImageQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<RestorePositionImageHandler>();
     private readonly MarkupData _markupData;
-    private const double CoefReisizeView = 0.97;
-    private const double DeltaPx = 10;
+    private const double CoefReisizeView = 0.98;
+  
+
     public RestorePositionImageHandler(MarkupData markupData)
     {
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
@@ -26,25 +27,28 @@ public class RestorePositionImageHandler: IRequestHandler<RestorePositionImageQu
         {
             var sizeWindows = _markupData.ImageMarkerPanelSize;
             var sizeImg = _markupData.SizeConvas;
-          
-            if(sizeWindows.IsEmpty() || sizeImg.IsEmpty())
+
+            if (sizeWindows.IsEmpty() || sizeImg.IsEmpty())
                 return Task.FromResult(false);
 
             var scaleFull = CalculateScale(sizeWindows, sizeImg);
-            var scale =scaleFull* CoefReisizeView;
+            var scale = scaleFull * CoefReisizeView;
             _markupData.ScaleCurrent = scale;
 
             var reversScale = 1 / scale;
-            
+            var reverScaleFull = (1 / scaleFull);
 
-            var newXoffset = ((sizeImg.Width * scale)-sizeImg.Width)*reversScale/2 +DeltaPx;
-            var newYoffset = (((sizeImg.Height * scale)-sizeImg.Height)*reversScale)/2 +DeltaPx;
-            
-            
+            var dWidth = (sizeWindows.Width - (sizeImg.Width * scale)) / 2 * reverScaleFull;
+            var dHeight = (sizeWindows.Height - (sizeImg.Height * scale)) / 2 * reverScaleFull;
+
+            var newXOffset = ((sizeImg.Width * scale) - sizeImg.Width) * reversScale / 2 + dWidth;
+            var newYOffset = ((sizeImg.Height * scale) - sizeImg.Height) * reversScale / 2 + dHeight;
+
+
             _markupData.OffsetDrawImage = new PointT()
             {
-                X = newXoffset,
-                Y = newYoffset,
+                X = newXOffset,
+                Y = newYOffset,
             };
             return Task.FromResult(true);
         }
@@ -58,8 +62,8 @@ public class RestorePositionImageHandler: IRequestHandler<RestorePositionImageQu
 
     private double CalculateScale(SizeWindows sizeWindows, SizeT sizeImg)
     {
-       var arrScale = new []{sizeWindows.Width/ sizeImg.Width, sizeWindows.Height / sizeImg.Height};
-       var minScale = arrScale.Min();
-       return minScale;
+        var arrScale = new[] { sizeWindows.Width / sizeImg.Width, sizeWindows.Height / sizeImg.Height };
+        var minScale = arrScale.Min();
+        return minScale;
     }
 }
