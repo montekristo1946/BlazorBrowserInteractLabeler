@@ -13,7 +13,8 @@ public class RestorePositionImageHandler: IRequestHandler<RestorePositionImageQu
 {
     private readonly ILogger _logger = Log.ForContext<RestorePositionImageHandler>();
     private readonly MarkupData _markupData;
-
+    private const double CoefReisizeView = 0.97;
+    private const double DeltaPx = 10;
     public RestorePositionImageHandler(MarkupData markupData)
     {
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
@@ -29,13 +30,16 @@ public class RestorePositionImageHandler: IRequestHandler<RestorePositionImageQu
             if(sizeWindows.IsEmpty() || sizeImg.IsEmpty())
                 return Task.FromResult(false);
 
-            var scale = CalculateScale(sizeWindows, sizeImg);
+            var scaleFull = CalculateScale(sizeWindows, sizeImg);
+            var scale =scaleFull* CoefReisizeView;
             _markupData.ScaleCurrent = scale;
 
             var reversScale = 1 / scale;
-            var newXoffset = (((sizeImg.Width * scale)-sizeImg.Width)*reversScale)/2 ;
-            var newYoffset = (((sizeImg.Height * scale)-sizeImg.Height)*reversScale)/2 ;
-           
+            
+
+            var newXoffset = ((sizeImg.Width * scale)-sizeImg.Width)*reversScale/2 +DeltaPx;
+            var newYoffset = (((sizeImg.Height * scale)-sizeImg.Height)*reversScale)/2 +DeltaPx;
+            
             
             _markupData.OffsetDrawImage = new PointT()
             {
