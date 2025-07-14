@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Web", "BrowserInteractLabeler.Web\BrowserInteractLabeler.Web.csproj", "{B7287A07-0F7B-49A6-A917-0F296881C51F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.Common", "BrowserInteractLabeler.Common\BrowserInteractLabeler.Common.csproj", "{93DF7F29-7ED6-49B3-B80E-A5A8843210AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserInteractLabeler.DataLoader", "BrowserInteractLabeler.DataLoader\BrowserInteractLabeler.DataLoader.csproj", "{50110A02-64FE-4660-BE11-668B96A5443E}"
@@ -40,6 +38,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImagesToDataset", "ImagesTo
 		Example\ImagesToDataset\annot.json = Example\ImagesToDataset\annot.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBrowserInteractLabeler.Web", "BlazorBrowserInteractLabeler.Web\BlazorBrowserInteractLabeler.Web.csproj", "{F5491D49-2423-4A9D-AE1D-DD5809D36B29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBrowserInteractLabeler.ARM", "BlazorBrowserInteractLabeler.ARM\BlazorBrowserInteractLabeler.ARM.csproj", "{3F72A982-C8A9-4E63-9243-91D6E7BB7719}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +51,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B7287A07-0F7B-49A6-A917-0F296881C51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7287A07-0F7B-49A6-A917-0F296881C51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7287A07-0F7B-49A6-A917-0F296881C51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7287A07-0F7B-49A6-A917-0F296881C51F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{93DF7F29-7ED6-49B3-B80E-A5A8843210AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{93DF7F29-7ED6-49B3-B80E-A5A8843210AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93DF7F29-7ED6-49B3-B80E-A5A8843210AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +67,14 @@ Global
 		{D5CADEDC-6347-4FA6-BDA3-CD4DD128D09D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5CADEDC-6347-4FA6-BDA3-CD4DD128D09D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5CADEDC-6347-4FA6-BDA3-CD4DD128D09D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5491D49-2423-4A9D-AE1D-DD5809D36B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F72A982-C8A9-4E63-9243-91D6E7BB7719}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1E3807AE-A7F2-48BB-9D71-3C099F08AD4D} = {73A592E4-FA99-4141-910E-B0BE9E0DCBCD}

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrowserInteractLabeler.Repository;
 
-public  class ApplicationDbContext:DbContext
+public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext()
     {
         Database.Migrate();
     }
-    
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -20,7 +20,7 @@ public  class ApplicationDbContext:DbContext
         Database.ExecuteSqlRawAsync("PRAGMA journal_mode=DELETE");
         Database.CloseConnectionAsync();
     }
-    
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -30,14 +30,14 @@ public  class ApplicationDbContext:DbContext
     }
 
     public DbSet<ImageFrame> ImageFrames { get; set; }
-    
+
     public DbSet<Annotation> Annotations { get; set; }
-    
-    public DbSet<PointF> Points { get; set; }
-    
+
+    public DbSet<PointD> Points { get; set; }
+
     public DbSet<SizeF> Sizes { get; set; }
     public DbSet<Label> Labels { get; set; }
-    
+
     public DbSet<InformationDto> InformationState { get; set; }
 
 }

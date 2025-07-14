@@ -32,22 +32,23 @@ public class CreateImageDataset : IHostedService
         switch (_typeWork)
         {
             case "loadImg":
-            {
-                await LoadDataset(_pathImg);
-                break;
-            }
+                {
+                    await LoadDataset(_pathImg);
+                    break;
+                }
             default:
-            {
-                Helper.HelperPrint();
-                throw new NotImplementedException($"Not Found {_typeWork}");
-            }
+                {
+                    Helper.HelperPrint();
+                    throw new NotImplementedException($"Not Found {_typeWork}");
+                }
         }
 
         Environment.Exit(0); //костыляка из зависания сериалога
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
+        return Task.CompletedTask;
     }
 
     private async Task LoadDataset(string pathTask)
@@ -64,18 +65,26 @@ public class CreateImageDataset : IHostedService
             _logger.Debug("[LoadDataset] Load Folder:{ImageName}", taskFolder);
 
             var nameDb = Path.GetFileName(taskFolder);
-            var pathSaveDB = Path.GetDirectoryName(taskFolder);
-            if (pathSaveDB is null)
+            var pathSaveDb = Path.GetDirectoryName(taskFolder);
+            if (pathSaveDb is null)
                 throw new Exception($"[LoadDataset] Fail GetDirectoryName {taskFolder}");
 
-            var fullPathDb = Path.Combine(pathSaveDB, $"{nameDb}.db3");
+            var fullPathDb = Path.Combine(pathSaveDb, $"{nameDb}.db3");
+            CheckOldDataBase(fullPathDb);
 
-            // using var sqlContext = new ApplicationDbContext(fullPathDb);
             using IRepository operativeFramesStorage = new SqlRepository();
-            operativeFramesStorage.LoadDatabase(fullPathDb);
+            await operativeFramesStorage.LoadDatabaseAsync(fullPathDb);
             await LoadImages(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadLabels(taskFolder, operativeFramesStorage).ConfigureAwait(false);
             await LoadAnnotations(taskFolder, operativeFramesStorage).ConfigureAwait(false);
+        }
+    }
+
+    private void CheckOldDataBase(string fullPathDb)
+    {
+        if (File.Exists(fullPathDb))
+        {
+            throw new InvalidOperationException($"Old databe! needs to be removed {fullPathDb}");
         }
     }
 
@@ -99,7 +108,7 @@ public class CreateImageDataset : IHostedService
             return;
 
         var annots = exportDto.Annotations;
-        var frames = repository.GetAllImages();
+        var frames = await repository.GetInfoAllImagesAsync();
         var annotGroupByImgImport = annots.GroupBy(p => p.ImageFrameId)
             .Select(groupAnnot =>
             {
@@ -121,7 +130,8 @@ public class CreateImageDataset : IHostedService
                 {
                     return annot with
                     {
-                        Id = 0, ImageFrameId = indexInBase,
+                        Id = 0,
+                        ImageFrameId = indexInBase,
                         Points = annot.Points?.Select(p => p with { Id = 0 }).ToList()
                     };
                 })
@@ -129,7 +139,7 @@ public class CreateImageDataset : IHostedService
             if (!annotsImport.Any())
                 continue;
 
-            var res = repository.SaveAnnotations(annotsImport);
+            var res = await repository.SaveAnnotationsAsync(annotsImport);
             if (!res)
                 throw new Exception($"[GetDtoToJson] Fail SaveAnnotationsAsync, folder: {taskFolder}");
         }
@@ -141,19 +151,19 @@ public class CreateImageDataset : IHostedService
         if (!exportDto.Labels.Any())
             throw new Exception($"[LoadLabels] Fail Labels, folder: {taskFolder}");
 
-        var res = operativeFramesStorage.InsertLabels(exportDto.Labels);
+        var res = await operativeFramesStorage.InsertLabelsAsync(exportDto.Labels);
         if (!res)
             throw new Exception($"[LoadDataset] Fail InsertLabel, name {taskFolder}");
     }
 
     private (int width, int height, byte[] img) ResizeImg(byte[] img, string pathImg)
     {
-        const int optimalHeightOnInterface = 640;
-        const int optimalWidthOnInterface = 640;
+        // const int optimalHeightOnInterface = 640;
+        // const int optimalWidthOnInterface = 1280;
         try
         {
             using var image = new MagickImage(img);
-            image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
+            // image.Resize(optimalWidthOnInterface, optimalHeightOnInterface);
             image.Quality = 100;
             image.Format = MagickFormat.Jpg;
             var data = image.ToByteArray();
@@ -177,7 +187,7 @@ public class CreateImageDataset : IHostedService
 
         var onlyFrame = arrFrames.Select(p => p.Value).ToArray();
 
-        var res = operativeFramesStorage.InsertImageFrames(onlyFrame);
+        var res = await operativeFramesStorage.InsertImageFramesAsync(onlyFrame);
         if (!res)
             throw new Exception($"[LoadDataset] Fail InsertImageFrame, taskFolder: {taskFolder}");
     }

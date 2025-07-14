@@ -5,20 +5,17 @@ namespace BrowserInteractLabeler.Common.DTO;
 
 public record Annotation
 {
-    public int Id { get; set; } 
+    public int Id { get; set; }
 
-    public int LabelId { get; set; } 
+    public int LabelId { get; set; }
 
-    public List<PointF>? Points { get; set; } = new();
+    public List<PointD>? Points { get; set; } = [];
 
     public TypeLabel LabelPattern { get; set; } = TypeLabel.None;
 
     [JsonIgnore]
     public StateAnnot State { get; set; } = StateAnnot.Finalized;
-    
+
     public int ImageFrameId { get; set; } = -1;
-    
-    [JsonIgnore]
-    public ImageFrame Images { get; set; } 
-    
+
 }

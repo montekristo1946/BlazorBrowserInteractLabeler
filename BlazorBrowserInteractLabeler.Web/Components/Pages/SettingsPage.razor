@@ -1,0 +1,31 @@
+@page "/SettingsPage"
+@using BlazorBrowserInteractLabeler.Web.Common
+
+@rendermode InteractiveServer
+
+
+<div class="m-0 p-0" id="@ConstantsArm.ImageMarkerRoot"
+     style="background-color: #ebf0ff; overflow-x: hidden; overflow-y: hidden;  ">
+    <div class="row m-0 p-0 border-enveloping-custom" style=" height: 5.0vh; width: 100vw;">
+        <div class="col-1 p-0 m-0">
+            @PagesSelectorTemplate
+        </div>
+        <div class="col-1 p-0 m-0">
+            <div class="row p-0 m-0" style="height: 100%">
+                <div class="col-4 padding-1px" @onclick="@(OnClickSave)" style="height: 100%; ">
+                    <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
+                         style="height: 100%; width: 100%">
+                        <span role="img" class="anticon  text-vertical-center">
+                            <img src="icons/001_save.svg" width="25" height="25"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row m-0 p-0 border-enveloping-custom page-main-style"
+         style="">
+        @SettingComponentTemplate
+    </div>
+</div>

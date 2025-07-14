@@ -1,0 +1,19 @@
+@page "/SelectorWorks"
+@using BlazorBrowserInteractLabeler.Web.Common
+
+@rendermode InteractiveServer
+
+
+<div class="m-0 p-0" id="@ConstantsArm.ImageMarkerRoot" 
+     style="background-color: #ebf0ff; overflow-x: hidden; overflow-y: hidden;  ">
+    <div class="row m-0 p-0 border-enveloping-custom" style=" height: 5.0vh; width: 100vw;">
+        <div class="col-1 p-0 m-0">
+            @PagesSelectorTemplate
+        </div>
+    
+    </div>
+    <div class="row m-0 p-0 border-enveloping-custom page-main-style" 
+         style="">
+        @WorksShowerComponentTemplate
+    </div>
+</div>

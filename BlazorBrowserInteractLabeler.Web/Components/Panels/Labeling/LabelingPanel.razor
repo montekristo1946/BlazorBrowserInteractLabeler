@@ -1,0 +1,136 @@
+@rendermode InteractiveServer
+
+<div class="row no-select p-0 m-0">
+    <div class="col-12 p-0 m-0">
+
+        <ul class="nav nav-tabs padding-tabs " id="myTab" role="tablist">
+            <li class="nav-item" role="presentation" style="width: 50%">
+                <button class="nav-link active prevent-select p-1 " id="object-tab" data-bs-toggle="tab"
+                        data-bs-target="#object-tab-panel"
+                        type="button" role="tab" aria-controls="object-tab-panel" aria-selected="false"
+                        style="height: 100%; width: 100%">
+                    Object
+                </button>
+            </li>
+            <li class="nav-item" role="presentation" style="width: 50%">
+                <button class="nav-link prevent-select p-1" id="labels-tab" data-bs-toggle="tab"
+                        data-bs-target="#labels-tab-pane" type="button"
+                        role="tab" aria-controls="labels-tab-pane" aria-selected="false"
+                        style="height: 100%; width: 100%">
+                    Labels
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="tab-content prevent-select" id="myTabContent" style="">
+    <div class="tab-pane fade show active" id="object-tab-panel" role="tabpanel" aria-labelledby="object-tab">
+
+        <div class="row p-0 m-0" style="height: 30px; width: 100%">
+            <div class="col-3 padding-1px" @onclick="@(() => ClickHiddenAll(true))" style="height: 100%;">
+                <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
+                    <span role="img" class="anticon  text-vertical-center">
+                        <img src="icons/016_close_eye_icon.svg" width="25" height="25" alt=""/>
+                    </span>
+                </div>
+            </div>
+            <div class="col-3 padding-1px" @onclick="@(() => ClickHiddenAll(false))" style="height: 100%;">
+                <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
+                    <span role="img" class="anticon  text-vertical-center">
+                        <img src="icons/015_open_eye_icon.svg" width="25" height="25" alt=""/>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-3 padding-1px" style="height: 100%;  ">
+                <div class=" p-0 m-0 div-menu-center settings-panel" style="height: 100%; width: 100%">
+                    <div class="p-0 m-0 text-vertical-center">
+                        @GetCountAnnots()
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-3 padding-1px" @onclick="@(ClickDeleteEditionAnnot)" style="height: 100%;">
+                <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel" style="height: 100%; width: 100%">
+                    <span role="img" class="anticon  text-vertical-center">
+                        <img src="icons/018_garbage.svg" width="25" height="25" alt=""/>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="list-group  m-0 padding-1px no-select">
+            @{
+                foreach (var labelingPanelDto in _labelingPanelDtos)
+                {
+                    var backGround = GetBackroundColor(labelingPanelDto.State);
+                    <div class="row  m-0 button-panel padding-2px "
+                         style="height: 38px; width: 100%; background-color: @backGround">
+
+                        <div class="col-9 m-0 p-0 bottom-shadow" style="height: 100%;"
+                             @onclick="@(() => ButtonClickObjectAsync(labelingPanelDto.IdAnnotation))">
+                            <div class="row p-0 m-0" style="height: 100%;">
+                                <div class="col-3   m-0  padding-2px" style="height: 100%;">
+                                    <div class="p-0 m-0 settings-panel"
+                                         style="height: 100%; width: 100%; background-color: @labelingPanelDto.Color">
+                                    </div>
+                                </div>
+                                <div class="col-9 padding-2px m-0  "
+                                     style="height: 100%; overflow: hidden ; word-break: break-all; ">
+                                    @labelingPanelDto.Name
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-3 p-0  m-0 settings-panel bottom-shadow div-menu-center " style="height: 100%;"
+                             @onclick="@(() => ButtonClickObjectHiddenAsync(labelingPanelDto.IdAnnotation))">
+                            <span role="img" class="anticon  text-vertical-center">
+                                <img src="@GetSvgPath(labelingPanelDto.LabelPattern)" width="25" height="25"/>
+                            </span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+
+    </div>
+
+    <div class="tab-pane fade " id="labels-tab-pane" role="tabpanel" aria-labelledby="object-tab">
+        <div class="list-group  m-0 p-0 no-select">
+            @{
+                foreach (var colorModel in _colorModels)
+                {
+                    <div class="row  m-0 button-panel padding-2px" style="height: 38px; width: 100%;" >
+
+                        <div class="col-9 m-0 p-0 bottom-shadow" style="height: 100%;"
+                             @onclick="@(() => ButtonClickSetActiveLabel(colorModel.IdLabel))">
+                            <div class="row p-0 m-0" style="height: 100%;">
+                                <div class="col-3   m-0  padding-2px" style="height: 100%;">
+                                    <div class="p-0 m-0 settings-panel"
+                                         style="height: 100%; width: 100%; background-color: @colorModel.Color">
+                                    </div>
+                                </div>
+                                <div class="col-9 padding-2px m-0  "
+                                     style="height: 100%; overflow: hidden ; word-break: break-all; ">
+                                    @GetLabelText(colorModel.IdLabel)
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-3 p-0  m-0 settings-panel div-menu-center " style="height: 100%;">
+                            <span role="img" class="text-vertical-center">
+                                @GetKeyName(colorModel.IdLabel)
+                            </span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+
+    </div>
+</div>

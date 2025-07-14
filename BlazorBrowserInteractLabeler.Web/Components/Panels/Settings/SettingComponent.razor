@@ -1,0 +1,89 @@
+@rendermode InteractiveServer
+
+<div class="m-0 p-0">
+
+    <div class="row p-0" style="height: 3vh"></div>
+    <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-2 p-0 m-0">
+            <p class="m-0" style="">
+                Рабочий каталог
+            </p>
+        </div>
+
+        <div class="col-8 p-0 m-0">
+            <p class="m-0" style="">
+                <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
+                       data-mdb-placement="right"
+                       title="" placeholder="" aria-describedby="button-addon1"
+                       style="height: 3vh"
+                       value="@GetPathFolderWorkers()"
+                       @onchange="(SetPathFolderWorkers)">
+            </p>
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+
+    <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-2 p-0 m-0">
+            <p class="m-0" style="">
+                Толщина линий
+            </p>
+        </div>
+
+        <div class="col-8 p-0 m-0">
+            <p class="m-0" style="">
+                <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
+                       data-mdb-placement="right"
+                       title="" placeholder="" aria-describedby="button-addon1"
+                       style="height: 3vh"
+                       value="@GetSetStokeWidth()"
+                       @onchange="(SetStokeWidth)">
+            </p>
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+
+    <div class="row p-0" style="height: 3vh"></div>
+    <div class="row padding-1px" style="">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-10 p-0 m-0">
+            Добавить новую клавишу
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+
+    <div class="row padding-1px" style="">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-10 p-0 m-0">
+            @CreateKeyboardComponentTemplate()
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+
+
+    <div class="row p-0" style="height: 3vh"></div>
+    <div class="row padding-1px" style="">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-10 p-0 m-0">
+            Список установленных клавиш
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+    @{
+        foreach (var codeKey in GetKeyCode())
+        {
+            <div class="row padding-1px" style="">
+                <div class="col-1  p-0 m-0"></div>
+                <div class="col-10 p-0 m-0">
+                    @GetMainKeyboardComponentTemplate(codeKey)
+                </div>
+                <div class="col-1  p-0 m-0"></div>
+            </div>
+        }
+    }
+
+    <div class="row p-0" style="height: 3vh"></div>
+    
+</div>

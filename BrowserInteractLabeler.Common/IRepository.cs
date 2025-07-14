@@ -4,31 +4,25 @@ namespace BrowserInteractLabeler.Common;
 
 public interface IRepository : IDisposable
 {
-    public bool LoadDatabase(string path);
+    public Task<bool> LoadDatabaseAsync(string path);
 
-    public int[] GetAllIndexImages();
-    
-    ImageFrame[] GetAllImages();
-    
-    public Annotation[] GetAllAnnotations();
+    public Task<int[]> GetAllIndexImagesAsync();
 
-    public ImageFrame GetImagesByIndex(int imagesId);
+    public Task<ImageFrame[]> GetInfoAllImagesAsync();
 
-    public Label[] GetAllLabels();
+    public Task<Annotation[]> GetAllAnnotationsAsync();
 
-    public Annotation[] GetAnnotationsFromImgId(int imagesId);
+    public Task<ImageFrame> GetImagesByIndexAsync(int imagesId);
 
-    public bool DeleteAnnotations(Annotation[] removeAnnot);
-    
-    public bool SaveAnnotations(Annotation[] toArray);
-    
-    public int GetLastIndexAnnotation();
+    public Task<Annotation[]> GetAnnotationsFromImgIdAsync(int imagesId);
 
-    public bool InsertImageFrames(ImageFrame[]? frame);
+    public Task<bool> DeleteAnnotationsAsync(Annotation[] removeAnnot);
 
-    public bool InsertLabels(Label?[]? frame);
+    public Task<bool> SaveAnnotationsAsync(Annotation[] toArray);
 
-    public bool SaveInformationDto(InformationDto frame);
+    public Task<Label[]> GetAllLabelsAsync();
 
-    public InformationDto[] GetInformationDto();
+    public Task<bool> InsertLabelsAsync(Label[] labels);
+    public Task<bool> InsertImageFramesAsync(ImageFrame[] frame);
+
 }

@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace BrowserInteractLabeler.Common;
+namespace BrowserInteractLabeler.Common.DTO;
 
 
 public record SizeF

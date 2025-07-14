@@ -2,11 +2,11 @@ namespace BrowserInteractLabeler.Common.DTO;
 
 public class ExportDTO
 {
-    public Label[] Labels { get; set; } = Array.Empty<Label>();
+    public Label[] Labels { get; set; } = [];
 
-    public ImageFrame [] Images { get; set; } = Array.Empty<ImageFrame>();
+    public ImageFrame[] Images { get; set; } = [];
 
-    public Annotation[] Annotations { get; set; }= Array.Empty<Annotation>();
-    
-    
+    public Annotation[] Annotations { get; set; } = [];
+
+
 }

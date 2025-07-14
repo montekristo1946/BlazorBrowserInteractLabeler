@@ -24,7 +24,7 @@ public static class ConfiguratorExtension
         })
         .ConfigureServices((context, services) =>
         {
-            
+
             var configuration = context.Configuration;
             var pathImg = configuration["pathImg"];
             if (string.IsNullOrEmpty(pathImg))
@@ -32,16 +32,16 @@ public static class ConfiguratorExtension
                 Helper.HelperPrint();
                 throw new Exception("Fail argument pathImg");
             }
-            
+
             var typeWork = configuration["typeWork"];
             if (string.IsNullOrEmpty(typeWork))
             {
                 Helper.HelperPrint();
                 throw new Exception("Fail argument typeWork");
             }
-            
+
             services.AddScoped<IRepository, SqlRepository>();
-            services.AddHostedService<CreateImageDataset>(provider => new CreateImageDataset(pathImg,typeWork));
+            services.AddHostedService<CreateImageDataset>(provider => new CreateImageDataset(pathImg, typeWork));
 
         });
 }

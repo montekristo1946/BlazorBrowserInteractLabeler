@@ -6,5 +6,5 @@ public enum StateAnnot
     Edit = 1,
     Active = 2,
     Finalized = 3,
-    Hidden =4
+    Hidden = 4
 }
