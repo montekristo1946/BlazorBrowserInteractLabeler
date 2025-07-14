@@ -10,8 +10,8 @@ public class AnnotationHandler
     private SemaphoreSlim _semaphoreSlim = new(1, 1);
     private List<Annotation> _annotations = new();
     private readonly int _timeWaitSeamaphore = 10;
-    
-    
+
+
     public async Task<Annotation[]> GetAllAnnotations()
     {
         await _semaphoreSlim.WaitAsync(_timeWaitSeamaphore);
@@ -30,8 +30,8 @@ public class AnnotationHandler
 
         return [];
     }
-    
-    
+
+
     public async Task UpdateAllAnnotations(Annotation[] allAnnots)
     {
         await _semaphoreSlim.WaitAsync();

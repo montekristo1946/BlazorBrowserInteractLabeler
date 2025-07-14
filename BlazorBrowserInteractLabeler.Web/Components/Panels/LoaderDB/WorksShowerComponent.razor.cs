@@ -16,16 +16,14 @@ public partial class WorksShowerComponent : ComponentBase
     private bool _enableSpinner = false;
     protected override async Task OnInitializedAsync()
     {
-        _worksShowerData =  await Mediator.Send(new GetAllNamesDatabaseQueries() {PathFolderWorkers =SettingsData.PathFolderWorkers});
+        _worksShowerData = await Mediator.Send(new GetAllNamesDatabaseQueries() { PathFolderWorkers = SettingsData.PathFolderWorkers });
     }
-
-
-
+    
     private async Task ClickLoadTask(string path)
     {
         _enableSpinner = true;
         StateHasChanged();
-        await Mediator.Send(new ChoseActiveDataBaseQueries() { PathDb = path});
+        await Mediator.Send(new ChoseActiveDataBaseQueries() { PathDb = path });
         _enableSpinner = false;
         StateHasChanged();
     }
@@ -34,13 +32,13 @@ public partial class WorksShowerComponent : ComponentBase
     {
         if (_activeDb != nameDatabes)
             return;
-        
-        await Mediator.Send(new ExportDatabaseQueries() );
+
+        await Mediator.Send(new ExportDatabaseQueries());
     }
 
     private string GetColorBackground(string nameDatabes)
     {
-       
+
         return _activeDb == nameDatabes ? "#fdeaee" : string.Empty;
     }
 
@@ -51,20 +49,14 @@ public partial class WorksShowerComponent : ComponentBase
 
     private bool GetEnableButton(string nameDatabes)
     {
-        
+
         return _activeDb == nameDatabes ? true : false;
     }
 
     private void UpdateActiveDb()
     {
-       _activeDb = MarkupData.NameDb;
-        
+        _activeDb = MarkupData.NameDb;
+
     }
 
-    private string GetShadowButton(string nameDatabes)
-    {
-        return _activeDb == nameDatabes ? "bottom-shadow" : string.Empty;
-        
-    }
-    
 }

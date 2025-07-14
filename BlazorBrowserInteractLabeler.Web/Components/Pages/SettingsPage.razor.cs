@@ -11,7 +11,7 @@ public partial class SettingsPage : ComponentBase
     [Inject] private IMediator Mediator { get; set; } = null!;
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;
     private PagesSelectorComponent? _pagesSelector = null;
-    
+
     private RenderFragment SettingComponentTemplate { get; set; } = null!;
     private SettingComponent? _settingComponent = null;
     protected override async Task OnInitializedAsync()
@@ -20,11 +20,11 @@ public partial class SettingsPage : ComponentBase
         PagesSelectorTemplate = CreatePagesSelectorTemplate();
         SettingComponentTemplate = SettingComponentTemplateTemplate();
     }
-    
+
     private RenderFragment CreatePagesSelectorTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(PagesSelectorComponent));
-        
+
         builder.AddComponentReferenceCapture(1, value =>
         {
             _pagesSelector = value as PagesSelectorComponent
@@ -34,11 +34,11 @@ public partial class SettingsPage : ComponentBase
 
         builder.CloseComponent();
     };
-    
+
     private RenderFragment SettingComponentTemplateTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(SettingComponent));
-        
+
         builder.AddComponentReferenceCapture(1, value =>
         {
             _settingComponent = value as SettingComponent

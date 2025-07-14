@@ -8,28 +8,28 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Settings;
 
 public partial class CreateKeyboardComponent : ComponentBase
 {
-    
+
     [Inject] private IMediator Mediator { get; set; } = null!;
-    [Parameter] public Action? IsNeedUpdateUi { get; set; }= null!;
-    
+    [Parameter] public Action? IsNeedUpdateUi { get; set; } = null!;
+
     private EventCode _eventCode = EventCode.None;
     string _code = String.Empty;
     string _keyOnBoardName = string.Empty;
-    string _color =  "white";
+    string _color = "white";
     private bool _isOpenedPalette = false;
-    
-    private EventCode [] GetAllEnums()
+
+    private EventCode[] GetAllEnums()
     {
         var arrEnum = Enum.GetValues(typeof(EventCode));
-        var retValue= new EventCode[arrEnum.Length];
+        var retValue = new EventCode[arrEnum.Length];
         Array.Copy(arrEnum, retValue, arrEnum.Length);
-        
+
         return retValue;
     }
 
     private Task SetCurrentEventCode(ChangeEventArgs changeEventArgs)
     {
-        if (changeEventArgs?.Value == null) 
+        if (changeEventArgs?.Value == null)
             return Task.CompletedTask;
 
         var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
@@ -39,17 +39,17 @@ public partial class CreateKeyboardComponent : ComponentBase
             : EventCode.None;
 
         _eventCode = newEnum;
-        
+
         return Task.CompletedTask;
     }
 
- 
+
 
     private Task EventOnKeyDown(KeyboardEventArgs arg)
     {
         _keyOnBoardName = arg.Code == "Space" ? arg.Code : arg.Key.ToLower();
-       
-       _code = arg.Code;
+
+        _code = arg.Code;
         return Task.CompletedTask;
     }
 
@@ -62,18 +62,18 @@ public partial class CreateKeyboardComponent : ComponentBase
     private Task ClosedEventChoiceColor(string color)
     {
         _isOpenedPalette = false;
-        
-        if (string.IsNullOrWhiteSpace(color) )
+
+        if (string.IsNullOrWhiteSpace(color))
             return Task.CompletedTask;
 
         _color = color;
-        
+
         return Task.CompletedTask;
     }
 
     private async Task SaveLabel()
     {
-        if (_eventCode  == EventCode.None || string.IsNullOrWhiteSpace(_code) || string.IsNullOrWhiteSpace(_keyOnBoardName))
+        if (_eventCode == EventCode.None || string.IsNullOrWhiteSpace(_code) || string.IsNullOrWhiteSpace(_keyOnBoardName))
             return;
 
         var codeKey = new CodeKey()
@@ -82,9 +82,9 @@ public partial class CreateKeyboardComponent : ComponentBase
             KeyFromUser = _keyOnBoardName,
             EventCode = _eventCode
         };
-        
-        await Mediator.Send(new InitNewCodeKeyQueries() { CodeKey = codeKey, Color = _color});
-       
+
+        await Mediator.Send(new InitNewCodeKeyQueries() { CodeKey = codeKey, Color = _color });
+
         _code = string.Empty;
         _keyOnBoardName = string.Empty;
         _color = "white";

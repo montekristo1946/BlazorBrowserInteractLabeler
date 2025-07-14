@@ -47,7 +47,7 @@ public class MoveImagesHandler
 
     public void HandlerOnmouseUp()
     {
-        
+
         lock (_lock)
         {
             _isStartMove = false;

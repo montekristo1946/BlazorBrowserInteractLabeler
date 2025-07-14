@@ -15,8 +15,8 @@ public class MovingPointHandler : IRequestHandler<MovingPointQueries, bool>
     private readonly ILogger _logger = Log.ForContext<MovingPointHandler>();
     private readonly AnnotationHandler _annotationHandler;
     private readonly MovingPointData _movingPointData;
-    
-    public MovingPointHandler( AnnotationHandler annotationHandler,  MovingPointData movingPointData)
+
+    public MovingPointHandler(AnnotationHandler annotationHandler, MovingPointData movingPointData)
     {
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
         _movingPointData = movingPointData ?? throw new ArgumentNullException(nameof(movingPointData));
@@ -26,15 +26,15 @@ public class MovingPointHandler : IRequestHandler<MovingPointQueries, bool>
     {
         try
         {
-            if (request is null || request.Point.X <=0 ||  request.Point.Y <=0)
+            if (request is null || request.Point.X <= 0 || request.Point.Y <= 0)
                 return false;
-            
-            
+
+
             var allAnnots = await _annotationHandler.GetAllAnnotations();
             var currentAnnot = allAnnots.FirstOrDefault(p => p.Id == _movingPointData.CurrentIdAnnot && p.State == StateAnnot.Edit);
             if (currentAnnot is null)
                 return false;
-            
+
             var points = currentAnnot.Points;
             if (points is null || !points.Any())
                 return false;
@@ -54,9 +54,9 @@ public class MovingPointHandler : IRequestHandler<MovingPointQueries, bool>
             });
 
             currentAnnot.Points = points;
-            
+
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
-           
+
             return true;
         }
         catch (Exception e)

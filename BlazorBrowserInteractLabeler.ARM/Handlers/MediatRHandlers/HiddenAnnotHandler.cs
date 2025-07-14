@@ -30,13 +30,13 @@ public class HiddenAnnotHandler : IRequestHandler<HiddenAnnotQueries, bool>
             if (allAnnots.Any() is false)
                 return false;
 
-            var annot = allAnnots.FirstOrDefault(p=>p.Id == request.IdAnnotaion);
-            
-            if(annot is null)
+            var annot = allAnnots.FirstOrDefault(p => p.Id == request.IdAnnotaion);
+
+            if (annot is null)
                 return false;
 
             annot.State = annot.State == StateAnnot.Hidden ? StateAnnot.Finalized : StateAnnot.Hidden;
-            
+
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
 
             return true;

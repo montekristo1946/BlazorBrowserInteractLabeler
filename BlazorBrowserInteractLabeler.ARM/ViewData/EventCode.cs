@@ -40,7 +40,7 @@ public enum EventCode
     MoveDefault = 10,
 
     [Display(Name = "Удалить активный annot"), Description(nameof(DeleteActiveAnnot))]
-    DeleteActiveAnnot =11,
+    DeleteActiveAnnot = 11,
 
     [Display(Name = "Класс разметки 1"), Description(nameof(Label1))]
     Label1 = 12,
@@ -58,7 +58,7 @@ public enum EventCode
     Label5 = 16,
 
     [Display(Name = "Класс разметки 6"), Description(nameof(Label6))]
-    Label6 =17,
+    Label6 = 17,
 
     [Display(Name = "Класс разметки 7"), Description(nameof(Label7))]
     Label7 = 18,
@@ -75,5 +75,5 @@ public enum EventCode
     [Display(Name = "Класс разметки 11"), Description(nameof(Label11))]
     Label11 = 22,
 
-    
+
 }

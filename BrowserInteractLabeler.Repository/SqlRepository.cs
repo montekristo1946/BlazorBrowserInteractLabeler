@@ -211,9 +211,10 @@ public class SqlRepository : IRepository
         try
         {
             var retArr = _db.ImageFrames.Select(s => new
-                {
-                    s.Id, s.NameImages
-                })
+            {
+                s.Id,
+                s.NameImages
+            })
                 .Select(p => new ImageFrame()
                 {
                     Id = p.Id,
@@ -271,10 +272,10 @@ public class SqlRepository : IRepository
         {
             if (labels is null || !labels.Any())
                 return false;
-            
+
             await _db.Labels.AddRangeAsync(labels!);
             await _db.SaveChangesAsync();
-            
+
             return true;
         }
         catch (Exception e)
@@ -288,7 +289,7 @@ public class SqlRepository : IRepository
 
         return false;
     }
-    public  async Task<bool> InsertImageFramesAsync(ImageFrame[]? frame)
+    public async Task<bool> InsertImageFramesAsync(ImageFrame[]? frame)
     {
         if (_db is null)
             return false;
@@ -298,10 +299,10 @@ public class SqlRepository : IRepository
         {
             if (frame is null || !frame.Any())
                 return false;
-            
+
             await _db.ImageFrames.AddRangeAsync(frame);
             await _db.SaveChangesAsync();
-            
+
             return true;
         }
         catch (Exception e)
@@ -315,8 +316,8 @@ public class SqlRepository : IRepository
 
         return false;
     }
-    
-    
+
+
     // public bool InsertLabels(Label?[]? labels)
     // {
     //     lock (_locker)

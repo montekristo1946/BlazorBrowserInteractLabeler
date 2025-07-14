@@ -5,11 +5,11 @@ namespace BrowserInteractLabeler.Common.DTO;
 public record ImageFrame
 {
     public int Id { get; init; }
-    
-    [JsonIgnore] 
+
+    [JsonIgnore]
     public SizeF SizeImage { get; init; } = new() { Height = -1, Width = -1 };
 
-    [JsonIgnore] 
+    [JsonIgnore]
     public byte[] Images { get; init; } = [];
     public string NameImages { get; init; } = String.Empty;
 

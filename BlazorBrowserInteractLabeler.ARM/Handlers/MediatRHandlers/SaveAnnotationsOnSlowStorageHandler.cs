@@ -11,7 +11,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Сохранить Annots в Sql хранилище.
 /// </summary>
-public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotationsOnSlowStorageQueries,bool>
+public class SaveAnnotationsOnSlowStorageHandler : IRequestHandler<SaveAnnotationsOnSlowStorageQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<LoadNextImageHandler>();
     private readonly IRepository _repository;
@@ -40,10 +40,10 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
                     indexImg);
                 return false;
             }
-            var removeAnnot =await _repository.GetAnnotationsFromImgIdAsync(indexImg);
+            var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(indexImg);
             var annotationsFromCash = await _annotationHandler.GetAllAnnotations();
-           
-          
+
+
             var equalAnnotation = removeAnnot.Equality(annotationsFromCash);
             if (equalAnnotation)
                 return true;
@@ -60,16 +60,16 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
                     throw new InvalidOperationException("[SaveAnnotationsOnSlowStorageHandler] fail delete in DB");
                 }
             }
-       
-           
+
+
             annotationsFromCash = ClearFailAnnotation(annotationsFromCash);
             annotationsFromCash = OrderPoints(annotationsFromCash);
             await _repository.SaveAnnotationsAsync(annotationsFromCash);
 
             var allAnnotWithIndex = await _repository.GetAnnotationsFromImgIdAsync(indexImg);
-            
+
             await _annotationHandler.UpdateAllAnnotations(allAnnotWithIndex);
-            
+
             return true;
         }
         catch (Exception e)
@@ -80,7 +80,7 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
 
         return false;
     }
-    
+
     private Annotation[] OrderPoints(Annotation[] annotations)
     {
         if (annotations?.Any() == null)
@@ -96,7 +96,7 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
 
         return retArr;
     }
-    
+
     private Annotation[] ClearFailAnnotation(Annotation[] annotations)
     {
         if (annotations?.Any() == null)
@@ -109,8 +109,8 @@ public class SaveAnnotationsOnSlowStorageHandler:IRequestHandler<SaveAnnotations
                 || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count >= 2)
                 || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count >= 3)
                 || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count >= 1)
-                 
-            ).Where(annot => annot.LabelId >=0 )
+
+            ).Where(annot => annot.LabelId >= 0)
             .Select(annot =>
             {
                 annot.State = StateAnnot.Finalized;

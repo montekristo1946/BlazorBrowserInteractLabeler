@@ -70,7 +70,7 @@ public class SvgConstructor
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-        var srcPoints = annotation.Points.OrderBy(p=>p.PositionInGroup).ToArray();
+        var srcPoints = annotation.Points.OrderBy(p => p.PositionInGroup).ToArray();
 
         var retPolygon = new List<string>();
         var color = GetColor(annotation.LabelId);
@@ -101,7 +101,7 @@ public class SvgConstructor
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-        var srcPoints = annotation.Points.OrderBy(p=>p.PositionInGroup).ToArray();
+        var srcPoints = annotation.Points.OrderBy(p => p.PositionInGroup).ToArray();
 
         var retPolygon = new List<string>();
         var color = GetColor(annotation.LabelId);
@@ -148,7 +148,7 @@ public class SvgConstructor
         if (annotation?.Points is null || annotation.Points.Any() == false)
             return string.Empty;
 
-        var srcPoints = annotation.Points.OrderBy(p=>p.PositionInGroup).ToArray();
+        var srcPoints = annotation.Points.OrderBy(p => p.PositionInGroup).ToArray();
 
         var retPolygon = new List<string>();
         var color = GetColor(annotation.LabelId);
@@ -227,17 +227,17 @@ public class SvgConstructor
         //     typeLine = "stroke-dasharray=\"4 3\"";
         // }
 
-        return activeAnnot? GetBrokenLine() :solidLine ;
+        return activeAnnot ? GetBrokenLine() : solidLine;
     }
     private string GetBrokenLine()
     {
         if (_markupData?.ScaleCurrent == null)
-            return  "stroke-dasharray=\"5 4\"";
+            return "stroke-dasharray=\"5 4\"";
 
-        var scale = 1/_markupData.ScaleCurrent;
-        var lien =10*scale;
-        var spase = 5*scale;
-        return  $"stroke-dasharray=\"{lien} {spase}\"";
+        var scale = 1 / _markupData.ScaleCurrent;
+        var lien = 10 * scale;
+        var spase = 5 * scale;
+        return $"stroke-dasharray=\"{lien} {spase}\"";
     }
 
     private string CreateSVGBox(Annotation? annotation, bool activeAnnot, double thicknessLine)
@@ -319,7 +319,7 @@ public class SvgConstructor
         return $"<circle cx=\"{cx * 100}%\" cy=\"{cy * 100}%\" r=\"{r}\" fill=\"{color}\" />$";
     }
 
-    private string CreateLastPoint(PointD [] annotationPoints, double strokeWidth)
+    private string CreateLastPoint(PointD[] annotationPoints, double strokeWidth)
     {
         var lastPoint = annotationPoints.MaxBy(p => p.PositionInGroup);
         if (lastPoint is null)

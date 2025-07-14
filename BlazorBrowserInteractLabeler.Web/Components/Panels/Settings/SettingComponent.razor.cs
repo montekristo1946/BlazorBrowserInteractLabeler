@@ -6,8 +6,8 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Settings;
 public partial class SettingComponent : ComponentBase
 {
     [Inject] private SettingsData SettingsData { get; set; } = null!;
- 
-    
+
+
 
     private Task SetStokeWidth(ChangeEventArgs changeEventArgs)
     {
@@ -17,8 +17,8 @@ public partial class SettingComponent : ComponentBase
             : 0;
 
         SettingsData.StrokeWidth = newValue;
-        
-       return Task.CompletedTask;
+
+        return Task.CompletedTask;
     }
 
     private Task SetPathFolderWorkers(ChangeEventArgs changeEventArgs)
@@ -26,7 +26,7 @@ public partial class SettingComponent : ComponentBase
         var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
 
         SettingsData.PathFolderWorkers = textToSave;
-        
+
         return Task.CompletedTask;
     }
 
@@ -39,26 +39,26 @@ public partial class SettingComponent : ComponentBase
     {
         return SettingsData.StrokeWidth;
     }
-    
+
     private RenderFragment GetMainKeyboardComponentTemplate(CodeKey codeKey) => (builder) =>
     {
         builder.OpenComponent(0, typeof(MainKeyboardComponent));
-        builder.AddAttribute(1,nameof(MainKeyboardComponent.CodeKey),codeKey);
-        builder.AddAttribute(2,nameof(MainKeyboardComponent.IsNeedUpdateUi),UpdateUiMainKeyboardComponent);
-        
+        builder.AddAttribute(1, nameof(MainKeyboardComponent.CodeKey), codeKey);
+        builder.AddAttribute(2, nameof(MainKeyboardComponent.IsNeedUpdateUi), UpdateUiMainKeyboardComponent);
+
         builder.CloseComponent();
     };
-    
+
     private RenderFragment CreateKeyboardComponentTemplate() => (builder) =>
     {
         builder.OpenComponent(0, typeof(CreateKeyboardComponent));
-        builder.AddAttribute(2,nameof(CreateKeyboardComponent.IsNeedUpdateUi),UpdateUiMainKeyboardComponent);
+        builder.AddAttribute(2, nameof(CreateKeyboardComponent.IsNeedUpdateUi), UpdateUiMainKeyboardComponent);
         builder.CloseComponent();
     };
-    
-    private void UpdateUiMainKeyboardComponent ()
+
+    private void UpdateUiMainKeyboardComponent()
     {
-    
+
         StateHasChanged();
     }
 

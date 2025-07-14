@@ -5,15 +5,15 @@ namespace BlazorBrowserInteractLabeler.ARM.ViewData;
 public class SettingsData
 {
     private readonly Lock _lock = new Lock();
-    
+
     private ColorModel[] _colors = [];
     private double _strokeWidth = 2.5;
     private string _pathFolderWorkers = String.Empty;
-    private CodeKey [] _codeKeys = [];
+    private CodeKey[] _codeKeys = [];
 
     private static string _pathDirConfigs = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Config");
     private static string _pathConfig = Path.Join(_pathDirConfigs, $"{nameof(SettingsData)}.json");
-    
+
 
     public string PathDirConfigs
     {
@@ -25,8 +25,8 @@ public class SettingsData
             }
         }
     }
-    
-    public CodeKey [] CodeKey
+
+    public CodeKey[] CodeKey
     {
         get
         {
@@ -39,11 +39,11 @@ public class SettingsData
         {
             lock (_lock)
             {
-                _codeKeys = value ;
+                _codeKeys = value;
             }
         }
     }
-    
+
     public string PathFolderWorkers
     {
         get
@@ -57,7 +57,7 @@ public class SettingsData
         {
             lock (_lock)
             {
-                _pathFolderWorkers = value ;
+                _pathFolderWorkers = value;
             }
         }
     }
@@ -97,7 +97,7 @@ public class SettingsData
         }
     }
 
-  
+
 
     public void Init()
     {
@@ -105,26 +105,26 @@ public class SettingsData
         CodeKey = InitDefaultCodeKey();
     }
 
-    private  CodeKey[] InitDefaultCodeKey()
+    private CodeKey[] InitDefaultCodeKey()
     {
         return
         [
             new CodeKey(){CodeFromKeyBoard = "KeyF",KeyFromUser = "f" , EventCode = EventCode.GoNext},
              new CodeKey(){CodeFromKeyBoard = "ArrowRight",KeyFromUser = "ArrowRight" , EventCode = EventCode.GoNext},
-             
+
              new CodeKey(){CodeFromKeyBoard = "KeyD",KeyFromUser = "d" , EventCode = EventCode.GoBack},
              new CodeKey(){CodeFromKeyBoard = "ArrowLeft",KeyFromUser = "ArrowLeft" , EventCode = EventCode.GoBack},
-             
+
              new CodeKey(){CodeFromKeyBoard = "Delete",KeyFromUser = "del" , EventCode = EventCode.DeleteActiveAnnot},
              new CodeKey(){CodeFromKeyBoard = "KeyZ",KeyFromUser = "z" , EventCode = EventCode.DeleteActiveAnnot},
-             
+
              new CodeKey(){CodeFromKeyBoard = "KeyE",KeyFromUser = "e" , EventCode = EventCode.SaveAnnotation},
-             
+
              new CodeKey(){CodeFromKeyBoard = "KeyQ",KeyFromUser = "q" , EventCode = EventCode.InitAnnotationBox},
              new CodeKey(){CodeFromKeyBoard = "KeyW",KeyFromUser = "w" , EventCode = EventCode.InitAnnotationPolygon},
              new CodeKey(){CodeFromKeyBoard = "KeyA",KeyFromUser = "a" , EventCode = EventCode.InitAnnotationPolyline},
              new CodeKey(){CodeFromKeyBoard = "KeyS",KeyFromUser = "s" , EventCode = EventCode.InitAnnotationPoint},
-             
+
              new CodeKey(){CodeFromKeyBoard = "Space",KeyFromUser = "Space" , EventCode = EventCode.MoveDefault},
 
              new CodeKey(){CodeFromKeyBoard = "Digit1",KeyFromUser = "1" , EventCode = EventCode.Label1},
@@ -146,7 +146,7 @@ public class SettingsData
         var ret = ColorModel.FirstOrDefault(p => p.IdLabel == annotationLabelId);
         return ret ?? new ColorModel();
     }
-    
+
     private ColorModel[] InitDefaultColorModel()
     {
         return
@@ -170,43 +170,43 @@ public class SettingsData
             {
                 Color = "#F9BBD0",
                 IdLabel = 4,
-          
+
             },
             new ColorModel()
             {
                 Color = "#FF6F00",
                 IdLabel = 5,
-        
+
             },
             new ColorModel()
             {
                 Color = "#FFEB3C",
                 IdLabel = 6,
-         
+
             },
             new ColorModel()
             {
                 Color = "#1C5E20",
                 IdLabel = 7,
-   
+
             },
             new ColorModel()
             {
                 Color = "#6A1B9A",
                 IdLabel = 8,
-    
+
             },
             new ColorModel()
             {
                 Color = "#303E9F",
                 IdLabel = 9,
-          
+
             },
             new ColorModel()
             {
                 Color = "#EC407A",
                 IdLabel = 10,
-         
+
             },
             new ColorModel()
             {

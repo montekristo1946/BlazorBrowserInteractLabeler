@@ -67,28 +67,28 @@ public class DeleteLastPointsHandler : IRequestHandler<DeleteLastPointsQueries, 
 
     private Annotation DeleteInPoint(Annotation annotation)
     {
-        return DeleteInBox( annotation);
+        return DeleteInBox(annotation);
     }
 
     private Annotation AddInPolyline(Annotation annotation)
     {
-        return DeleteInBox( annotation);
+        return DeleteInBox(annotation);
     }
 
     private Annotation DeleteInPolygon(Annotation annotation)
     {
-        return DeleteInBox( annotation);
+        return DeleteInBox(annotation);
     }
 
     private Annotation DeleteInBox(Annotation annotation)
     {
         if (annotation.Points == null || annotation.Points.Any() is false)
             return annotation;
-        
+
         var lastPosition = annotation.Points.MaxBy(p => p.PositionInGroup)?.PositionInGroup ?? 0;
         var retValuePoints = annotation.Points.Where(p => p.PositionInGroup != lastPosition).ToList();
         annotation.Points = retValuePoints;
-        
+
         return annotation;
     }
 }

@@ -8,7 +8,7 @@
         <div class="row p-0 m-0 text-center" style="height: 100%">
             <div class="col-4 p-0 m-0" style="height: 100%">
                 <div class="row p-0 m-0" style="height: 100%">
-                    <div class="col-1 padding-menu" @onclick="@(OnClickSave)" style="height: 100%; ">
+                    <div class="col-1 padding-1px" @onclick="@(OnClickSave)" style="height: 100%; ">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              title="@EventCode.SaveAnnotation.ToDisplayName()"
                              style="height: 100%; width: 100%">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickUndo)" style="height: 100%; " 
+                    <div class="col-1 padding-1px" @onclick="@(OnClickUndo)" style="height: 100%; " 
                          title="@EventCode.UndoAction.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center  settings-panel" 
                              style="height: 100%; width: 100%">
@@ -27,7 +27,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickRedo)" style="height: 100%; "
+                    <div class="col-1 padding-1px" @onclick="@(OnClickRedo)" style="height: 100%; "
                          title="@EventCode.RedoAction.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center  settings-panel"
                              
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-1"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitRectangle)" style="height: 100%; "
+                    <div class="col-1 padding-1px" @onclick="@(OnClickInitRectangle)" style="height: 100%; "
                          title="@EventCode.InitAnnotationBox.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
@@ -47,7 +47,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolygon)" style="height: 100%; "
+                    <div class="col-1 padding-1px" @onclick="@(OnClickInitPolygon)" style="height: 100%; "
                          title="@EventCode.InitAnnotationPolygon.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
@@ -56,7 +56,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPolyline)" style="height: 100%; "
+                    <div class="col-1 padding-1px" @onclick="@(OnClickInitPolyline)" style="height: 100%; "
                          title="@EventCode.InitAnnotationPolyline.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
@@ -65,7 +65,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickInitPoints)" style="height: 100%; "
+                    <div class="col-1 padding-1px" @onclick="@(OnClickInitPoints)" style="height: 100%; "
                          title="@EventCode.InitAnnotationPoint.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="col-1 p-0 m-0"></div>
-                    <div class="col-1 padding-menu" @onclick="@(OnClickRestorePositionImage)" style="height: 100%; "
+                    <div class="col-1 padding-1px" @onclick="@(OnClickRestorePositionImage)" style="height: 100%; "
                          title="@EventCode.MoveDefault.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
                              style="height: 100%; width: 100%">
@@ -89,13 +89,13 @@
 
             <div class="col-1 p-0 m-0" style="height: 100%">
                 <div class="row  p-0 m-0" style="height: 100%">
-                    <div class="col-4 padding-menu"  style="height: 100%; ">
+                    <div class="col-4 padding-1px"  style="height: 100%; ">
                         <div class=" p-0 m-0 div-menu-center button-panel"
                              style="height: 100%; width: 100%; background-color: @GetBacgroundLabel()">
                         </div>
                     </div>
                     <div class="col-1 p-0 m-0 "  style="height: 100%; "></div>
-                    <div class="col-4  m-0 padding-menu" style="height: 100%; ">
+                    <div class="col-4  m-0 padding-1px" style="height: 100%; ">
                         <div class=" p-0 m-0 div-menu-center settings-panel" style="height: 100%; width: 100%;">
                             <p class=" text-vertical-center">
                                 @GetActiveType()
@@ -110,7 +110,7 @@
 
             <div class="col-1 p-0 m-0  " style="height: 100%">
                 <div class="row p-0 m-0  " style="height: 100%;">
-                    <div class="col-6 m-0  padding-menu " style="height: 100%; "
+                    <div class="col-6 m-0  padding-1px " style="height: 100%; "
                          @onclick="@(OnClickBackImg)"
                          title="@EventCode.GoBack.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
@@ -121,7 +121,7 @@
                         </div>
                     </div>
 
-                    <div class="col-6 m-0 padding-menu  " style="height: 100%; "
+                    <div class="col-6 m-0 padding-1px  " style="height: 100%; "
                          @onclick="@(OnClickNextImg)"
                          title="@EventCode.GoNext.ToDisplayName()">
                         <div class=" p-0 m-0 div-menu-center bottom-shadow button-panel"
@@ -135,7 +135,7 @@
             </div>
 
             <div class="col-1 p-0 m-0 " style="height: 100%;">
-                <div class="row  m-0 padding-menu" style="height: 100%; ">
+                <div class="row  m-0 padding-1px" style="height: 100%; ">
                     <div class="col-2 p-0 m-0"></div>
                     <div class="col-8 p-0 m-0">
                         <input type="text" class="form-control text-center color-text-main" data-mdb-toggle="tooltip"
@@ -143,8 +143,7 @@
                                title="" placeholder="" aria-describedby="button-addon1"
                                style="height: 100%; width: 100%"
                                value="@GetIndexImage()"
-                               @onchange="(ClickSetupIndexImage)"
-                               >
+                               @onchange="(ClickSetupIndexImage)">
                     </div>
                     <div class="col-2 p-0 m-0"></div>
 
@@ -153,7 +152,7 @@
             </div>
 
             <div class="col-4 p-0 m-0 " style="height: 100%;">
-                <div class="row m-0 padding-menu" style="height: 100%; ">
+                <div class="row m-0 padding-1px" style="height: 100%; ">
                     <div class="row  m-0 p-0" style="height: 40%;">
                         <div class="m-0 p-0 progress prevent-select" role="progressbar" aria-label="Example with label" aria-valuenow="25"
                              aria-valuemin="0" aria-valuemax="100" style="height: 100%;">

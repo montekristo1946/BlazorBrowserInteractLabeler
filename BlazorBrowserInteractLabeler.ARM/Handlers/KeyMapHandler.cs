@@ -61,7 +61,7 @@ public class KeyMapHandler
                 break;
         }
     }
-    
+
     /// <summary>
     /// Отпустили кнопку мыши
     /// </summary>
@@ -71,10 +71,10 @@ public class KeyMapHandler
     {
         switch (args)
         {
-            case { CtrlKey: false,  Buttons: 0 }: //TODO: глюк возвращает всегда Buttons==0 
-                 EndMoveImage(args);
+            case { CtrlKey: false, Buttons: 0 }: //TODO: глюк возвращает всегда Buttons==0 
+                EndMoveImage(args);
                 break;
-        
+
         }
         return Task.CompletedTask;
     }
@@ -348,5 +348,5 @@ public class KeyMapHandler
         await _mediator.Send(new SetActiveLabelQueries() { IdLabel = id });
     }
 
-   
+
 }

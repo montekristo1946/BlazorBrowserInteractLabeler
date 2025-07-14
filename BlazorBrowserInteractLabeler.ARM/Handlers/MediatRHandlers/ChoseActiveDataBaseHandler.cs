@@ -11,7 +11,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Инициализация базы данных.
 /// </summary>
-public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueries,bool>
+public class ChoseActiveDataBaseHandler : IRequestHandler<ChoseActiveDataBaseQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<ChoseActiveDataBaseHandler>();
     private readonly IRepository _repository;
@@ -36,7 +36,7 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
 
             if (!File.Exists(pathDb))
                 throw new InvalidOperationException("[ChoseActiveDataBaseHandler] Fail path DB");
-     
+
             var res = await _repository.LoadDatabaseAsync(pathDb);
             if (!res)
             {
@@ -47,12 +47,12 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             _markupData.CurrentIdImg = idImg;
             _markupData.CurrentProgress = 0;
             await _mediator.Send(new LoadAnnotationsSlowStorageQueries() { ImageId = idImg }, cancellationToken);
-            var resLoadImage =  await _mediator.Send(new LoadByIndexImageQueries() { IndexImage = idImg }, cancellationToken);
+            var resLoadImage = await _mediator.Send(new LoadByIndexImageQueries() { IndexImage = idImg }, cancellationToken);
             if (!resLoadImage)
             {
                 throw new InvalidOperationException($"[ChoseActiveDataBaseHandler] fail GetImagesByIndexAsync {pathDb}");
             }
-            
+
 
             var labelsDb = await _repository.GetAllLabelsAsync();
             if (labelsDb is null || labelsDb.Any() is false)
@@ -64,7 +64,7 @@ public class ChoseActiveDataBaseHandler:IRequestHandler<ChoseActiveDataBaseQueri
             await SetAllImagesCount();
 
             InitNameDb(pathDb);
-            
+
             return true;
         }
         catch (Exception e)

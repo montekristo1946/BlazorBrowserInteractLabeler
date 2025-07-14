@@ -11,7 +11,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Загрузить Annots из базы данных.
 /// </summary>
-public class LoadAnnotationsSlowStorageHandler: IRequestHandler<LoadAnnotationsSlowStorageQueries, bool>
+public class LoadAnnotationsSlowStorageHandler : IRequestHandler<LoadAnnotationsSlowStorageQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<LoadNextImageHandler>();
     private readonly IRepository _repository;
@@ -33,7 +33,7 @@ public class LoadAnnotationsSlowStorageHandler: IRequestHandler<LoadAnnotationsS
                 return false;
 
             var indexImg = _markupData.CurrentIdImg;
-            
+
             var allAnnots = await _repository.GetAnnotationsFromImgIdAsync(indexImg);
             var cloneAnnots = allAnnots.CloneDeep().ToList();
             var annotations = cloneAnnots.Select(annot =>
@@ -50,9 +50,9 @@ public class LoadAnnotationsSlowStorageHandler: IRequestHandler<LoadAnnotationsS
                 .OrderBy(p => p.LabelId)
                 .ThenByDescending(p => CalculateArea(p.Points))
                 .ToArray();
-            
+
             await _annotationHandler.UpdateAllAnnotations(annotations);
-            
+
             return true;
         }
         catch (Exception e)
@@ -62,7 +62,7 @@ public class LoadAnnotationsSlowStorageHandler: IRequestHandler<LoadAnnotationsS
 
         return false;
     }
-    
+
     private double CalculateArea(List<PointD>? argPoints)
     {
         if (argPoints is null)

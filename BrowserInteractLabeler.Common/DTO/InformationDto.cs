@@ -6,5 +6,5 @@ public record InformationDto
 
     public int CategoryInformation { get; set; } = -1;
 
-    public string Information { get; set; }  = string.Empty;
+    public string Information { get; set; } = string.Empty;
 }

@@ -19,6 +19,6 @@ public class ProjectsLocalHandler
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
-    
-  
+
+
 }

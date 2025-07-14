@@ -9,7 +9,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Сохранить конфигурацию утилиты на диск.
 /// </summary>
-public class LoadConfigurationHandler: IRequestHandler<LoadConfigurationQueries, bool>
+public class LoadConfigurationHandler : IRequestHandler<LoadConfigurationQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<LoadConfigurationHandler>();
     private readonly IMediator _mediator;
@@ -40,18 +40,18 @@ public class LoadConfigurationHandler: IRequestHandler<LoadConfigurationQueries,
             if (configNew is null)
                 throw new Exception($"[LoadConfigurationHandler] fail DeserializeObject {pathSave}");
 
-            FildConfig(configNew,_settingsData);
+            FildConfig(configNew, _settingsData);
             return true;
         }
         catch (Exception e)
         {
             _logger.Error("[SaveConfigurationHandler] {@Exception}", e);
         }
-        
+
         return false;
     }
 
-    private void FildConfig(SettingsData source, SettingsData  distination)
+    private void FildConfig(SettingsData source, SettingsData distination)
     {
         distination.PathFolderWorkers = source.PathFolderWorkers;
         distination.StrokeWidth = source.StrokeWidth;

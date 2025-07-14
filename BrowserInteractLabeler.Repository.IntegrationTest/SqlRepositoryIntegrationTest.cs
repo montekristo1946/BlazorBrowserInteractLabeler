@@ -76,7 +76,7 @@ public class SqlRepositoryIntegrationTest
                     .With(p => p.LabelId, rnd.Next(1, 100))
                     .With(p => p.ImageFrameId, i)
                     .With(p => p.Points, points)
-                    
+
                     .Create();
                 arrAnnotations.Add(annotation);
             }
@@ -136,7 +136,7 @@ public class SqlRepositoryIntegrationTest
             throw new Exception("Fail GetAllLabelsAsyncTest");
     }
 
-    
+
 
 
     public void FailWriteSqlAnnotation()
@@ -169,6 +169,6 @@ public class SqlRepositoryIntegrationTest
     }
 
 
- 
+
 
 }

@@ -14,40 +14,40 @@ public partial class LabelingPanel : ComponentBase
     [Inject] private Mappers Mappers { get; set; } = null!;
     [Inject] private SettingsData SettingsData { get; set; } = null!;
     [Inject] private MarkupData MarkupData { get; set; } = null!;
-    
+
     [Inject] private IMediator Mediator { get; set; } = null!;
-    
-    [Parameter] public  Action  IsUpdateMenu { get; set; }= null!;
-    
-    
+
+    [Parameter] public Action IsUpdateMenu { get; set; } = null!;
+
+
     private LabelingPanelDto[] _labelingPanelDtos = [];
     private ColorModel[] _colorModels = [];
     private Label[] _labelsName = [];
-    private CodeKey [] _codeKeys = [];
+    private CodeKey[] _codeKeys = [];
 
     protected override async Task OnInitializedAsync()
     {
-        _colorModels = SettingsData.ColorModel.OrderBy(p=>p.IdLabel).ToArray();
+        _colorModels = SettingsData.ColorModel.OrderBy(p => p.IdLabel).ToArray();
         _labelsName = MarkupData.LabelsName;
         _codeKeys = SettingsData.CodeKey;
         await LoadAnnots();
     }
-    
+
 
     private async Task LoadAnnots()
     {
         var annotations = await AnnotationHandler.GetAllAnnotations();
-        _labelingPanelDtos = Mappers.MapToLabelingPanelDto(annotations,_colorModels,_labelsName);
+        _labelingPanelDtos = Mappers.MapToLabelingPanelDto(annotations, _colorModels, _labelsName);
         _labelingPanelDtos = _labelingPanelDtos.OrderByDescending(p => p.IdAnnotation).ToArray();
 
     }
     private async Task ClickHiddenAll(bool isHidden)
     {
-        await Mediator.Send(new HiddenAllAnnotQueries(){IsHidden = isHidden});
+        await Mediator.Send(new HiddenAllAnnotQueries() { IsHidden = isHidden });
         IsUpdateMenu?.Invoke();
         await LoadAnnots();
         StateHasChanged();
-        
+
     }
 
     private int GetCountAnnots()
@@ -74,7 +74,7 @@ public partial class LabelingPanel : ComponentBase
     }
     private async Task ButtonClickObjectHiddenAsync(int idAnnotation)
     {
-        await Mediator.Send(new HiddenAnnotQueries(){IdAnnotaion = idAnnotation});
+        await Mediator.Send(new HiddenAnnotQueries() { IdAnnotaion = idAnnotation });
         IsUpdateMenu?.Invoke();
         await LoadAnnots();
         StateHasChanged();
@@ -82,7 +82,7 @@ public partial class LabelingPanel : ComponentBase
 
     private async Task ButtonClickObjectAsync(int idAnnotation)
     {
-        await Mediator.Send(new EditionAnnotQueries(){IdAnnotaion = idAnnotation});
+        await Mediator.Send(new EditionAnnotQueries() { IdAnnotaion = idAnnotation });
         IsUpdateMenu?.Invoke();
         await LoadAnnots();
         StateHasChanged();
@@ -108,9 +108,9 @@ public partial class LabelingPanel : ComponentBase
             await LoadAnnots();
             StateHasChanged();
         });
-    
+
     }
-    
+
     private async Task ClickDeleteEditionAnnot()
     {
         await Mediator.Send(new DeleteEditionAnnotQueries());
@@ -119,13 +119,13 @@ public partial class LabelingPanel : ComponentBase
 
     private string GetLabelText(int idLabel)
     {
-        var retValue = _labelsName.FirstOrDefault(p=>p.Id == idLabel)?.NameLabel ?? string.Empty;
+        var retValue = _labelsName.FirstOrDefault(p => p.Id == idLabel)?.NameLabel ?? string.Empty;
         return retValue;
     }
 
     private async Task ButtonClickSetActiveLabel(int colorModelIdLabel)
     {
-        await Mediator.Send(new SetActiveLabelQueries(){IdLabel = colorModelIdLabel});
+        await Mediator.Send(new SetActiveLabelQueries() { IdLabel = colorModelIdLabel });
         IsUpdateMenu?.Invoke();
     }
 

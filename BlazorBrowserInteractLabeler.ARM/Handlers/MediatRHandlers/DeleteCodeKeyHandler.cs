@@ -8,7 +8,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Удаляет горячую клавишу из конфига.
 /// </summary>
-public class DeleteCodeKeyHandler: IRequestHandler<DeleteCodeKeyQueries, bool>
+public class DeleteCodeKeyHandler : IRequestHandler<DeleteCodeKeyQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<DeleteCodeKeyHandler>();
     private readonly SettingsData _settingsData;
@@ -26,7 +26,7 @@ public class DeleteCodeKeyHandler: IRequestHandler<DeleteCodeKeyQueries, bool>
                 return Task.FromResult(false);
 
             var deleteCodeFromKeyBoard = request.CodeKey.CodeFromKeyBoard;
-         
+
             var keysSrc = _settingsData.CodeKey;
             var sortKey = keysSrc.Where(p => p.CodeFromKeyBoard != deleteCodeFromKeyBoard).ToArray();
             if (sortKey.Length == keysSrc.Length)

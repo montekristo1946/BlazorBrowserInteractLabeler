@@ -31,7 +31,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
     {
         try
         {
-            if (request is null )
+            if (request is null)
                 return false;
 
             var newIndex = request.IndexImage;
@@ -43,8 +43,8 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
                 return false;
             }
 
-            
-            await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() , cancellationToken);
+
+            await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries(), cancellationToken);
             _markupData.CurrentIdImg = newIndex;
             SetCurrentProgress();
             await LoadImage(newIndex);
@@ -62,7 +62,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
     }
 
 
-    private async Task  LoadImage(int index)
+    private async Task LoadImage(int index)
     {
         var imageFrame = await _repository.GetImagesByIndexAsync(index);
         if (!imageFrame.Images.Any())
@@ -76,7 +76,7 @@ public class LoadByIndexImageHandler : IRequestHandler<LoadByIndexImageQueries, 
             Width = imageFrame.SizeImage.Width,
             Height = imageFrame.SizeImage.Height
         };
-        _markupData.NameImage= imageFrame.NameImages;
+        _markupData.NameImage = imageFrame.NameImages;
     }
 
     private void SetCurrentProgress()

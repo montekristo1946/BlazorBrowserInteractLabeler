@@ -36,7 +36,7 @@ public class InitNewCodeKeyHandler : IRequestHandler<InitNewCodeKeyQueries, bool
 
             if (idLabel > 0)
             {
-                InitLabelCodeKey( request.Color, idLabel);
+                InitLabelCodeKey(request.Color, idLabel);
             }
 
             return Task.FromResult(true);
@@ -55,7 +55,7 @@ public class InitNewCodeKeyHandler : IRequestHandler<InitNewCodeKeyQueries, bool
         var findCodeKey = keysSrc.FirstOrDefault(p => p.CodeFromKeyBoard == requestCodeKey.CodeFromKeyBoard);
         if (findCodeKey != null)
             throw new InvalidOperationException($"Клавиша {requestCodeKey.CodeFromKeyBoard} уже существует");
-        
+
     }
 
     private void InitToolsCodekey(CodeKey requestCodeKey)
@@ -65,7 +65,7 @@ public class InitNewCodeKeyHandler : IRequestHandler<InitNewCodeKeyQueries, bool
         _settingsData.CodeKey = keysSrc;
     }
 
-    private void InitLabelCodeKey( string? requestColor, int idLabel)
+    private void InitLabelCodeKey(string? requestColor, int idLabel)
     {
         if (string.IsNullOrWhiteSpace(requestColor))
             throw new InvalidOperationException("Не заполнен цвет для клавиши labeling");
@@ -80,7 +80,7 @@ public class InitNewCodeKeyHandler : IRequestHandler<InitNewCodeKeyQueries, bool
             Color = requestColor,
             IdLabel = idLabel
         });
-        
+
         _settingsData.ColorModel = sortColor.ToArray();
     }
 }

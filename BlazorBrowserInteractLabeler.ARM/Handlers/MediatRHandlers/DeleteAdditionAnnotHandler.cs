@@ -33,7 +33,7 @@ public class DeleteAdditionAnnotHandler : IRequestHandler<DeleteEditionAnnotQuer
             allAnnots = allAnnots
                 .Where(p => p.State != StateAnnot.Edit)
               .ToArray();
-            
+
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
 
             return true;

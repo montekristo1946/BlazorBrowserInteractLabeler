@@ -4,9 +4,9 @@ public class ExportDTO
 {
     public Label[] Labels { get; set; } = [];
 
-    public ImageFrame [] Images { get; set; } = [];
+    public ImageFrame[] Images { get; set; } = [];
 
-    public Annotation[] Annotations { get; set; }= [];
-    
-    
+    public Annotation[] Annotations { get; set; } = [];
+
+
 }

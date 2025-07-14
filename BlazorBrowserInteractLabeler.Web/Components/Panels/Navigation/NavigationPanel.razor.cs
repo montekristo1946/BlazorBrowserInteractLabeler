@@ -15,9 +15,9 @@ public partial class NavigationPanel : ComponentBase
     [Inject] private SettingsData SettingsData { get; set; } = null!;
     [Inject] private MarkupData MarkupData { get; set; } = null!;
 
-    [Parameter] public Action? IsNeedUpdateUi { get; set; }= null!;
-    
-    
+    [Parameter] public Action? IsNeedUpdateUi { get; set; } = null!;
+
+
     private async Task OnClickBackImg()
     {
         await Mediator.Send(new LoadNextImageQueries() { IsForward = false });
@@ -30,7 +30,7 @@ public partial class NavigationPanel : ComponentBase
         IsNeedUpdateUi?.Invoke();
     }
 
-    private  async Task OnClickSave()
+    private async Task OnClickSave()
     {
         await Mediator.Send(new SaveAnnotationsOnSlowStorageQueries());
         IsNeedUpdateUi?.Invoke();
@@ -58,7 +58,7 @@ public partial class NavigationPanel : ComponentBase
         IsNeedUpdateUi?.Invoke();
     }
 
-    private async Task  OnClickInitPolyline()
+    private async Task OnClickInitPolyline()
     {
         await Mediator.Send(new InitNewAnnotQueries() { TypeLabel = TypeLabel.PolyLine });
         IsNeedUpdateUi?.Invoke();
@@ -74,14 +74,14 @@ public partial class NavigationPanel : ComponentBase
         var resultTryParse = Int32.TryParse((string?)changeEventArgs.Value, out var indexImg);
         if (!resultTryParse)
             return;
-        
+
         await Mediator.Send(new LoadByIndexImageQueries() { IndexImage = indexImg });
         IsNeedUpdateUi?.Invoke();
     }
-    
+
     private async Task OnClickRestorePositionImage()
     {
-        await Mediator.Send(new RestorePositionImageQueries() );
+        await Mediator.Send(new RestorePositionImageQueries());
         IsNeedUpdateUi?.Invoke();
     }
 
@@ -126,6 +126,6 @@ public partial class NavigationPanel : ComponentBase
             _ => string.Empty
         };
     }
-    
+
 
 }

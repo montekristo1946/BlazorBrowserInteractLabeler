@@ -14,7 +14,7 @@ public class RestorePositionImageHandler : IRequestHandler<RestorePositionImageQ
     private readonly ILogger _logger = Log.ForContext<RestorePositionImageHandler>();
     private readonly MarkupData _markupData;
     private const double CoefReisizeView = 0.98;
-  
+
 
     public RestorePositionImageHandler(MarkupData markupData)
     {

@@ -40,7 +40,8 @@ public class Helper
 
         return new PointT()
         {
-            X = correctX, Y = correctY
+            X = correctX,
+            Y = correctY
         };
     }
 
@@ -69,7 +70,7 @@ public class Helper
             X = centerCanvasA.X - scaleSizeImg.Width / 2,
             Y = centerCanvasA.Y - scaleSizeImg.Height / 2,
         };
-        
+
 
         var pointCorrect = new PointT()
         {
@@ -100,5 +101,5 @@ public class Helper
         };
     }
 
-    
+
 }

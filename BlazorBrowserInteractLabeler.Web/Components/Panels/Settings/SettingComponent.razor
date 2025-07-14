@@ -1,17 +1,8 @@
-@using BlazorBrowserInteractLabeler.ARM.Extension
-@using BlazorBrowserInteractLabeler.ARM.ViewData
-@using BlazorBrowserInteractLabeler.Web.Components.Panels.Palette
-
 @rendermode InteractiveServer
 
-
-    
-
-
-
 <div class="m-0 p-0">
-  
-    <div class="row p-0" style="height: 3vh"> </div>
+
+    <div class="row p-0" style="height: 3vh"></div>
     <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
         <div class="col-1  p-0 m-0"></div>
         <div class="col-2 p-0 m-0">
@@ -19,7 +10,7 @@
                 Рабочий каталог
             </p>
         </div>
-      
+
         <div class="col-8 p-0 m-0">
             <p class="m-0" style="">
                 <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
@@ -32,7 +23,7 @@
         </div>
         <div class="col-1  p-0 m-0"></div>
     </div>
-    
+
     <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
         <div class="col-1  p-0 m-0"></div>
         <div class="col-2 p-0 m-0">
@@ -40,7 +31,7 @@
                 Толщина линий
             </p>
         </div>
-      
+
         <div class="col-8 p-0 m-0">
             <p class="m-0" style="">
                 <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
@@ -53,8 +44,8 @@
         </div>
         <div class="col-1  p-0 m-0"></div>
     </div>
-    
-    <div class="row p-0" style="height: 3vh"> </div>
+
+    <div class="row p-0" style="height: 3vh"></div>
     <div class="row padding-1px" style="">
         <div class="col-1  p-0 m-0"></div>
         <div class="col-10 p-0 m-0">
@@ -62,17 +53,17 @@
         </div>
         <div class="col-1  p-0 m-0"></div>
     </div>
-    
+
     <div class="row padding-1px" style="">
         <div class="col-1  p-0 m-0"></div>
         <div class="col-10 p-0 m-0">
-            @CreateKeyboardComponentTemplate() 
+            @CreateKeyboardComponentTemplate()
         </div>
         <div class="col-1  p-0 m-0"></div>
     </div>
-    
-    
-    <div class="row p-0" style="height: 3vh"> </div>
+
+
+    <div class="row p-0" style="height: 3vh"></div>
     <div class="row padding-1px" style="">
         <div class="col-1  p-0 m-0"></div>
         <div class="col-10 p-0 m-0">
@@ -81,20 +72,18 @@
         <div class="col-1  p-0 m-0"></div>
     </div>
     @{
-        foreach (var codeKey  in GetKeyCode())
+        foreach (var codeKey in GetKeyCode())
         {
             <div class="row padding-1px" style="">
                 <div class="col-1  p-0 m-0"></div>
                 <div class="col-10 p-0 m-0">
-                    @GetMainKeyboardComponentTemplate( codeKey) 
+                    @GetMainKeyboardComponentTemplate(codeKey)
                 </div>
                 <div class="col-1  p-0 m-0"></div>
             </div>
         }
     }
-    
-    <div class="row p-0" style="height: 3vh"> </div>
 
+    <div class="row p-0" style="height: 3vh"></div>
     
-    <div class="row p-0" style="height: 3vh"> </div>
 </div>

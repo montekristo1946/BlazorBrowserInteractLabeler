@@ -18,8 +18,8 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
     private readonly MovingPointData _movingPointData;
     private readonly IMediator _mediator;
     private const int SizeAreaPx = 10;
-    
-    public MovingInitPointHandler( AnnotationHandler annotationHandler, MarkupData markupData, MovingPointData movingPointData, IMediator mediator)
+
+    public MovingInitPointHandler(AnnotationHandler annotationHandler, MarkupData markupData, MovingPointData movingPointData, IMediator mediator)
     {
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
         _markupData = markupData;
@@ -33,7 +33,7 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
         {
             if (request is null)
                 return false;
-          
+
             var allAnnots = await _annotationHandler.GetAllAnnotations();
             var currentAnnot = allAnnots.FirstOrDefault(p => p.State == StateAnnot.Edit);
             if (currentAnnot is null)
@@ -43,8 +43,8 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
             if (points is null || !points.Any())
                 return false;
 
-            
-                
+
+
             var newPoint = request.Point;
             var overlapPercentageX = SizeAreaPx / _markupData.SizeConvas.Width;
             var overlapPercentageY = SizeAreaPx / _markupData.SizeConvas.Width;
@@ -56,14 +56,14 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
 
                 return res;
             });
-            
+
             if (movingPoint is null)
                 return false;
 
             _movingPointData.CurrentIdAnnot = currentAnnot.Id;
             _movingPointData.PositionInGroup = movingPoint.PositionInGroup;
-            
-            await _mediator.Send(new MovingPointQueries() {Point = newPoint}, cancellationToken);
+
+            await _mediator.Send(new MovingPointQueries() { Point = newPoint }, cancellationToken);
             return true;
         }
         catch (Exception e)

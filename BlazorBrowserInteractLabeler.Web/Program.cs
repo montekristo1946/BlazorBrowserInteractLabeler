@@ -28,7 +28,7 @@ builder.Services
     .AddScoped<Helper>()
     .AddScoped<MoveImagesHandler>()
     .AddScoped<SvgConstructor>()
-    
+
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 

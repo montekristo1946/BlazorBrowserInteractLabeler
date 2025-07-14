@@ -8,7 +8,7 @@ using Serilog;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 
-public class ExportDatabaseHandler: IRequestHandler<ExportDatabaseQueries, bool>
+public class ExportDatabaseHandler : IRequestHandler<ExportDatabaseQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<ExportDatabaseHandler>();
     private readonly IRepository _repository;
@@ -28,22 +28,22 @@ public class ExportDatabaseHandler: IRequestHandler<ExportDatabaseQueries, bool>
         {
             var labels = await _repository.GetAllLabelsAsync();
             var frames = await _repository.GetInfoAllImagesAsync();
-            var annots =await  _repository.GetAllAnnotationsAsync();
+            var annots = await _repository.GetAllAnnotationsAsync();
             var saveJson = new ExportDTO()
             {
                 Labels = labels,
                 Annotations = annots,
                 Images = frames
             };
-            
+
             var jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-            
+
             var json = JsonConvert.SerializeObject(saveJson, jsonSerializerSettings);
             var jsonPath = Path.Combine(_settingsData.PathFolderWorkers, $"{Path.GetFileName(_markupData.NameDb)}.json");
             await File.WriteAllTextAsync(jsonPath, json, cancellationToken);
-            
-            
+
+
             return true;
         }
         catch (Exception e)

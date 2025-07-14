@@ -19,12 +19,6 @@ public static class ProjectsLocalHandlerBuilder
         var mediator = serviceProvider.GetService<IMediator>() ?? throw new ArgumentNullException(nameof(IMediator));
 
         var handler = new ProjectsLocalHandler(repository, markupData, mediator);
-
-        // var pathDb = "/mnt/Disk_D/TMP/17.06.2025/000_2025-06-19_08-11-35-224402.db3";
-        // var pathDb = "/mnt/Disk_D/TMP/17.06.2025/003_2025-07-01_08-06-17-726029.db3";
-        // mediator.Send(new ChoseActiveDataBaseQueries() { PathDb = pathDb}).Wait();
-        
-
         return handler;
     }
 }

@@ -32,17 +32,17 @@ public class CreateImageDataset : IHostedService
         switch (_typeWork)
         {
             case "loadImg":
-            {
-                await LoadDataset(_pathImg);
-                break;
-            }
+                {
+                    await LoadDataset(_pathImg);
+                    break;
+                }
             default:
-            {
-                Helper.HelperPrint();
-                throw new NotImplementedException($"Not Found {_typeWork}");
-            }
+                {
+                    Helper.HelperPrint();
+                    throw new NotImplementedException($"Not Found {_typeWork}");
+                }
         }
-        
+
         Environment.Exit(0); //костыляка из зависания сериалога
     }
 
@@ -82,7 +82,7 @@ public class CreateImageDataset : IHostedService
 
     private void CheckOldDataBase(string fullPathDb)
     {
-        if(File.Exists(fullPathDb))
+        if (File.Exists(fullPathDb))
         {
             throw new InvalidOperationException($"Old databe! needs to be removed {fullPathDb}");
         }
@@ -130,7 +130,7 @@ public class CreateImageDataset : IHostedService
                 {
                     return annot with
                     {
-                        Id = 0, 
+                        Id = 0,
                         ImageFrameId = indexInBase,
                         Points = annot.Points?.Select(p => p with { Id = 0 }).ToList()
                     };

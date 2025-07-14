@@ -3,9 +3,9 @@ using MediatR;
 
 namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 
-public class InitNewCodeKeyQueries:IRequest<bool>
+public class InitNewCodeKeyQueries : IRequest<bool>
 {
     public CodeKey? CodeKey { get; set; }
-    
-    public string? Color  { get; set; }
+
+    public string? Color { get; set; }
 }

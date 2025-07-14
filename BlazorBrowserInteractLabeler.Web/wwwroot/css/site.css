@@ -71,13 +71,6 @@
     overflow: hidden;
 }
 
-.padding-menu{
-    padding-bottom: 1px;
-    padding-top: 1px;
-    padding-left: 1px;
-    padding-right: 1px;
-}
-
 .nav-tabs .nav-link:hover {
     background-color: #e1e8ff;
     border-color: #ced4da;
@@ -124,3 +117,10 @@
 }
 
 
+.page-main-style{
+    height: 95.0vh; 
+    width: 100vw; 
+    overflow-x: hidden; 
+    overflow-y: auto;
+    background-color: #f0f4fa;
+}

@@ -62,7 +62,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
     {
         var allIndex = await _repository.GetAllIndexImagesAsync();
 
-        await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries() );
+        await _mediator.Send(new SaveAnnotationsOnSlowStorageQueries());
 
         if (index > allIndex.Length || index < 1)
         {
@@ -73,7 +73,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
 
         _markupData.CurrentIdImg = index;
         SetCurrentProgress();
-        
+
         var imageFrame = await _repository.GetImagesByIndexAsync(index);
         if (!imageFrame.Images.Any())
         {
@@ -87,7 +87,7 @@ public class LoadNextImageHandler : IRequestHandler<LoadNextImageQueries, bool>
             Width = imageFrame.SizeImage.Width,
             Height = imageFrame.SizeImage.Height
         };
-        _markupData.NameImage= imageFrame.NameImages;
+        _markupData.NameImage = imageFrame.NameImages;
 
         _markupData.CurrentTypeLabel = TypeLabel.None;
 

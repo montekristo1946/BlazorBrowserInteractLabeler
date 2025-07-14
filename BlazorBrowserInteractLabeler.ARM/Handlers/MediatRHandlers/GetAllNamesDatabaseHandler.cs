@@ -8,10 +8,10 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Получить все доступные базы с данными для разметки.
 /// </summary>
-public class GetAllNamesDatabaseHandler: IRequestHandler<GetAllNamesDatabaseQueries, WorksShowerData []>
+public class GetAllNamesDatabaseHandler : IRequestHandler<GetAllNamesDatabaseQueries, WorksShowerData[]>
 {
     private readonly ILogger _logger = Log.ForContext<GetAllNamesDatabaseHandler>();
-    
+
     public Task<WorksShowerData[]> Handle(GetAllNamesDatabaseQueries? request, CancellationToken cancellationToken)
     {
         try
@@ -20,7 +20,7 @@ public class GetAllNamesDatabaseHandler: IRequestHandler<GetAllNamesDatabaseQuer
                 return Task.FromResult(Array.Empty<WorksShowerData>());
 
             var path = request.PathFolderWorkers;
-            
+
             if (!Path.Exists(path))
                 return Task.FromResult(Array.Empty<WorksShowerData>());
 

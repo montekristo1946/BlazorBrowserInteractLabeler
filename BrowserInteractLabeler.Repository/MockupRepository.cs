@@ -7,7 +7,7 @@ using SizeF = BrowserInteractLabeler.Common.DTO.SizeF;
 
 namespace BrowserInteractLabeler.Repository;
 
-public class MockupRepository 
+public class MockupRepository
 {
     private readonly ILogger _logger = Log.ForContext<MockupRepository>();
     private string[] _allImagesPath = Array.Empty<string>();
@@ -30,7 +30,7 @@ public class MockupRepository
                 Points = new List<PointD>()
                     { new PointD() { X = 0.5f, Y = 0.5f }, new PointD() { X = 0.6f, Y = 0.56f } },
                 LabelId = 2, LabelPattern = TypeLabel.Box, State =  StateAnnot.Finalized
-                
+
             },
             new Annotation()
             {
@@ -38,7 +38,7 @@ public class MockupRepository
                 Points = new List<PointD>()
                     { new PointD() { X = 0.1f, Y = 0.1f }, new PointD() { X = 0.2f, Y = 0.2f } },
                 LabelId = 7, LabelPattern = TypeLabel.Box, State =  StateAnnot.Finalized
-                
+
             },
             new Annotation()
             {
@@ -137,11 +137,12 @@ public class MockupRepository
         var (width, height, resizeByte) = GetSizeImg(img);
 
         return new ImageFrame()
-            { Id = idImages, 
-                Images = resizeByte, 
-                SizeImage = new SizeF() { Width = width, Height = height },
-                NameImages = _allImagesPath[idImages]
-            };
+        {
+            Id = idImages,
+            Images = resizeByte,
+            SizeImage = new SizeF() { Width = width, Height = height },
+            NameImages = _allImagesPath[idImages]
+        };
     }
 
     public Task<Label[]> GetAllLabelsAsync()
@@ -152,7 +153,7 @@ public class MockupRepository
 
     public Task<Annotation[]> GetAnnotationsFromImgIdAsync(int imagesId)
     {
-       var res = _annotations.Where(p => p.ImageFrameId == imagesId).ToArray();
+        var res = _annotations.Where(p => p.ImageFrameId == imagesId).ToArray();
         return Task.FromResult(res);
     }
 
@@ -183,9 +184,9 @@ public class MockupRepository
     public Task<int> GetLastIndexAnnotation()
     {
         var lastId = -1;
-        if(_annotations.Any())
-             lastId = _annotations.Max(p => p.Id);
-        
+        if (_annotations.Any())
+            lastId = _annotations.Max(p => p.Id);
+
         return Task.FromResult(lastId);
     }
 
@@ -194,7 +195,7 @@ public class MockupRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> InsertLabels(Label? [] frame)
+    public Task<bool> InsertLabels(Label?[] frame)
     {
         throw new NotImplementedException();
     }

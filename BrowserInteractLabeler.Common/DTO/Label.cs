@@ -4,7 +4,7 @@ namespace BrowserInteractLabeler.Common.DTO;
 
 public record Label
 {
-    [JsonIgnore] 
+    [JsonIgnore]
     public int Id { get; set; }
 
     public string NameLabel { get; set; } = string.Empty;

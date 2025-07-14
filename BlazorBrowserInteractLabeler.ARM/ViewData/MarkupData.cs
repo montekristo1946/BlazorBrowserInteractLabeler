@@ -9,12 +9,12 @@ public class MarkupData
     private readonly Lock _lock = new Lock();
     private string _imagesUi = string.Empty;
     private SizeT _sizeConvas = new SizeT();
-    private double _scaleCurrent  = 1.0F;
-    private PointT _offsetDrawImage  = new();
+    private double _scaleCurrent = 1.0F;
+    private PointT _offsetDrawImage = new();
     private SizeWindows _imageMarkerPanelSize = new SizeWindows();
     private CrosshairData _crosshairData = new CrosshairData();
-    private int _currentIdImg  = 0;
-    private int _currentProgress  = 0;
+    private int _currentIdImg = 0;
+    private int _currentProgress = 0;
     private int _allImagesCount = 0;
     private int _labelId = 0;
     private Label[] _labelsName = [];
@@ -22,7 +22,7 @@ public class MarkupData
     private string _nameImage = string.Empty;
     private TypeLabel _currentTypeLabel = TypeLabel.None;
     private string _errorMessage = String.Empty;
-    
+
     public string ErrorMessage
     {
         get
@@ -40,7 +40,7 @@ public class MarkupData
             }
         }
     }
-    
+
     public TypeLabel CurrentTypeLabel
     {
         get
@@ -92,7 +92,7 @@ public class MarkupData
             }
         }
     }
-    
+
     public int AllImagesCount
     {
         get
@@ -176,7 +176,7 @@ public class MarkupData
             {
                 _currentIdImg = value;
             }
-        } 
+        }
     }
     public CrosshairData CrosshairData
     {
@@ -193,7 +193,7 @@ public class MarkupData
             {
                 _crosshairData = value;
             }
-        } 
+        }
     }
     public SizeWindows ImageMarkerPanelSize
     {
@@ -285,5 +285,5 @@ public class MarkupData
         }
     }
 
-   
+
 }

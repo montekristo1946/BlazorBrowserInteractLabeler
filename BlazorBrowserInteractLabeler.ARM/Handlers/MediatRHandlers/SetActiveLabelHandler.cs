@@ -43,7 +43,7 @@ public class SetActiveLabelHandler : IRequestHandler<SetActiveLabelQueries, bool
         {
             _logger.Error("[HiddenAnnotHandler] {@Exception}", e);
         }
-        
+
         return false;
     }
 

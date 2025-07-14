@@ -46,7 +46,7 @@ public class EditionAnnotHandler : IRequestHandler<EditionAnnotQueries, bool>
                         p.State = StateAnnot.Finalized;
                     return p;
                 }).ToArray();
-            
+
             annot.State = annot.State != StateAnnot.Edit ? StateAnnot.Edit : StateAnnot.Finalized;
             allAnnots = allAnnots.Append(annot).ToArray();
 

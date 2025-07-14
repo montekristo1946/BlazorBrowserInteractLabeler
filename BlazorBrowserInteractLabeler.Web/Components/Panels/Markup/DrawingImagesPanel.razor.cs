@@ -13,18 +13,18 @@ public partial class DrawingImagesPanel : ComponentBase
 {
     [Inject] private MarkupData MarkupData { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
-    [Inject] private Helper  Helper { get; set; } = null!;
-    [Inject] private SvgConstructor  SvgConstructor { get; set; } = null!;
+    [Inject] private Helper Helper { get; set; } = null!;
+    [Inject] private SvgConstructor SvgConstructor { get; set; } = null!;
 
     [Inject] private SettingsData SettingsData { get; set; } = null!;
 
-    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseDown { get; set; } = null!;
+    [Parameter] public Action<MouseEventArgs> HandlerOnmouseDown { get; set; } = null!;
 
     [Parameter] public Action<MouseEventArgs> HandlerOnMouseMove { get; set; } = null!;
 
     [Parameter] public Action<WheelEventArgs> HandleMouseWheel { get; set; } = null!;
-    
-    [Parameter] public  Action<MouseEventArgs> HandlerOnmouseUp { get; set; } = null!;
+
+    [Parameter] public Action<MouseEventArgs> HandlerOnmouseUp { get; set; } = null!;
 
     private RenderFragment CrosshairTemplate { get; set; } = null!;
     private Crosshair? _crosshairComponent = null;
@@ -64,16 +64,16 @@ public partial class DrawingImagesPanel : ComponentBase
         };
         _crosshairComponent?.UpdateSvg(emptyCrosshair);
     }
-    
+
     private void MouseWheelHandler(WheelEventArgs args)
     {
         HandleMouseWheel?.Invoke(args);
     }
-    
+
     private RenderFragment CreateCrosshairTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(Crosshair));
-        
+
         builder.AddComponentReferenceCapture(1, value =>
         {
             _crosshairComponent = value as Crosshair
@@ -83,7 +83,7 @@ public partial class DrawingImagesPanel : ComponentBase
 
         builder.CloseComponent();
     };
-    
+
     private string CssScale()
     {
         var scaleCurrent = MarkupData.ScaleCurrent;
@@ -91,7 +91,7 @@ public partial class DrawingImagesPanel : ComponentBase
         var offsetY = MarkupData.OffsetDrawImage.Y;
         return $"transform: scale({scaleCurrent}) translate({offsetX}px, {offsetY}px)";
     }
-    
+
     private void OnUpdateUiAsync()
     {
         var img = MarkupData.ImagesUI;
@@ -102,31 +102,31 @@ public partial class DrawingImagesPanel : ComponentBase
         var sizeCash = MarkupData.SizeConvas;
         var width = (int)sizeCash.Width;
         var height = (int)sizeCash.Height;
-       
+
         InvokeAsync(async () =>
         {
             await JsRuntime.InvokeVoidAsync("LoadImg", ConstantsArm.IdConvas, img, width, height);
         });
-      
-        
+
+
     }
 
     private void MouseMoveHandler(MouseEventArgs args)
     {
         HandlerOnMouseMove?.Invoke(args);
-     
+
         var correctPoint = Helper.GetAbsoluteCoordinate(
             args.PageX,
-            args.PageY, 
+            args.PageY,
             MarkupData.ImageMarkerPanelSize);
-        
-        
+
+
         var point = Helper.CorrectPoint(
             correctPoint,
             MarkupData.ScaleCurrent,
             MarkupData.OffsetDrawImage,
             MarkupData.SizeConvas);
-      
+
         MarkupData.CrosshairData = MarkupData.CrosshairData with
         {
             PointCursor = new PointT()
@@ -138,10 +138,10 @@ public partial class DrawingImagesPanel : ComponentBase
             Color = GetBacgroundLabel(),
         };
 
-       
-       
+
+
         _crosshairComponent?.UpdateSvg(MarkupData.CrosshairData);
-       
+
     }
     private string GetBacgroundLabel()
     {
@@ -151,13 +151,13 @@ public partial class DrawingImagesPanel : ComponentBase
         return color;
     }
 
-    private RenderFragment GetRenderAnnotation()=>
+    private RenderFragment GetRenderAnnotation() =>
         async void (builder) =>
         {
             try
             {
                 var figure = await SvgConstructor.CreateAnnotsFigure();
-       
+
                 builder.AddMarkupContent(0, figure);
             }
             catch (Exception e)
@@ -169,9 +169,9 @@ public partial class DrawingImagesPanel : ComponentBase
 
     private RenderFragment GetRenderTextHelper() => (builder) =>
     {
-        if(string.IsNullOrWhiteSpace(MarkupData.ErrorMessage))
+        if (string.IsNullOrWhiteSpace(MarkupData.ErrorMessage))
             return;
-        
+
         var figure = SvgConstructor.CreateTextHelper(ColorError, [MarkupData.ErrorMessage]);
         builder.AddMarkupContent(0, figure);
     };

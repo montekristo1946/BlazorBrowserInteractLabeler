@@ -15,7 +15,7 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
     private readonly ILogger _logger = Log.ForContext<AddPointsHandler>();
     private readonly AnnotationHandler _annotationHandler;
 
-    public AddPointsHandler( AnnotationHandler annotationHandler)
+    public AddPointsHandler(AnnotationHandler annotationHandler)
     {
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
     }
@@ -26,13 +26,13 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
         {
             if (request is null)
                 return false;
-            
+
             var allAnnots = await _annotationHandler.GetAllAnnotations();
             var currentAnnot = allAnnots.FirstOrDefault(p => p.State == StateAnnot.Edit);
             if (currentAnnot is null)
                 return false;
 
-            
+
             var tabelPattern = currentAnnot.LabelPattern;
             var point = request.Point;
             currentAnnot = AddPoint(point, tabelPattern, currentAnnot);
@@ -41,7 +41,7 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
             var saveAnnots = otherAnnots.Append(currentAnnot).ToArray();
 
             await _annotationHandler.UpdateAllAnnotations(saveAnnots);
-            
+
             return true;
         }
         catch (Exception e)
@@ -73,20 +73,20 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
 
     private Annotation AddInPolyline(Annotation annotation, PointT point)
     {
-       return AddInPolygon(annotation, point);
+        return AddInPolygon(annotation, point);
     }
 
     private Annotation AddInPolygon(Annotation annotation, PointT point)
     {
         annotation.Points ??= new List<PointD>();
-        
-        var lastPosition = annotation.Points?.MaxBy(p=>p.PositionInGroup)?.PositionInGroup ?? 0;
+
+        var lastPosition = annotation.Points?.MaxBy(p => p.PositionInGroup)?.PositionInGroup ?? 0;
 
         annotation.Points?.Add(new PointD()
         {
             X = point.X,
             Y = point.Y,
-            PositionInGroup = lastPosition+1
+            PositionInGroup = lastPosition + 1
         });
         return annotation;
     }
@@ -101,13 +101,13 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
             annotation.Points.Remove(annotation.Points.Last());
         }
 
-        var lastPosition = annotation.Points?.MaxBy(p=>p.PositionInGroup)?.PositionInGroup ?? 0;
+        var lastPosition = annotation.Points?.MaxBy(p => p.PositionInGroup)?.PositionInGroup ?? 0;
 
         annotation.Points?.Add(new PointD()
         {
             X = point.X,
             Y = point.Y,
-            PositionInGroup = lastPosition+1
+            PositionInGroup = lastPosition + 1
         });
         return annotation;
     }

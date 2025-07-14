@@ -32,7 +32,7 @@ public class HiddenAllAnnotHandler : IRequestHandler<HiddenAllAnnotQueries, bool
 
             foreach (var annotation in allAnnots)
             {
-                annotation.State = request.IsHidden ? StateAnnot.Hidden: StateAnnot.Finalized;
+                annotation.State = request.IsHidden ? StateAnnot.Hidden : StateAnnot.Finalized;
             }
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
 

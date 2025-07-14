@@ -16,11 +16,11 @@ namespace BlazorBrowserInteractLabeler.Web.Components.Pages;
 
 public partial class ImageMarker : ComponentBase, IDisposable
 {
-    
+
     [Inject] private KeyMapHandler KeyMapHandler { get; set; } = null!;
     [Inject] private MarkupData MarkupData { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
-    
+
     [Inject] private ProjectsLocalHandler _projectsLocalHandler { get; set; } = null!;
 
     [Inject] private IMediator _mediator { get; set; } = null!;
@@ -29,10 +29,10 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
     private RenderFragment NavigationPanelTemplate { get; set; } = null!;
     private NavigationPanel? _navigationPanel = null;
-    
+
     private RenderFragment LabelingPanelTemplate { get; set; } = null!;
     private LabelingPanel? _labelingPanelComponent = null;
-    
+
     private RenderFragment PagesSelectorTemplate { get; set; } = null!;
     private PagesSelectorComponent? _pagesSelector = null;
     protected override async Task OnInitializedAsync()
@@ -54,9 +54,9 @@ public partial class ImageMarker : ComponentBase, IDisposable
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("window.registerViewportChangeCallback", DotNetObjectReference.Create(this));
-            OnResize(-1,-1);
+            OnResize(-1, -1);
             await JSRuntime.InvokeVoidAsync("FocusElement", ConstantsArm.ImageMarkerRoot);
-            
+
         }
     }
 
@@ -66,25 +66,25 @@ public partial class ImageMarker : ComponentBase, IDisposable
         _labelingPanelComponent?.UpdateUi();
     }
 
-    private void UpdateUiNavigation ()
+    private void UpdateUiNavigation()
     {
         _drawingImagesPanelComponent?.OnUpdateImage();
         _labelingPanelComponent?.UpdateUi();
         UpdateUiLabelingPanel();
     }
-    
-    private void UpdateUiLabelingPanel ()
+
+    private void UpdateUiLabelingPanel()
     {
         StateHasChanged();
     }
     private RenderFragment CreateDrawingImagesPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(DrawingImagesPanel));
-        builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseDown),ClickMouseDown);
-        builder.AddAttribute(1,nameof(DrawingImagesPanel.HandlerOnmouseUp),ClickMouseUp);
-        builder.AddAttribute(2,nameof(DrawingImagesPanel.HandlerOnMouseMove),MouseMove);
-        builder.AddAttribute(3,nameof(DrawingImagesPanel.HandleMouseWheel),HandleMouseWheel);
-        
+        builder.AddAttribute(1, nameof(DrawingImagesPanel.HandlerOnmouseDown), ClickMouseDown);
+        builder.AddAttribute(1, nameof(DrawingImagesPanel.HandlerOnmouseUp), ClickMouseUp);
+        builder.AddAttribute(2, nameof(DrawingImagesPanel.HandlerOnMouseMove), MouseMove);
+        builder.AddAttribute(3, nameof(DrawingImagesPanel.HandleMouseWheel), HandleMouseWheel);
+
         builder.AddComponentReferenceCapture(4, value =>
         {
             _drawingImagesPanelComponent = value as DrawingImagesPanel
@@ -94,11 +94,11 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
-    
+
     private RenderFragment CreateNavigationPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(NavigationPanel));
-        builder.AddAttribute(1,nameof(NavigationPanel.IsNeedUpdateUi),UpdateUiNavigation);
+        builder.AddAttribute(1, nameof(NavigationPanel.IsNeedUpdateUi), UpdateUiNavigation);
         builder.AddComponentReferenceCapture(2, value =>
         {
             _navigationPanel = value as NavigationPanel
@@ -111,7 +111,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     private RenderFragment CreateLabelingPanelTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(LabelingPanel));
-        builder.AddAttribute(1,nameof(LabelingPanel.IsUpdateMenu),UpdateUiLabelingPanel);
+        builder.AddAttribute(1, nameof(LabelingPanel.IsUpdateMenu), UpdateUiLabelingPanel);
         builder.AddComponentReferenceCapture(1, value =>
         {
             _labelingPanelComponent = value as LabelingPanel
@@ -121,11 +121,11 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
         builder.CloseComponent();
     };
-    
+
     private RenderFragment CreatePagesSelectorTemplate() => builder =>
     {
         builder.OpenComponent(0, typeof(PagesSelectorComponent));
-        
+
         builder.AddComponentReferenceCapture(1, value =>
         {
             _pagesSelector = value as PagesSelectorComponent
@@ -147,7 +147,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
         }
     }
 
-    
+
     private void ClickMouseUp(MouseEventArgs args)
     {
         InvokeAsync(async () =>
@@ -166,7 +166,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
             _labelingPanelComponent?.UpdateUi();
         });
     }
-    
+
     private void MouseMove(MouseEventArgs args)
     {
         InvokeAsync(async () =>
@@ -177,11 +177,11 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
 
 
-   
 
 
 
-    
+
+
     [JSInvokable]
     public void OnResize(int width, int height)
     {
@@ -190,13 +190,13 @@ public partial class ImageMarker : ComponentBase, IDisposable
             var sizeBrowse = await JSRuntime.InvokeAsync<SizeWindows>("GetBrowseSize", ConstantsArm.DrawingImagesPanelRoot);
 
             MarkupData.ImageMarkerPanelSize = sizeBrowse;
-            
+
             await _drawingImagesPanelComponent?.SetSizeConvas()!;
-            await _mediator.Send(new RestorePositionImageQueries() );
+            await _mediator.Send(new RestorePositionImageQueries());
             UpdateUi();
         });
     }
-    
+
 
 
     private async Task HandleKeyDown(KeyboardEventArgs arg)
@@ -206,11 +206,11 @@ public partial class ImageMarker : ComponentBase, IDisposable
 
     public void Dispose()
     {
-        if(KeyMapHandler?.IsNeedUpdateUi is null)
+        if (KeyMapHandler?.IsNeedUpdateUi is null)
             return;
-        
+
         KeyMapHandler.IsNeedUpdateUi -= UpdateUi;
     }
 
-  
+
 }

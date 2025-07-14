@@ -9,7 +9,7 @@ namespace BlazorBrowserInteractLabeler.ARM.Handlers.MediatRHandlers;
 /// <summary>
 /// Сохранить конфигурацию утилиты на диск.
 /// </summary>
-public class SaveConfigurationHandler: IRequestHandler<SaveConfigurationQueries, bool>
+public class SaveConfigurationHandler : IRequestHandler<SaveConfigurationQueries, bool>
 {
     private readonly ILogger _logger = Log.ForContext<SaveConfigurationHandler>();
     private readonly SettingsData _settingsData;
@@ -36,7 +36,7 @@ public class SaveConfigurationHandler: IRequestHandler<SaveConfigurationQueries,
         {
             _logger.Error("[SaveConfigurationHandler] {@Exception}", e);
         }
-        
+
         return false;
     }
 }

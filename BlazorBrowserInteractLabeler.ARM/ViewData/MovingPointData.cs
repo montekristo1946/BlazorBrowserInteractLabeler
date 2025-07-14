@@ -7,7 +7,7 @@ public class MovingPointData
     private readonly Lock _lock = new Lock();
     private int _idAnnot = -1;
     public int _positionInGroup = -1;
-    
+
     public int PositionInGroup
     {
         get
