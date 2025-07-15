@@ -20,6 +20,7 @@ public class KeyMapHandler
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
     private readonly int _timeWaitSeamaphore = 1;
     private readonly Mappers _mappers;
+    private readonly MovingPointData _movingPointData;
 
     public Action IsNeedUpdateUi = null!;
 
@@ -31,7 +32,7 @@ public class KeyMapHandler
         MoveImagesHandler moveImagesHandler,
         IMediator mediator,
         SettingsData settingsData,
-        Mappers mappers)
+        Mappers mappers, MovingPointData movingPointData)
     {
         _helper = helper ?? throw new ArgumentNullException(nameof(helper));
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
@@ -39,6 +40,7 @@ public class KeyMapHandler
         _mediator = mediator;
         _settingsData = settingsData ?? throw new ArgumentNullException(nameof(settingsData));
         _mappers = mappers ?? throw new ArgumentNullException(nameof(mappers));
+        _movingPointData = movingPointData ?? throw new ArgumentNullException(nameof(movingPointData));
     }
 
 
@@ -81,6 +83,7 @@ public class KeyMapHandler
     private void EndMoveImage(MouseEventArgs args)
     {
         _moveImagesHandler.HandlerOnmouseUp();
+        _movingPointData.HandlerOnmouseUp();
     }
     private void StartMoveImage(MouseEventArgs args)
     {
@@ -196,11 +199,16 @@ public class KeyMapHandler
         {
             var resMovingPoint = await _mediator.Send(new MovingInitPointQueries() { Point = points });
             if (resMovingPoint)
+            {
                 return;
+            }
 
             var resAdd = await _mediator.Send(new AddPointsQueries() { Point = points });
             if (resAdd)
+            {
+                await _mediator.Send(new MovingInitPointQueries() { Point = points });
                 return;
+            }
 
             await _mediator.Send(new SetEditAnnotBySelectPointQueries() { Point = points });
         }

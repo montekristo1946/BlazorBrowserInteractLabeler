@@ -31,6 +31,7 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
     {
         try
         {
+   
             if (request is null)
                 return false;
 
@@ -42,8 +43,6 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
             var points = currentAnnot.Points;
             if (points is null || !points.Any())
                 return false;
-
-
 
             var newPoint = request.Point;
             var overlapPercentageX = SizeAreaPx / _markupData.SizeConvas.Width;
@@ -62,8 +61,10 @@ public class MovingInitPointHandler : IRequestHandler<MovingInitPointQueries, bo
 
             _movingPointData.CurrentIdAnnot = currentAnnot.Id;
             _movingPointData.PositionInGroup = movingPoint.PositionInGroup;
+            _movingPointData.HandlerOnmouseDown();
 
             await _mediator.Send(new MovingPointQueries() { Point = newPoint }, cancellationToken);
+            
             return true;
         }
         catch (Exception e)

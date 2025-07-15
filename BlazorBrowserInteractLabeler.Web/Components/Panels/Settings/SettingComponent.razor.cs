@@ -35,7 +35,7 @@ public partial class SettingComponent : ComponentBase
         return SettingsData.PathFolderWorkers;
     }
 
-    private double GetSetStokeWidth()
+    private double GetStokeWidth()
     {
         return SettingsData.StrokeWidth;
     }
@@ -67,5 +67,21 @@ public partial class SettingComponent : ComponentBase
 
         var keys = SettingsData.CodeKey.OrderBy(p => p.EventCode).ToArray();
         return keys;
+    }
+
+    private double GetCoefResizeView()
+    {
+        return SettingsData.CoefResizeView;
+    }
+
+    private void SetCoefResizeView(ChangeEventArgs changeEventArgs)
+    {
+        var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
+        var newValue = double.TryParse(textToSave, out double parsValue)
+            ? parsValue
+            : 0;
+
+        SettingsData.CoefResizeView = newValue;
+        
     }
 }

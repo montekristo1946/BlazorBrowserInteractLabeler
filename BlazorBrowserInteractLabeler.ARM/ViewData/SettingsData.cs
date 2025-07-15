@@ -8,12 +8,30 @@ public class SettingsData
 
     private ColorModel[] _colors = [];
     private double _strokeWidth = 2.5;
+    private double _coefResizeView = 0.95;
     private string _pathFolderWorkers = String.Empty;
     private CodeKey[] _codeKeys = [];
 
     private static string _pathDirConfigs = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Config");
     private static string _pathConfig = Path.Join(_pathDirConfigs, $"{nameof(SettingsData)}.json");
 
+    public double CoefResizeView
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _coefResizeView;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _coefResizeView = value is >= 0.1 and <= 1.0 ? value : 0.95;
+            }
+        }
+    }
 
     public string PathDirConfigs
     {
