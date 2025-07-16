@@ -22,7 +22,25 @@ public class MarkupData
     private string _nameImage = string.Empty;
     private TypeLabel _currentTypeLabel = TypeLabel.None;
     private string _errorMessage = String.Empty;
+    private Annotation? _lastAnnot = null;
 
+    public Annotation? LastAnnot
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _lastAnnot;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _lastAnnot = value;
+            }
+        }
+    }
     public string ErrorMessage
     {
         get
@@ -285,5 +303,5 @@ public class MarkupData
         }
     }
 
-
+    
 }

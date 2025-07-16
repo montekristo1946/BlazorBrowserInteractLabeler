@@ -345,6 +345,11 @@ public class KeyMapHandler
             case EventCode.Label11:
                 await SendQueriesActiveLabel(EventCode.Label11);
                 break;
+            
+            case EventCode.ReplayAnnot:
+                await _mediator.Send(new ReplayAnnotQueries(){IdImage = _markupData.CurrentIdImg});
+                break;
+            
         }
 
         IsNeedUpdateUi?.Invoke();
