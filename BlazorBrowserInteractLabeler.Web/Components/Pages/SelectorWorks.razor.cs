@@ -19,6 +19,7 @@ public partial class SelectorWorks : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+       
         await Mediator.Send(new LoadConfigurationQueries());
         PagesSelectorTemplate = CreatePagesSelectorTemplate();
         WorksShowerComponentTemplate = CreateWorksShowerComponentTemplate();

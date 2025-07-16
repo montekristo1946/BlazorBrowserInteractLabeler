@@ -28,7 +28,7 @@ namespace BlazorBrowserInteractLabeler.Web.Properties {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("BlazorBrowserInteractLabeler.Web.Properties.Resources", typeof(Resources).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("BlazorBrowserInteractLabeler.ARM.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

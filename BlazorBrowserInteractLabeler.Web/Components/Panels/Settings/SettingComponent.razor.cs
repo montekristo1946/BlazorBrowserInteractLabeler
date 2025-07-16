@@ -1,4 +1,6 @@
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
+using MediatR;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Settings;
@@ -7,7 +9,7 @@ public partial class SettingComponent : ComponentBase
 {
     [Inject] private SettingsData SettingsData { get; set; } = null!;
 
-
+    [Inject] private IMediator Mediator { get; set; } = null!;
 
     private Task SetStokeWidth(ChangeEventArgs changeEventArgs)
     {
@@ -21,13 +23,13 @@ public partial class SettingComponent : ComponentBase
         return Task.CompletedTask;
     }
 
-    private Task SetPathFolderWorkers(ChangeEventArgs changeEventArgs)
+    private async Task SetPathFolderWorkers(ChangeEventArgs changeEventArgs)
     {
         var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
 
         SettingsData.PathFolderWorkers = textToSave;
 
-        return Task.CompletedTask;
+        await Mediator.Send(new UnloadDataBaseQueries());
     }
 
     private string GetPathFolderWorkers()
