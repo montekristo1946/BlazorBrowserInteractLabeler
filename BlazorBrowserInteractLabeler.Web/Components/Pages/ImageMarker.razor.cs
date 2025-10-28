@@ -21,7 +21,7 @@ public partial class ImageMarker : ComponentBase, IDisposable
     [Inject] private MarkupData MarkupData { get; set; } = null!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
 
-    [Inject] private ProjectsLocalHandler _projectsLocalHandler { get; set; } = null!;
+    // [Inject] private ProjectsLocalHandler _projectsLocalHandler { get; set; } = null!;
 
     [Inject] private IMediator _mediator { get; set; } = null!;
     private RenderFragment DrawingImagesPanelTemplate { get; set; } = null!;
