@@ -4,6 +4,8 @@ namespace BrowserInteractLabeler.Common;
 
 public interface IRepository : IDisposable
 {
+    public Task<bool> UnloadDatabaseAsync();
+    
     public Task<bool> LoadDatabaseAsync(string path);
 
     public Task<int[]> GetAllIndexImagesAsync();

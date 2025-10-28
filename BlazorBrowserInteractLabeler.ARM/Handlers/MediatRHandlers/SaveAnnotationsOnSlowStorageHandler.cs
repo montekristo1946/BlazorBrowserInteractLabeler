@@ -15,10 +15,11 @@ public class SaveAnnotationsOnSlowStorageHandler : IRequestHandler<SaveAnnotatio
 {
     private readonly ILogger _logger = Log.ForContext<LoadNextImageHandler>();
     private readonly IRepository _repository;
-
     private readonly AnnotationHandler _annotationHandler;
     private readonly MarkupData _markupData;
-    public SaveAnnotationsOnSlowStorageHandler(IRepository repository, AnnotationHandler annotationHandler, MarkupData markupData)
+
+    public SaveAnnotationsOnSlowStorageHandler(IRepository repository, AnnotationHandler annotationHandler,
+        MarkupData markupData)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         _annotationHandler = annotationHandler ?? throw new ArgumentNullException(nameof(annotationHandler));
@@ -35,11 +36,11 @@ public class SaveAnnotationsOnSlowStorageHandler : IRequestHandler<SaveAnnotatio
             var indexImg = _markupData.CurrentIdImg;
             if (indexImg < 0)
             {
-
                 _logger.Error("[SaveAnnotationsOnSlowStorageHandler] Fail save annotations in Img:{imagesId} ",
                     indexImg);
                 return false;
             }
+
             var removeAnnot = await _repository.GetAnnotationsFromImgIdAsync(indexImg);
             var annotationsFromCash = await _annotationHandler.GetAllAnnotations();
 
@@ -63,6 +64,8 @@ public class SaveAnnotationsOnSlowStorageHandler : IRequestHandler<SaveAnnotatio
 
 
             annotationsFromCash = ClearFailAnnotation(annotationsFromCash);
+            CopyLastAnnotation(annotationsFromCash);
+            annotationsFromCash = FinalizedAnnotation(annotationsFromCash);
             annotationsFromCash = OrderPoints(annotationsFromCash);
             await _repository.SaveAnnotationsAsync(annotationsFromCash);
 
@@ -79,6 +82,28 @@ public class SaveAnnotationsOnSlowStorageHandler : IRequestHandler<SaveAnnotatio
         }
 
         return false;
+    }
+
+    private void CopyLastAnnotation(Annotation[] annotations)
+    {
+        var lastEdition = annotations.FirstOrDefault(p => p.State == StateAnnot.Edit );
+
+        _markupData.LastAnnot = lastEdition;
+    }
+
+    private Annotation[] FinalizedAnnotation(Annotation[] annotations)
+    {
+        if (annotations?.Any() == null)
+            return [];
+
+        var retResult = annotations.Select(annot =>
+        {
+            annot.State = StateAnnot.Finalized;
+            annot.Id = 0;
+            return annot;
+        }).ToArray();
+
+        return retResult;
     }
 
     private Annotation[] OrderPoints(Annotation[] annotations)
@@ -109,14 +134,8 @@ public class SaveAnnotationsOnSlowStorageHandler : IRequestHandler<SaveAnnotatio
                 || (annot.LabelPattern == TypeLabel.PolyLine && annot.Points.Count >= 2)
                 || (annot.LabelPattern == TypeLabel.Polygon && annot.Points.Count >= 3)
                 || (annot.LabelPattern == TypeLabel.Point && annot.Points.Count >= 1)
+            ).Where(annot => annot.LabelId >= 0).ToArray();
 
-            ).Where(annot => annot.LabelId >= 0)
-            .Select(annot =>
-            {
-                annot.State = StateAnnot.Finalized;
-                annot.Id = 0;
-                return annot;
-            }).ToArray();
 
         return retAnnots;
     }

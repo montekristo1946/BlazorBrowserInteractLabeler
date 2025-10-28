@@ -11,6 +11,36 @@ public class SqlRepository : IRepository
     private readonly ILogger _logger = Log.ForContext<SqlRepository>();
     private static readonly SemaphoreSlim SemaphoreSlim = new(1, 1);
 
+    public async Task<bool> UnloadDatabaseAsync()
+    {
+        await SemaphoreSlim.WaitAsync();
+        try
+        {
+            if (_db is null)
+            {
+                return true;
+            }
+            
+            _logger.Debug("[LoadDatabaseAsync] Unload DB ok");
+            await _db.DisposeAsync();
+            _db = null;
+            
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.Error("[UnloadDatabaseAsync] {@Exception}", e.Message);
+        }
+        finally
+        {
+            SemaphoreSlim.Release();
+        }
+
+
+        return false;
+    }
+
     public async Task<bool> LoadDatabaseAsync(string pathDb)
     {
         await SemaphoreSlim.WaitAsync();

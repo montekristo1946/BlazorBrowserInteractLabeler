@@ -75,5 +75,8 @@ public enum EventCode
     [Display(Name = "Класс разметки 11"), Description(nameof(Label11))]
     Label11 = 22,
 
+    [Display(Name = "Повторить аннтоацию"), Description(nameof(ReplayAnnot))]
+    ReplayAnnot = 23,
+    
 
 }

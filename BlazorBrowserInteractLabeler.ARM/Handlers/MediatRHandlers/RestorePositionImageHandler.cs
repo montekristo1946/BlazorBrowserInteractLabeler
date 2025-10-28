@@ -13,12 +13,15 @@ public class RestorePositionImageHandler : IRequestHandler<RestorePositionImageQ
 {
     private readonly ILogger _logger = Log.ForContext<RestorePositionImageHandler>();
     private readonly MarkupData _markupData;
-    private const double CoefReisizeView = 0.98;
+    private readonly SettingsData _settingsData;
+    // private const double CoefReisizeView = 0.90;
+    
 
 
-    public RestorePositionImageHandler(MarkupData markupData)
+    public RestorePositionImageHandler(MarkupData markupData, SettingsData settingsData)
     {
         _markupData = markupData ?? throw new ArgumentNullException(nameof(markupData));
+        _settingsData = settingsData ?? throw new ArgumentNullException(nameof(settingsData));
     }
 
     public Task<bool> Handle(RestorePositionImageQueries request, CancellationToken cancellationToken)
@@ -32,7 +35,7 @@ public class RestorePositionImageHandler : IRequestHandler<RestorePositionImageQ
                 return Task.FromResult(false);
 
             var scaleFull = CalculateScale(sizeWindows, sizeImg);
-            var scale = scaleFull * CoefReisizeView;
+            var scale = scaleFull * _settingsData.CoefResizeView;
             _markupData.ScaleCurrent = scale;
 
             var reversScale = 1 / scale;

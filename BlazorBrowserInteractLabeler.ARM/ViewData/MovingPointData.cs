@@ -7,7 +7,25 @@ public class MovingPointData
     private readonly Lock _lock = new Lock();
     private int _idAnnot = -1;
     public int _positionInGroup = -1;
+    private bool _isStartMove = false;
 
+    public bool IsStartMove
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _isStartMove;
+            }
+        }
+        set
+        {
+            lock (_lock)
+            {
+                _isStartMove = value;
+            }
+        }
+    }
     public int PositionInGroup
     {
         get
@@ -44,5 +62,20 @@ public class MovingPointData
         }
     }
 
+    public void HandlerOnmouseDown()
+    {
 
+        lock (_lock)
+        {
+            _isStartMove = true;
+        }
+    }
+    public void HandlerOnmouseUp()
+    {
+
+        lock (_lock)
+        {
+            _isStartMove = false;
+        }
+    }
 }

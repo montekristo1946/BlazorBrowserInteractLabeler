@@ -98,7 +98,8 @@ public class AddPointsHandler : IRequestHandler<AddPointsQueries, bool>
 
         if (annotation.Points.Count == maxPoints)
         {
-            annotation.Points.Remove(annotation.Points.Last());
+            var lastPoint = annotation.Points.MaxBy(p => p.PositionInGroup) ?? annotation.Points.Last();
+            annotation.Points.Remove(lastPoint);
         }
 
         var lastPosition = annotation.Points?.MaxBy(p => p.PositionInGroup)?.PositionInGroup ?? 0;

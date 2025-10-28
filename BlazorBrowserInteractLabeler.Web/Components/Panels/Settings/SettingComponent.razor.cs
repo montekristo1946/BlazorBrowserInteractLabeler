@@ -1,4 +1,6 @@
+using BlazorBrowserInteractLabeler.ARM.Handlers.MediatRQueries;
 using BlazorBrowserInteractLabeler.ARM.ViewData;
+using MediatR;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBrowserInteractLabeler.Web.Components.Panels.Settings;
@@ -7,7 +9,7 @@ public partial class SettingComponent : ComponentBase
 {
     [Inject] private SettingsData SettingsData { get; set; } = null!;
 
-
+    [Inject] private IMediator Mediator { get; set; } = null!;
 
     private Task SetStokeWidth(ChangeEventArgs changeEventArgs)
     {
@@ -21,13 +23,13 @@ public partial class SettingComponent : ComponentBase
         return Task.CompletedTask;
     }
 
-    private Task SetPathFolderWorkers(ChangeEventArgs changeEventArgs)
+    private async Task SetPathFolderWorkers(ChangeEventArgs changeEventArgs)
     {
         var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
 
         SettingsData.PathFolderWorkers = textToSave;
 
-        return Task.CompletedTask;
+        await Mediator.Send(new UnloadDataBaseQueries());
     }
 
     private string GetPathFolderWorkers()
@@ -35,7 +37,7 @@ public partial class SettingComponent : ComponentBase
         return SettingsData.PathFolderWorkers;
     }
 
-    private double GetSetStokeWidth()
+    private double GetStokeWidth()
     {
         return SettingsData.StrokeWidth;
     }
@@ -67,5 +69,21 @@ public partial class SettingComponent : ComponentBase
 
         var keys = SettingsData.CodeKey.OrderBy(p => p.EventCode).ToArray();
         return keys;
+    }
+
+    private double GetCoefResizeView()
+    {
+        return SettingsData.CoefResizeView;
+    }
+
+    private void SetCoefResizeView(ChangeEventArgs changeEventArgs)
+    {
+        var textToSave = (string)changeEventArgs.Value! ?? string.Empty;
+        var newValue = double.TryParse(textToSave, out double parsValue)
+            ? parsValue
+            : 0;
+
+        SettingsData.CoefResizeView = newValue;
+        
     }
 }

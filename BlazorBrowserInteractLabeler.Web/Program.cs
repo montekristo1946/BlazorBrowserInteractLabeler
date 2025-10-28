@@ -17,7 +17,7 @@ builder.Host.InitCulture();
 builder.Host.UseMediatRComponents();
 
 builder.Services
-    .AddSingleton<MarkupData>(MarkupDataBuilder.Build)
+    .AddSingleton<MarkupData>()
     .AddSingleton<MovingPointData>()
     .AddSingleton<SettingsData>()
     .AddSingleton<IRepository>(provider => new SqlRepository())

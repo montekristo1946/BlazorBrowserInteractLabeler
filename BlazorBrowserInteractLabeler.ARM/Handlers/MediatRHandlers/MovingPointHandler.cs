@@ -26,7 +26,7 @@ public class MovingPointHandler : IRequestHandler<MovingPointQueries, bool>
     {
         try
         {
-            if (request is null || request.Point.X <= 0 || request.Point.Y <= 0)
+            if (request is null || request.Point.X <= 0 || request.Point.Y <= 0 || !_movingPointData.IsStartMove)
                 return false;
 
 
@@ -57,6 +57,8 @@ public class MovingPointHandler : IRequestHandler<MovingPointQueries, bool>
 
             await _annotationHandler.UpdateAllAnnotations(allAnnots);
 
+         
+            
             return true;
         }
         catch (Exception e)

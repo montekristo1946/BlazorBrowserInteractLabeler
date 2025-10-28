@@ -38,8 +38,29 @@
                        data-mdb-placement="right"
                        title="" placeholder="" aria-describedby="button-addon1"
                        style="height: 3vh"
-                       value="@GetSetStokeWidth()"
+                       value="@GetStokeWidth()"
                        @onchange="(SetStokeWidth)">
+            </p>
+        </div>
+        <div class="col-1  p-0 m-0"></div>
+    </div>
+    
+    <div class="row p-0" style="margin-left: 0.3vw; margin-top: 0.3vw;">
+        <div class="col-1  p-0 m-0"></div>
+        <div class="col-2 p-0 m-0">
+            <p class="m-0" style="">
+                Коэффициент ресайза изображнеия
+            </p>
+        </div>
+
+        <div class="col-8 p-0 m-0">
+            <p class="m-0" style="">
+                <input type="text" class="form-control text-start color-text-main" data-mdb-toggle="tooltip"
+                       data-mdb-placement="right"
+                       title="" placeholder="" aria-describedby="button-addon1"
+                       style="height: 3vh"
+                       value="@GetCoefResizeView()"
+                       @onchange="(SetCoefResizeView)">
             </p>
         </div>
         <div class="col-1  p-0 m-0"></div>
